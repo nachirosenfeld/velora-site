@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terms of Service — Velora Capital</title>
+<meta name="description" content="The terms governing your use of the Velora Capital website and funding brokerage services.">
+<link rel="icon" type="image/svg+xml" href="velora-icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fbf8f7;
+    --ink:#181818;
+    --lime:#d8f477;
+    --forest:#233028;
+    --forest-deep:#192526;
+    --muted:#5f6b64;
+    --line:#e7e2dd;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+  a{text-decoration:none;color:inherit}
+  .serif{font-family:'Fraunces',Georgia,serif}
+  .italic{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500}
+
+  /* nav */
+  header{position:sticky;top:0;z-index:50;background:rgba(251,248,247,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:96px}
+  .logo svg{height:60px;width:auto;display:block}
+  .navlinks{display:flex;align-items:center;gap:34px;font-size:15px;font-weight:500}
+  .navlinks a{color:#2a2a2a}
+  .navlinks a:hover{opacity:.6}
+  .btn{display:inline-block;background:var(--ink);color:#fff;font-weight:600;font-size:15px;padding:13px 26px;border-radius:999px;transition:.15s;border:none;cursor:pointer}
+  .btn:hover{background:#000;transform:translateY(-1px)}
+  .btn-lime{background:var(--lime);color:var(--ink)}
+  .btn-lime:hover{background:#cdeb63}
+  @media(max-width:820px){.navlinks{display:none}}
+
+  /* legal document */
+  .doc{padding:60px 0 20px;max-width:830px}
+  .doc h1{font-size:clamp(38px,5.5vw,60px);font-weight:600;letter-spacing:-.02em;line-height:1.05;margin-bottom:16px}
+  .doc .eff{font-size:15px;color:var(--muted);font-weight:500}
+  .doc .intro{font-size:18.5px;color:#333;line-height:1.65;margin-top:26px;padding-top:28px;border-top:1px solid var(--line)}
+  .doc h2{font-size:23px;font-weight:600;letter-spacing:-.01em;margin:46px 0 12px;scroll-margin-top:112px}
+  .doc h3{font-size:17px;font-weight:600;margin:26px 0 8px}
+  .doc p{font-size:16.5px;color:#3d3d3d;line-height:1.72;margin-bottom:14px}
+  .doc ul{margin:0 0 16px 20px}
+  .doc li{font-size:16.5px;color:#3d3d3d;line-height:1.72;margin-bottom:9px;padding-left:4px}
+  .doc li::marker{color:var(--forest)}
+  .doc strong{font-weight:600;color:var(--ink)}
+  .doc a.link{color:var(--forest);text-decoration:underline;text-underline-offset:2px}
+  .doc a.link:hover{opacity:.65}
+  .doc .caps{text-transform:uppercase;font-size:14.5px;letter-spacing:.01em;line-height:1.75;color:#3d3d3d}
+
+  .toc{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px 32px;margin:38px 0 8px}
+  .toc h5{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#999;margin-bottom:16px}
+  .toc ol{columns:2;column-gap:38px;margin-left:18px}
+  @media(max-width:640px){.toc ol{columns:1}}
+  .toc li{font-size:15px;line-height:1.5;margin-bottom:9px;color:var(--muted);break-inside:avoid}
+  .toc a{color:#3a3a3a}
+  .toc a:hover{opacity:.6;text-decoration:underline}
+
+  .callout{background:var(--forest);color:#fff;border-radius:20px;padding:30px 32px;margin:26px 0}
+  .callout h3{color:#fff;margin:0 0 10px;font-size:18px}
+  .callout p{color:#cddac9;font-size:16px;margin-bottom:10px}
+  .callout p:last-child{margin-bottom:0}
+  .callout strong{color:#fff}
+  .callout a.link{color:var(--lime)}
+
+  .note{background:#fff;border:1px solid var(--line);border-left:3px solid var(--lime);border-radius:14px;padding:22px 26px;margin:22px 0}
+  .note p{margin-bottom:0;font-size:16px}
+
+  .contact-block{background:#fff;border:1px solid var(--line);border-radius:20px;padding:30px 32px;margin-top:22px}
+  .contact-block p{margin-bottom:8px}
+  .contact-block p:last-child{margin-bottom:0}
+
+  /* footer */
+  footer{padding:56px 0 40px;border-top:1px solid var(--line);margin-top:88px}
+  .foot{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:30px}
+  .foot .logo svg{height:52px}
+  .foot p{font-size:14px;color:var(--muted);margin-top:14px;max-width:320px;line-height:1.6}
+  .foot-links{display:flex;gap:60px;flex-wrap:wrap}
+  .foot-col h5{font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#999;margin-bottom:14px}
+  .foot-col a{display:block;font-size:15px;color:#3a3a3a;margin-bottom:10px}
+  .foot-col a:hover{opacity:.6}
+  .legal{margin-top:44px;font-size:12.5px;color:#9a948e;line-height:1.6;max-width:820px}
+  .copyright{margin-top:22px;font-size:13px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a class="logo" href="index.html" aria-label="Velora Capital">
+        <svg height="30" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1c1f26"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1c1f26"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1c1f26">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
+      </a>
+      <div class="navlinks">
+        <a href="index.html#products">What we fund</a>
+        <a href="index.html#how">How it works</a>
+        <a href="index.html#why">Why Velora</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <a href="index.html#contact" class="btn">Apply now</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <article class="doc">
+
+    <h1>Terms of Service</h1>
+    <div class="eff">Effective date: August 14, 2026 &nbsp;·&nbsp; Last updated: August 14, 2026</div>
+
+    <p class="intro">These Terms of Service (“<strong>Terms</strong>”) are a binding agreement between you and Velora Capital LLC (“<strong>Velora Capital</strong>,” “<strong>we</strong>,” “<strong>us</strong>,” or “<strong>our</strong>”), a Florida limited liability company, governing your access to and use of <a class="link" href="https://veloracapitalgrp.com">veloracapitalgrp.com</a> (the “Site”) and any services, applications, or communications we provide (together, the “Services”). Please read them carefully — <strong>Section 16 contains a binding arbitration provision and a class action waiver that affect how disputes between us are resolved.</strong></p>
+
+    <div class="toc">
+      <h5>Contents</h5>
+      <ol>
+        <li><a href="#accept">Acceptance of these terms</a></li>
+        <li><a href="#eligibility">Eligibility</a></li>
+        <li><a href="#broker">Brokerage, not a lender</a></li>
+        <li><a href="#application">Your application and information</a></li>
+        <li><a href="#credit">Credit authorization &amp; FCRA notice</a></li>
+        <li><a href="#sms">SMS terms, TCPA &amp; opt-out</a></li>
+        <li><a href="#esign">Electronic communications &amp; E-SIGN</a></li>
+        <li><a href="#compensation">How we are compensated</a></li>
+        <li><a href="#partners">Funding partners &amp; third-party links</a></li>
+        <li><a href="#ip">Intellectual property &amp; limited license</a></li>
+        <li><a href="#prohibited">Prohibited uses</a></li>
+        <li><a href="#disclaimers">Disclaimers</a></li>
+        <li><a href="#liability">Limitation of liability</a></li>
+        <li><a href="#indemnity">Indemnification</a></li>
+        <li><a href="#termination">Termination</a></li>
+        <li><a href="#disputes">Governing law &amp; arbitration</a></li>
+        <li><a href="#changes">Changes to these terms</a></li>
+        <li><a href="#misc">Miscellaneous</a></li>
+        <li><a href="#contact">Contact us</a></li>
+      </ol>
+    </div>
+
+    <h2 id="accept">1. Acceptance of these terms</h2>
+    <p>By accessing the Site, submitting a funding inquiry or application, communicating with us by phone, email, or text message, or otherwise using the Services, you agree to these Terms and to our <a class="link" href="privacy.html">Privacy Policy</a>, which is incorporated here by reference. If you do not agree, do not use the Services.</p>
+    <p>If you use the Services on behalf of a business entity, you represent that you are authorized to bind that entity, and “you” refers to both you individually and that entity.</p>
+
+    <h2 id="eligibility">2. Eligibility</h2>
+    <p>To use the Services you must be at least <strong>18 years of age</strong> (or the age of majority in your jurisdiction, if higher) and legally capable of entering into binding contracts. The Services are offered solely for <strong>commercial and business purposes</strong> to businesses located in the United States. They are not intended for personal, family, or household use, and the financing products we help you apply for are commercial products that generally do not carry consumer-credit protections.</p>
+    <p>You further represent that you are an owner, officer, or authorized representative of the business named in your inquiry, and that you are not prohibited from receiving the Services under applicable law, sanctions programs, or watchlists.</p>
+
+    <h2 id="broker">3. Velora Capital is a brokerage, not a lender</h2>
+    <div class="callout">
+      <h3>Please read this section carefully</h3>
+      <p><strong>Velora Capital LLC is a business financing brokerage. We are not a bank, lender, funder, or credit provider.</strong> We do not lend money, we do not underwrite, and we do not make credit decisions.</p>
+      <p>Our role is to review the information you provide, identify third-party funding partners whose products may fit your business, and submit your application to them. <strong>All credit decisions, approvals, declines, pricing, amounts, rates, fees, and terms are made solely by the funding partner</strong> in its own discretion and under its own criteria.</p>
+      <p><strong>We do not guarantee that you will be approved, that you will receive any offer, or that any offer will be on particular terms.</strong> Nothing on the Site or said by any representative is a commitment to lend or an offer of credit.</p>
+    </div>
+    <p>Any figures, amounts, timelines, rates, or product descriptions shown on the Site — including funding ranges, decision speeds, and approval statistics — are <strong>illustrative and for general information only</strong>. They are not offers, quotes, or predictions of what your business will receive. Actual results vary based on your business profile, credit, revenue, industry, time in business, documentation, and the funding partner’s requirements.</p>
+    <p>Any financing you accept will be governed exclusively by the agreement between you and that funding partner. Velora Capital is not a party to that agreement and has no authority to modify, waive, or enforce its terms. Review any funding agreement carefully, including all fees, factor rates, payment schedules, and personal guaranty provisions, before signing. We recommend you consult your own attorney and accountant.</p>
+
+    <h2 id="application">4. Your application and the information you provide</h2>
+    <p>You agree that all information you provide to us — about you, your business, your owners, your revenue, and your financial condition — is <strong>true, accurate, current, and complete</strong>, and you will promptly update us if it changes while an application is pending. Submitting false, altered, or fraudulent information, including doctored bank statements or financial documents, is grounds for immediate termination and may be reported to funding partners, fraud databases, and law enforcement.</p>
+    <p>By submitting an application, you authorize Velora Capital to:</p>
+    <ul>
+      <li>submit your application and supporting documents to one or more funding partners for review;</li>
+      <li>discuss your application and business with those partners, and receive their decisions and offers on your behalf;</li>
+      <li>verify any information you provide, including with banks, processors, references, and public and commercial databases;</li>
+      <li>contact you by phone, email, and text message regarding your application, as described in Sections 6 and 7.</li>
+    </ul>
+    <p>You remain responsible for reviewing and deciding whether to accept any offer. We do not accept offers on your behalf.</p>
+
+    <h2 id="credit">5. Credit authorization and FCRA notice</h2>
+    <p>By submitting an application or inquiry, you authorize Velora Capital and the funding partners to whom we submit your file to obtain <strong>consumer credit reports, business credit reports, and other background and verification information</strong> about you personally and about your business, from one or more consumer reporting agencies or commercial data sources, for the purpose of evaluating the credit transaction you have initiated and for related account review, verification, and collection purposes.</p>
+    <p>This authorization is given under the federal <strong>Fair Credit Reporting Act, 15 U.S.C. § 1681 et seq.</strong> (“FCRA”), and you acknowledge that a <strong>permissible purpose</strong> exists because you have initiated a credit transaction. You authorize this in your individual capacity as an owner or personal guarantor as well as on behalf of your business, and the authorization remains in effect for as long as an application is pending and for any renewal, extension, or subsequent request you make.</p>
+    <p>Credit inquiries may be “soft” (typically not affecting your credit score) at the pre-qualification stage, and may be “hard” (which can affect your score and appear on your credit report) when a funding partner moves toward a decision. We will tell you which type an inquiry is when we know, but the type of inquiry is ultimately determined by the funding partner.</p>
+    <p>Under the FCRA you have the right to know if information in your file has been used against you, to obtain a copy of your file from the reporting agency, and to dispute incomplete or inaccurate information. A summary of your rights is available at <a class="link" href="https://www.consumerfinance.gov">consumerfinance.gov</a>. If a funding partner takes adverse action based in whole or in part on a report, that partner — not Velora Capital — is responsible for providing you the required adverse action notice.</p>
+    <p>You may withdraw this authorization at any time by writing to <a class="link" href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a>, but doing so while an application is pending will generally end our ability to continue processing it.</p>
+
+    <h2 id="sms">6. Text messaging terms, TCPA consent, and opt-out</h2>
+    <p>By providing your telephone number to Velora Capital, you expressly consent to receive calls and text messages from us and from our representatives at that number — including through an automatic telephone dialing system, an artificial or prerecorded voice, or a text-messaging platform — regarding your inquiry, your application, and our services. These may be sent even if the number is registered on a state or federal Do Not Call list.</p>
+    <div class="callout">
+      <h3>Velora Capital SMS program</h3>
+      <p><strong>Program description:</strong> Application updates, document requests, offer notifications, appointment reminders, and account servicing messages, plus promotional messages where you have separately agreed to receive them.</p>
+      <p><strong>Message frequency:</strong> Varies with your application activity; recurring messages.</p>
+      <p><strong>Cost:</strong> Message and data rates may apply. Velora Capital does not charge for messages; your carrier’s standard rates apply.</p>
+      <p><strong>STOP:</strong> Reply <strong>STOP</strong> to any message to cancel. You will receive one confirmation message, after which no further messages will be sent.</p>
+      <p><strong>HELP:</strong> Reply <strong>HELP</strong> for assistance, email <a class="link" href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a>, or call <a class="link" href="tel:+19146062010">914-606-2010</a>.</p>
+      <p><strong>Carrier disclaimer:</strong> Wireless carriers are not liable for delayed or undelivered messages. Delivery is subject to effective transmission by your carrier and is not guaranteed.</p>
+      <p><strong>Supported carriers:</strong> Major U.S. carriers are supported; carrier participation may change without notice.</p>
+    </div>
+    <div class="note">
+      <p><strong>Consent is not a condition of purchase.</strong> You are not required to agree to receive calls or text messages in order to apply for, be considered for, or obtain financing, or to use any part of the Services. You may revoke consent at any reasonable time and by any reasonable means, including by replying STOP, telling your advisor, or emailing us. Revoking consent for marketing messages does not revoke consent to receive transactional messages about a transaction already in progress, which you may also revoke separately.</p>
+    </div>
+    <p>We handle mobile opt-in data as described in our <a class="link" href="privacy.html#sms">Privacy Policy</a>. <strong>No mobile information or text-messaging opt-in data or consent will be shared with third parties or affiliates for marketing or promotional purposes.</strong> We operate our messaging program in a manner intended to comply with the Telephone Consumer Protection Act, applicable state telemarketing laws, and CTIA messaging principles and best practices. If you change or relinquish a mobile number you gave us, you agree to notify us promptly.</p>
+
+    <h2 id="esign">7. Electronic communications and E-SIGN consent</h2>
+    <p>By using the Services, you consent to conduct business with us electronically and to receive communications, disclosures, notices, agreements, and records from us in electronic form — by email, text message, or by posting to the Site — rather than on paper. You agree that electronic communications satisfy any legal requirement that a communication be in writing.</p>
+    <p>You also agree that your electronic signature, including a typed name, a click of an “I agree,” “Submit,” or “Apply” button, or a signature applied through an e-signature platform, has the same legal force and effect as a handwritten signature under the federal <strong>Electronic Signatures in Global and National Commerce Act (E-SIGN)</strong> and comparable state laws.</p>
+    <p><strong>Hardware and software you need:</strong> a device with internet access, a current web browser, a valid email address, and the ability to view PDF files and to print or save records for your files.</p>
+    <p><strong>Withdrawing consent:</strong> You may withdraw consent to receive records electronically, or request a paper copy of any record, by emailing <a class="link" href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a> or calling <a class="link" href="tel:+19146062010">914-606-2010</a>. Withdrawal is effective only after we have a reasonable opportunity to act on it, and may prevent us from continuing to provide the Services. Keep your email address and phone number current with us so we can reach you.</p>
+
+    <h2 id="compensation">8. How we are compensated</h2>
+    <p>Velora Capital does not charge you a fee to apply. We are typically compensated by the funding partner in the form of a commission or referral fee when a transaction closes, and that compensation may vary by partner and by product. In some transactions a fee may instead be disclosed to you and deducted from funding proceeds by the funding partner — where that is the case, it will be set out in the funding partner’s agreement, which you should review before signing. You agree not to circumvent Velora Capital in order to avoid compensation properly owed on a transaction we sourced or facilitated.</p>
+
+    <h2 id="partners">9. Funding partners and third-party links</h2>
+    <p>The Services include the submission of your application to independent third parties. Velora Capital does not control and is not responsible for the acts, omissions, products, pricing, servicing, collection practices, data practices, or performance of any funding partner or other third party. Any dispute you have with a funding partner is between you and that partner.</p>
+    <p>The Site may contain links to third-party websites and services. Those links are provided for convenience only and do not imply endorsement. Your use of any third-party site is subject to that site’s own terms and privacy policy.</p>
+
+    <h2 id="ip">10. Intellectual property and limited license</h2>
+    <p>The Site and all of its contents — including text, graphics, logos, the Velora Capital name and marks, page layouts, design elements, images, and underlying code — are owned by Velora Capital LLC or its licensors and are protected by United States and international copyright, trademark, and other intellectual property laws.</p>
+    <p>Subject to these Terms, we grant you a limited, revocable, non-exclusive, non-transferable, non-sublicensable license to access and view the Site for your own internal business purposes in connection with evaluating or obtaining financing. This license does not permit you to:</p>
+    <ul>
+      <li>copy, reproduce, republish, distribute, publicly display, or create derivative works from any part of the Site;</li>
+      <li>use any Velora Capital trademark, logo, or trade dress without our prior written permission;</li>
+      <li>use automated means — scrapers, crawlers, bots, or harvesters — to access or collect content from the Site;</li>
+      <li>frame, mirror, or resell any part of the Site or Services;</li>
+      <li>remove or obscure any copyright, trademark, or proprietary notice.</li>
+    </ul>
+    <p>All rights not expressly granted are reserved. Any feedback or suggestions you send us may be used by us without restriction or compensation to you.</p>
+
+    <h2 id="prohibited">11. Prohibited uses</h2>
+    <p>You agree not to:</p>
+    <ul>
+      <li>use the Services for any unlawful, fraudulent, or deceptive purpose;</li>
+      <li>submit information that is false, forged, altered, or belongs to another person or business without authorization;</li>
+      <li>impersonate any person or entity or misrepresent your affiliation with one;</li>
+      <li>interfere with, disrupt, probe, or attempt to gain unauthorized access to the Site, our systems, or any related network;</li>
+      <li>introduce malware, viruses, or other harmful code;</li>
+      <li>use the Services to launder money, finance terrorism, evade sanctions, or in violation of any export control or anti-money-laundering law;</li>
+      <li>harass, abuse, or threaten our personnel or our funding partners;</li>
+      <li>violate any applicable federal, state, or local law or regulation.</li>
+    </ul>
+
+    <h2 id="disclaimers">12. Disclaimers</h2>
+    <p class="caps">The site and the services are provided “as is” and “as available,” without warranties of any kind, whether express, implied, or statutory. to the fullest extent permitted by law, velora capital disclaims all warranties, including any implied warranties of merchantability, fitness for a particular purpose, title, non-infringement, and any warranties arising from a course of dealing or usage of trade.</p>
+    <p class="caps">Velora capital does not warrant that the site will be uninterrupted, timely, secure, or error-free; that defects will be corrected; that the site is free of viruses or other harmful components; or that any information on the site is accurate, complete, or current. velora capital does not warrant or guarantee that you will be approved for financing, that you will receive any offer, that any offer will be on any particular terms, or that funding will occur within any particular timeframe.</p>
+    <p>Nothing on the Site or provided through the Services constitutes legal, tax, accounting, investment, or financial advice. You are solely responsible for evaluating whether any financing product is appropriate for your business and for obtaining your own professional advice.</p>
+
+    <h2 id="liability">13. Limitation of liability</h2>
+    <p class="caps">To the fullest extent permitted by law, velora capital llc and its members, managers, officers, employees, agents, affiliates, and licensors will not be liable for any indirect, incidental, special, consequential, exemplary, or punitive damages, or for any loss of profits, revenue, business, goodwill, data, or business opportunity, arising out of or relating to the site, the services, any application, any funding partner, or these terms — whether based in contract, tort, negligence, strict liability, or any other theory, and even if velora capital has been advised of the possibility of such damages.</p>
+    <p class="caps">To the fullest extent permitted by law, the total aggregate liability of velora capital for all claims arising out of or relating to the site, the services, or these terms will not exceed the greater of (a) the total amount of fees you actually paid to velora capital in the twelve (12) months preceding the event giving rise to the claim, or (b) one hundred dollars ($100.00).</p>
+    <p>Some jurisdictions do not allow the exclusion of certain warranties or the limitation of certain damages, so some of the above may not apply to you. In those jurisdictions our liability is limited to the greatest extent permitted by law. These limitations are a fundamental basis of the bargain between you and us and apply even if a limited remedy fails of its essential purpose.</p>
+
+    <h2 id="indemnity">14. Indemnification</h2>
+    <p>You agree to defend, indemnify, and hold harmless Velora Capital LLC and its members, managers, officers, employees, agents, and affiliates from and against any claims, demands, actions, investigations, damages, losses, liabilities, judgments, settlements, costs, and expenses — including reasonable attorneys’ fees — arising out of or relating to: (a) your use of the Site or the Services; (b) information you submitted that is false, inaccurate, incomplete, or fraudulent; (c) your breach of these Terms or of any representation or warranty you make; (d) your violation of any law or of the rights of any third party; or (e) any dispute between you and a funding partner or other third party. We reserve the right to assume the exclusive defense and control of any matter subject to indemnification, in which case you agree to cooperate with our defense.</p>
+
+    <h2 id="termination">15. Termination</h2>
+    <p>We may suspend or terminate your access to the Site or the Services, decline to submit or continue processing any application, and discontinue communications with you at any time, for any reason or no reason, with or without notice, including if we believe you have violated these Terms or submitted inaccurate or fraudulent information. You may stop using the Services at any time and may ask us to stop processing your application by contacting us.</p>
+    <p>Termination does not affect any application already submitted to a funding partner or any agreement you have entered into with a funding partner. Sections 3, 4, 5, 8, 10, 12, 13, 14, 16, and 18, and any other provision that by its nature should survive, will survive termination.</p>
+
+    <h2 id="disputes">16. Governing law, arbitration, and class action waiver</h2>
+
+    <h3>a. Governing law and venue</h3>
+    <p>These Terms and any dispute arising out of or relating to them, the Site, or the Services are governed by the laws of the <strong>State of Florida</strong>, without regard to its conflict-of-laws principles. Subject to the arbitration agreement below, you and Velora Capital agree that the exclusive venue for any action that may be brought in court will be the state or federal courts located in <strong>Florida</strong>, and you consent to the personal jurisdiction of those courts and waive any objection based on venue or forum non conveniens.</p>
+
+    <h3>b. Informal resolution first</h3>
+    <p>Before initiating arbitration, you agree to first contact us at <a class="link" href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a> with a written description of the dispute and the relief you seek, and to give us <strong>thirty (30) days</strong> to attempt to resolve it informally. Most concerns can be resolved this way.</p>
+
+    <h3>c. Binding arbitration</h3>
+    <p class="caps">Please read this subsection carefully. it affects your legal rights, including your right to file a lawsuit in court and to have a jury trial.</p>
+    <p>If a dispute is not resolved informally, you and Velora Capital agree that <strong>any dispute, claim, or controversy arising out of or relating to these Terms, the Site, the Services, our communications with you, or the relationship between us — whether based in contract, tort, statute, fraud, misrepresentation, or any other legal theory — will be resolved by final and binding individual arbitration</strong>, rather than in court.</p>
+    <p>The arbitration will be administered by the American Arbitration Association (“AAA”) under its Commercial Arbitration Rules (or its Consumer Arbitration Rules where those apply), as modified by these Terms. The arbitration will be conducted by a single arbitrator, will take place in <strong>Florida</strong> or, at your election, by videoconference or on the basis of written submissions where the rules permit, and the arbitrator’s award may be entered as a judgment in any court of competent jurisdiction. The arbitrator has exclusive authority to resolve any dispute about the interpretation, applicability, enforceability, or formation of this arbitration agreement, except that a court decides whether a claim falls within the small-claims exception below and whether the class waiver in subsection (d) is enforceable. This arbitration agreement is governed by the <strong>Federal Arbitration Act</strong>.</p>
+
+    <h3>d. Class action waiver</h3>
+    <p class="caps">You and velora capital agree that each may bring claims against the other only in an individual capacity, and not as a plaintiff or class member in any purported class, collective, consolidated, coordinated, or representative proceeding. the arbitrator may not consolidate more than one person’s claims and may not preside over any form of class or representative proceeding. you and velora capital waive any right to a jury trial.</p>
+    <p>If this class action waiver is found unenforceable as to a particular claim or request for relief, then that claim or request must be severed and brought in court, while all other claims remain in arbitration.</p>
+
+    <h3>e. Exceptions and opt-out</h3>
+    <p>Either party may bring an individual action in <strong>small claims court</strong> for disputes within that court’s jurisdiction, and either party may seek injunctive or equitable relief in court to protect intellectual property rights or prevent unauthorized access to the Services.</p>
+    <p><strong>You may opt out of this arbitration agreement</strong> by sending written notice to <a class="link" href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a> with the subject line “Arbitration Opt-Out,” stating your name, your business name, and your intent to opt out, <strong>within thirty (30) days</strong> of the date you first accept these Terms. Opting out will not affect any other part of these Terms or your use of the Services.</p>
+
+    <h2 id="changes">17. Changes to these terms</h2>
+    <p>We may modify these Terms at any time. When we do, we will update the “Last updated” date at the top of this page and post the revised Terms here. Material changes will be identified with additional notice where appropriate. Changes take effect when posted, and your continued use of the Site or Services after that constitutes acceptance. If you do not agree to a change, stop using the Services. We recommend reviewing this page periodically.</p>
+
+    <h2 id="misc">18. Miscellaneous</h2>
+    <ul>
+      <li><strong>Entire agreement.</strong> These Terms, together with the Privacy Policy, are the entire agreement between you and Velora Capital regarding the Site and Services, and supersede all prior understandings on that subject.</li>
+      <li><strong>Severability.</strong> If any provision is held invalid or unenforceable, that provision will be limited or severed to the minimum extent necessary, and the remaining provisions remain in full force.</li>
+      <li><strong>No waiver.</strong> Our failure to enforce any provision is not a waiver of our right to do so later.</li>
+      <li><strong>Assignment.</strong> You may not assign or transfer these Terms without our prior written consent. We may assign them freely, including in connection with a merger, acquisition, or sale of assets.</li>
+      <li><strong>No third-party beneficiaries.</strong> These Terms do not create rights in any third party, except that our affiliates and personnel may enforce Sections 13 and 14.</li>
+      <li><strong>Force majeure.</strong> We are not liable for delays or failures caused by events beyond our reasonable control.</li>
+      <li><strong>Headings.</strong> Section headings are for convenience only and do not affect interpretation.</li>
+    </ul>
+
+    <h2 id="contact">19. Contact us</h2>
+    <p>Questions about these Terms, or notices required under them, should be sent to:</p>
+    <div class="contact-block">
+      <p><strong>Velora Capital LLC</strong></p>
+      <p>Email: <a class="link" href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a></p>
+      <p>Phone: <a class="link" href="tel:+19146062010">914-606-2010</a></p>
+      <p>Web: <a class="link" href="https://veloracapitalgrp.com">veloracapitalgrp.com</a></p>
+    </div>
+
+  </article>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <div class="logo">
+          <svg height="26" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1c1f26"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1c1f26"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1c1f26">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
+        </div>
+        <p>Fast, flexible funding for small businesses — backed by advisors who actually answer.</p>
+      </div>
+      <div class="foot-links">
+        <div class="foot-col">
+          <h5>Funding</h5>
+          <a href="index.html#products">Working Capital</a>
+          <a href="index.html#products">Merchant Cash Advance</a>
+          <a href="index.html#products">Equipment Financing</a>
+          <a href="index.html#products">Line of Credit</a>
+        </div>
+        <div class="foot-col">
+          <h5>Company</h5>
+          <a href="index.html#why">Why Velora</a>
+          <a href="index.html#how">How it works</a>
+          <a href="index.html#contact">Contact</a>
+        </div>
+        <div class="foot-col">
+          <h5>Legal</h5>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+        <div class="foot-col">
+          <h5>Get in touch</h5>
+          <a href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a>
+          <a href="tel:+19146062010">914-606-2010</a>
+        </div>
+      </div>
+    </div>
+    <div class="legal">
+      Velora Capital LLC is a business financing brokerage and does not make credit decisions or guarantee funding. Approval, rates, and terms vary based on the business profile and the funding partner, and are not guaranteed. All product names and amounts shown are illustrative.
+    </div>
+    <div class="copyright">© 2026 Velora Capital LLC. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>
