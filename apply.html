@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply for Funding — Velora Capital</title>
+<link rel="icon" type="image/svg+xml" href="velora-icon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#fbf8f7; --ink:#181818; --lime:#d8f477; --forest:#233028;
+    --forest-deep:#192526; --muted:#5f6b64; --line:#e7e2dd;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
+  .wrap{max-width:820px;margin:0 auto;padding:0 28px}
+  a{text-decoration:none;color:inherit}
+  .serif{font-family:'Fraunces',Georgia,serif}
+  .italic{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(251,248,247,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:96px;max-width:1200px;margin:0 auto;padding:0 28px}
+  .logo svg{height:60px;width:auto;display:block}
+  .btn{display:inline-block;background:var(--ink);color:#fff;font-weight:600;font-size:15px;padding:13px 26px;border-radius:999px;transition:.15s;border:none;cursor:pointer}
+  .btn:hover{background:#000}
+  .btn-lime{background:var(--lime);color:var(--ink)}
+  .btn-lime:hover{background:#cdeb63}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+
+  .head{text-align:center;padding:56px 0 10px}
+  .head h1{font-size:clamp(34px,5vw,54px);font-weight:600;letter-spacing:-.02em;margin-bottom:14px}
+  .head p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto}
+
+  form{padding:30px 0 60px}
+  .section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px;margin-bottom:22px}
+  .section h2{font-size:22px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
+  .section .sub{font-size:14px;color:var(--muted);margin-bottom:22px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid .full{grid-column:1 / -1}
+  @media(max-width:620px){.grid{grid-template-columns:1fr}}
+
+  label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
+  label .req{color:#c0392b}
+  input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
+    width:100%;font-family:inherit;font-size:15px;padding:12px 14px;border:1px solid #d8d2cc;border-radius:10px;background:#fff;color:var(--ink);transition:.12s;
+  }
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 3px rgba(216,244,119,.5)}
+  textarea{resize:vertical;min-height:80px}
+  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+
+  .filezone{border:1.5px dashed #c9c2ba;border-radius:12px;padding:22px;text-align:center;cursor:pointer;transition:.12s;background:#fdfcfb}
+  .filezone:hover{border-color:var(--forest);background:#faf9f6}
+  .filezone.drag{border-color:var(--forest);background:#f4f7ec}
+  .filezone p{font-size:14px;color:var(--muted);margin:0}
+  .filezone .hint{font-size:12px;margin-top:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .chip{display:flex;align-items:center;gap:8px;background:#f0ede8;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
+  .chip button{border:none;background:none;cursor:pointer;font-size:15px;line-height:1;color:var(--muted)}
+
+  .radio-row{display:flex;gap:10px}
+  .radio-opt{flex:1}
+  .radio-opt input{position:absolute;opacity:0}
+  .radio-opt label{display:block;text-align:center;padding:11px;border:1px solid #d8d2cc;border-radius:10px;cursor:pointer;font-weight:500;margin:0}
+  .radio-opt input:checked+label{border-color:var(--forest);background:var(--forest);color:#fff}
+
+  .consent{font-size:12.5px;color:#444;line-height:1.6;background:var(--forest);color:#e8efe6;padding:20px;border-radius:12px;margin-bottom:18px}
+  .check-row{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;font-size:13.5px;line-height:1.5}
+  .check-row input{margin-top:3px;width:17px;height:17px;flex-shrink:0;accent-color:var(--forest)}
+  .check-row a{text-decoration:underline}
+
+  .sigpad{border:1px solid #d8d2cc;border-radius:10px;background:#fff;touch-action:none;width:100%;height:150px;display:block}
+  .sig-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
+  .sig-clear{font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline}
+
+  .err{color:#c0392b;font-size:13px;margin-top:10px}
+  .errlist{background:#fdecea;border:1px solid #f5c6c0;border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:13.5px;color:#a5281b}
+  .errlist ul{margin:6px 0 0 18px}
+  .submit-row{text-align:center;padding-top:8px}
+  .note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:14px}
+
+  .success{text-align:center;padding:80px 20px}
+  .success h2{font-size:34px;font-weight:600;margin-bottom:14px}
+  .success p{font-size:17px;color:var(--muted);max-width:460px;margin:0 auto 26px}
+
+  footer{padding:44px 0 40px;border-top:1px solid var(--line);margin-top:40px}
+  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
+  .foot .logo svg{height:26px}
+  .foot p{font-size:13.5px;color:var(--muted);margin-top:12px;max-width:300px;line-height:1.55}
+  .foot-col h5{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#999;margin-bottom:12px}
+  .foot-col a{display:block;font-size:14px;color:#3a3a3a;margin-bottom:9px}
+  .foot-links{display:flex;gap:44px;flex-wrap:wrap}
+  .legal{margin-top:34px;font-size:12px;color:#9a948e;line-height:1.55;max-width:760px}
+  .copyright{margin-top:18px;font-size:12.5px;color:var(--muted)}
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a class="logo" href="/" aria-label="Velora Capital">
+      <svg height="60" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1c1f26"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1c1f26"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1c1f26">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
+    </a>
+    <a href="/" class="btn" style="background:none;color:var(--ink);border:1px solid var(--line)">← Home</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="head">
+    <h1>Apply for <span class="italic">funding</span></h1>
+    <p>A few minutes is all it takes. Your information is encrypted and reviewed by a Velora advisor — never sold.</p>
+  </div>
+
+  <div id="formWrap">
+  <form id="applyForm" novalidate>
+
+    <div id="errBox" class="errlist" style="display:none"></div>
+
+    <!-- BUSINESS -->
+    <div class="section">
+      <h2>Business information</h2>
+      <div class="sub">Tell us about your business.</div>
+      <div class="grid">
+        <div class="full"><label>Legal / Corporate Name <span class="req">*</span></label><input type="text" name="legal_name" required></div>
+        <div class="full"><label>DBA (if applicable)</label><input type="text" name="dba"></div>
+        <div class="full"><label>Business Address <span class="req">*</span></label><input type="text" name="business_street" placeholder="Street address" required></div>
+        <div class="full"><input type="text" name="business_street2" placeholder="Street address line 2"></div>
+        <div><input type="text" name="business_city" placeholder="City" required></div>
+        <div><input type="text" name="business_state" placeholder="State" required></div>
+        <div><input type="text" name="business_zip" placeholder="Zip code" required></div>
+        <div><label>Federal Tax ID (EIN #) <span class="req">*</span></label><input type="text" name="ein" inputmode="numeric" placeholder="00-0000000" required></div>
+        <div><label>Legal Entity Type <span class="req">*</span></label>
+          <select name="entity_type" required>
+            <option value="">Please select</option>
+            <option>Sole Proprietor</option><option>Partnership</option><option>Non-Profit</option><option>LLC</option><option>Corporation</option>
+          </select>
+        </div>
+        <div><label>Business Establish Date <span class="req">*</span></label><input type="date" name="established_date" required></div>
+        <div class="full"><label>Products or Services Sold <span class="req">*</span></label><textarea name="products_services" required></textarea></div>
+      </div>
+    </div>
+
+    <!-- OWNER -->
+    <div class="section">
+      <h2>Owner information</h2>
+      <div class="sub">Primary owner details.</div>
+      <div class="grid">
+        <div><label>First Name <span class="req">*</span></label><input type="text" name="owner_first" required></div>
+        <div><label>Last Name <span class="req">*</span></label><input type="text" name="owner_last" required></div>
+        <div><label>Cell Phone Number <span class="req">*</span></label><input type="tel" name="owner_cell" inputmode="numeric" placeholder="(000) 000-0000" required></div>
+        <div><label>Email <span class="req">*</span></label><input type="email" name="owner_email" placeholder="example@example.com" required></div>
+        <div class="full"><label>Home Address <span class="req">*</span></label><input type="text" name="home_street" placeholder="Street address" required></div>
+        <div class="full"><input type="text" name="home_street2" placeholder="Street address line 2"></div>
+        <div><input type="text" name="home_city" placeholder="City" required></div>
+        <div><input type="text" name="home_state" placeholder="State" required></div>
+        <div><input type="text" name="home_zip" placeholder="Zip code" required></div>
+        <div><label>Date of Birth <span class="req">*</span></label><input type="date" name="dob" required></div>
+        <div><label>SSN # <span class="req">*</span></label><input type="text" name="ssn" inputmode="numeric" placeholder="000-00-0000" required></div>
+        <div><label>Approximate Credit Score <span class="req">*</span></label><input type="text" name="credit_score" inputmode="numeric" placeholder="e.g. 680" required></div>
+        <div><label>Ownership % <span class="req">*</span></label><input type="text" name="ownership_pct" inputmode="numeric" placeholder="e.g. 100" required></div>
+        <div class="full"><label>Best time & method to contact you during business hours <span class="req">*</span></label><input type="text" name="best_contact_time" required></div>
+        <div class="full"><label>Is there an additional owner? <span class="req">*</span></label>
+          <div class="radio-row">
+            <div class="radio-opt"><input type="radio" id="ao_y" name="has_additional_owner" value="Yes"><label for="ao_y">Yes</label></div>
+            <div class="radio-opt"><input type="radio" id="ao_n" name="has_additional_owner" value="No"><label for="ao_n">No</label></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINANCIALS -->
+    <div class="section">
+      <h2>Business financials</h2>
+      <div class="sub">Documents are uploaded securely and stored encrypted.</div>
+      <div class="grid">
+        <div class="full">
+          <label>Last 4 months of business bank statements <span class="req">*</span></label>
+          <div class="filezone" data-cat="bank"><p>Drag & drop or click to upload</p><p class="hint">Up to 4 files · PDF, JPG, PNG</p></div>
+          <div class="chips" data-chips="bank"></div>
+        </div>
+        <div class="full"><label>Total Monthly Sales (CC, Cash, and Check) <span class="req">*</span></label><input type="text" name="total_monthly_sales" inputmode="numeric" placeholder="$" required></div>
+        <div class="full"><label>Do you currently have any open merchant cash advances? <span class="req">*</span></label>
+          <div class="radio-row">
+            <div class="radio-opt"><input type="radio" id="oa_y" name="has_open_advances" value="Yes"><label for="oa_y">Yes</label></div>
+            <div class="radio-opt"><input type="radio" id="oa_n" name="has_open_advances" value="No"><label for="oa_n">No</label></div>
+          </div>
+        </div>
+        <div class="full"><label>Funding Amount Requested <span class="req">*</span></label><input type="text" name="funding_requested" inputmode="numeric" placeholder="$" required></div>
+        <div class="full">
+          <label>Driver's license and voided check(s) <span class="req">*</span></label>
+          <div class="filezone" data-cat="license"><p>Driver's license — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG</p></div>
+          <div class="chips" data-chips="license"></div>
+          <div class="filezone" data-cat="voided_check" style="margin-top:12px"><p>Voided check — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG</p></div>
+          <div class="chips" data-chips="voided_check"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSENT -->
+    <div class="section">
+      <h2>Consent & signature</h2>
+      <div class="sub">Please review and sign below.</div>
+      <div class="consent">
+        By signing below, each of the above-listed business and business owner/officer (individually and collectively, "you") authorize Velora Capital LLC (Velora Capital) and each of its representatives, successors, assigns, and designees ("Recipients") that may be involved with or acquire commercial loans having daily repayment features or purchases of future receivables including Merchant Cash Advance transactions, including without limitation the application therefor (collectively, "Transactions") to obtain consumer or personal, business and investigative reports and other information about you, including credit card processor statements and bank statements, from one or more consumer reporting agencies, such as TransUnion, Experian, and Equifax, and from other credit bureaus, banks, creditors and other third parties. You also authorize Velora Capital to transmit this application form, along with any of the foregoing information obtained in connection with this application, to any or all of the Recipients for the foregoing purposes. You also consent to the release, by any creditor or financial institution, of any information relating to any of you, to Velora Capital, and to each of the Recipients, on its own behalf. You consent to receive e-mail, text messages, facsimiles, and telephone calls from Velora Capital, its employees, and agents to the numbers you have provided. You consent to receive these communications regardless of whether your telephone numbers appear on state or federal Do Not Call lists, and this consent for messaging does not bind you to any term of your application or advance. Std. cellular rates will apply.
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="agree" name="agreed_terms" required>
+        <label for="agree" style="font-weight:400;margin:0">I have read and agree with the <a href="terms.html" target="_blank">Terms &amp; Conditions</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>. <span class="req">*</span></label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="sms_t" name="sms_transactional_consent">
+        <label for="sms_t" style="font-weight:400;margin:0">I consent to receive non-marketing text messages from Velora Capital LLC about my funding application status, document requests, and service updates. Message frequency may vary, message &amp; data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="sms_m" name="sms_marketing_consent">
+        <label for="sms_m" style="font-weight:400;margin:0">I consent to receive marketing text messages, about special offers, discounts, and service updates, from Velora Capital LLC at the phone number provided. Message frequency may vary. Message &amp; data rates may apply. Text HELP for assistance, reply STOP to opt out.</label>
+      </div>
+
+      <div style="margin-top:18px">
+        <label>Owner Signature <span class="req">*</span></label>
+        <canvas class="sigpad" id="sigpad"></canvas>
+        <div class="sig-actions">
+          <span class="hint" style="font-size:12px;color:var(--muted)">Sign above with your mouse or finger</span>
+          <button type="button" class="sig-clear" id="sigClear">Clear</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- honeypot -->
+    <div class="hp"><label>Do not fill<input type="text" name="website_url_hp" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="submit-row">
+      <button type="submit" class="btn btn-lime" id="submitBtn" style="font-size:16px;padding:15px 40px">Submit application</button>
+      <div class="note">Your data is encrypted in transit and at rest. Velora Capital never sells your information.</div>
+    </div>
+  </form>
+  </div>
+
+  <div id="successWrap" class="success" style="display:none">
+    <h2>Application received.</h2>
+    <p>Thank you — a Velora Capital advisor will review your application and reach out shortly. Keep an eye on your phone and email.</p>
+    <a href="/" class="btn">Back to home</a>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap" style="max-width:1200px">
+    <div class="foot">
+      <div>
+        <div class="logo">
+          <svg height="26" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1c1f26"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1c1f26"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1c1f26">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
+        </div>
+        <p>Fast, flexible funding for small businesses — backed by advisors who actually answer.</p>
+      </div>
+      <div class="foot-links">
+        <div class="foot-col">
+          <h5>Get in touch</h5>
+          <a href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a>
+          <a href="tel:+19146062010">914-606-2010</a>
+        </div>
+        <div class="foot-col">
+          <h5>Legal</h5>
+          <a href="privacy.html">Privacy Policy</a>
+          <a href="terms.html">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+    <div class="legal">
+      Velora Capital LLC is a business financing brokerage and does not make credit decisions or guarantee funding. Approval, rates, and terms vary based on the business profile and the funding partner, and are not guaranteed.
+    </div>
+    <div class="copyright">© 2026 Velora Capital LLC. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---- file handling ----
+  var files = { bank: [], license: [], voided_check: [] };
+  var MAX = { bank: 4, license: 1, voided_check: 1 };
+  var OK_EXT = ['pdf','png','jpg','jpeg','gif','tif','tiff'];
+
+  function ext(n){ return (n.split('.').pop()||'').toLowerCase(); }
+
+  document.querySelectorAll('.filezone').forEach(function(zone){
+    var cat = zone.getAttribute('data-cat');
+    var input = document.createElement('input');
+    input.type = 'file'; input.style.display='none';
+    input.accept = '.pdf,.png,.jpg,.jpeg,.gif,.tif,.tiff';
+    if (MAX[cat] > 1) input.multiple = true;
+    zone.appendChild(input);
+    zone.addEventListener('click', function(){ input.click(); });
+    zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('drag'); });
+    zone.addEventListener('dragleave', function(){ zone.classList.remove('drag'); });
+    zone.addEventListener('drop', function(e){ e.preventDefault(); zone.classList.remove('drag'); addFiles(cat, e.dataTransfer.files); });
+    input.addEventListener('change', function(){ addFiles(cat, input.files); input.value=''; });
+  });
+
+  function addFiles(cat, list){
+    for (var i=0;i<list.length;i++){
+      var f = list[i];
+      if (OK_EXT.indexOf(ext(f.name)) === -1){ alert('File type not allowed: '+f.name); continue; }
+      if (f.size > 45*1024*1024){ alert('File too large (max 45MB): '+f.name); continue; }
+      if (files[cat].length >= MAX[cat]){ alert('Max '+MAX[cat]+' file(s) here.'); break; }
+      files[cat].push(f);
+    }
+    renderChips(cat);
+  }
+  function renderChips(cat){
+    var box = document.querySelector('[data-chips="'+cat+'"]');
+    box.innerHTML='';
+    files[cat].forEach(function(f, idx){
+      var chip = document.createElement('div'); chip.className='chip';
+      chip.innerHTML = '<span>'+f.name+'</span>';
+      var x = document.createElement('button'); x.type='button'; x.textContent='×';
+      x.onclick = function(){ files[cat].splice(idx,1); renderChips(cat); };
+      chip.appendChild(x); box.appendChild(chip);
+    });
+  }
+
+  // ---- signature pad ----
+  var canvas = document.getElementById('sigpad');
+  var ctx = canvas.getContext('2d');
+  var drawing=false, hasSig=false;
+  function resize(){
+    var r = canvas.getBoundingClientRect();
+    var dpr = window.devicePixelRatio||1;
+    canvas.width = r.width*dpr; canvas.height = r.height*dpr;
+    ctx.scale(dpr,dpr); ctx.lineWidth=2; ctx.lineCap='round'; ctx.strokeStyle='#181818';
+  }
+  setTimeout(resize, 50); window.addEventListener('resize', function(){ var d=canvas.toDataURL(); resize(); });
+  function pos(e){ var r=canvas.getBoundingClientRect(); var t=e.touches?e.touches[0]:e; return {x:t.clientX-r.left, y:t.clientY-r.top}; }
+  function start(e){ e.preventDefault(); drawing=true; hasSig=true; var p=pos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); }
+  function move(e){ if(!drawing)return; e.preventDefault(); var p=pos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); }
+  function end(){ drawing=false; }
+  canvas.addEventListener('mousedown',start); canvas.addEventListener('mousemove',move); window.addEventListener('mouseup',end);
+  canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',move,{passive:false}); canvas.addEventListener('touchend',end);
+  document.getElementById('sigClear').onclick=function(){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; };
+
+  // ---- submit ----
+  var form = document.getElementById('applyForm');
+  var btn = document.getElementById('submitBtn');
+  var errBox = document.getElementById('errBox');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+    errBox.style.display='none'; errBox.innerHTML='';
+    var errs = [];
+
+    var fd = new FormData(form);
+    var body = {};
+    fd.forEach(function(v,k){ body[k]=v; });
+    body.agreed_terms = document.getElementById('agree').checked;
+    body.sms_transactional_consent = document.getElementById('sms_t').checked;
+    body.sms_marketing_consent = document.getElementById('sms_m').checked;
+
+    // client checks
+    if (!body.agreed_terms) errs.push('You must agree to the Terms & Conditions and Privacy Policy.');
+    if (files.bank.length === 0) errs.push('Please upload at least one bank statement.');
+    if (files.license.length === 0) errs.push("Please upload your driver's license.");
+    if (files.voided_check.length === 0) errs.push('Please upload a voided check.');
+    if (!hasSig) errs.push('Please provide your signature.');
+    if (!body.has_additional_owner) errs.push('Please indicate if there is an additional owner.');
+    if (!body.has_open_advances) errs.push('Please indicate if you have open advances.');
+
+    if (errs.length){ showErrs(errs); return; }
+
+    btn.disabled = true; btn.textContent = 'Submitting…';
+    try {
+      // Step 1: get signed upload URLs
+      var meta = [];
+      files.bank.forEach(function(f){ meta.push({category:'bank', name:f.name}); });
+      files.license.forEach(function(f){ meta.push({category:'license', name:f.name}); });
+      files.voided_check.forEach(function(f){ meta.push({category:'voided_check', name:f.name}); });
+
+      var r1 = await fetch('/api/create-upload-urls', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ files: meta })
+      });
+      if (!r1.ok) throw new Error('upload-prep');
+      var prep = await r1.json();
+
+      // Step 2: upload each file directly to Supabase using its signed URL
+      var allFiles = files.bank.concat(files.license, files.voided_check);
+      for (var i=0;i<prep.uploads.length;i++){
+        var u = prep.uploads[i];
+        var put = await fetch(u.signedUrl, { method:'PUT', body: allFiles[i] });
+        if (!put.ok) throw new Error('upload');
+      }
+
+      // Step 3: submit the application record
+      body.signature_image = canvas.toDataURL('image/png');
+      body.applicationId = prep.applicationId;
+      body.paths = prep.uploads.map(function(u){ return { category:u.category, path:u.path }; });
+
+      var r3 = await fetch('/api/submit-application', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+      });
+      var out = await r3.json();
+      if (!r3.ok){ showErrs(out.details || [out.error || 'Submission failed.']); btn.disabled=false; btn.textContent='Submit application'; return; }
+
+      document.getElementById('formWrap').style.display='none';
+      document.getElementById('successWrap').style.display='block';
+      window.scrollTo(0,0);
+    } catch(err){
+      showErrs(['Something went wrong submitting your application. Please try again, or call us at 914-606-2010.']);
+      btn.disabled=false; btn.textContent='Submit application';
+    }
+  });
+
+  function showErrs(list){
+    errBox.innerHTML = '<strong>Please fix the following:</strong><ul>' + list.map(function(e){return '<li>'+e+'</li>';}).join('') + '</ul>';
+    errBox.style.display='block';
+    errBox.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+})();
+</script>
+</body>
+</html>
