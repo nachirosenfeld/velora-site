@@ -21,6 +21,64 @@ function originOk(req) {
   return false;
 }
 
+function clientIp(req) {
+  return (
+    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
+    req.socket?.remoteAddress ||
+    null
+  );
+}
+
+const TURNSTILE_VERIFY_URL = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
+
+// Cloudflare Turnstile. Every branch here fails closed: a missing secret, an
+// unset hostname allowlist, a network blip, or an unparseable response all deny
+// the submission rather than letting it through.
+async function verifyTurnstile(token, ip) {
+  if (typeof token !== 'string' || !token || token.length > 2048) {
+    return { ok: false, reason: 'missing or malformed token' };
+  }
+
+  const allowedHosts = String(process.env.TURNSTILE_HOSTNAMES || '')
+    .split(',')
+    .map((h) => h.trim())
+    .filter(Boolean);
+  if (!allowedHosts.length) {
+    return { ok: false, reason: 'TURNSTILE_HOSTNAMES is unset — refusing to verify' };
+  }
+
+  let result;
+  try {
+    const params = new URLSearchParams();
+    params.set('secret', process.env.TURNSTILE_SECRET || '');
+    params.set('response', token);
+    if (ip) params.set('remoteip', ip);
+
+    const res = await fetch(TURNSTILE_VERIFY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) return { ok: false, reason: `siteverify returned HTTP ${res.status}` };
+    result = await res.json();
+  } catch (err) {
+    return { ok: false, reason: `siteverify request failed: ${err?.message || err}` };
+  }
+
+  if (result?.success !== true) {
+    const codes = Array.isArray(result?.['error-codes']) ? result['error-codes'].join(', ') : 'none';
+    return { ok: false, reason: `challenge not passed (${codes})` };
+  }
+  if (result.action !== 'apply') {
+    return { ok: false, reason: `unexpected action: ${result.action}` };
+  }
+  if (!allowedHosts.includes(result.hostname)) {
+    return { ok: false, reason: `unexpected hostname: ${result.hostname}` };
+  }
+  return { ok: true };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -31,6 +89,14 @@ export default async function handler(req, res) {
   }
 
   const body = req.body || {};
+  const ip = clientIp(req);
+
+  // Bot gate. Nothing below this runs until Cloudflare vouches for the token.
+  const turnstile = await verifyTurnstile(body['cf-turnstile-response'], ip);
+  if (!turnstile.ok) {
+    console.error('[submit] turnstile rejected:', turnstile.reason);
+    return res.status(403).json({ error: 'Verification failed. Please reload the page and try again.' });
+  }
 
   // Honeypot — a hidden field real users never fill. If present, pretend success.
   if (body.website_url_hp) {
@@ -79,11 +145,6 @@ export default async function handler(req, res) {
     else if (p.category === 'license') license = p.path;
     else if (p.category === 'voided_check') voided = p.path;
   }
-
-  const ip =
-    (req.headers['x-forwarded-for'] || '').split(',')[0].trim() ||
-    req.socket?.remoteAddress ||
-    null;
 
   const row = {
     ...v.data,

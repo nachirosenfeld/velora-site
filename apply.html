@@ -6,6 +6,15 @@
 <title>Apply for Funding — Velora Capital</title>
 <link rel="icon" type="image/svg+xml" href="velora-icon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<!-- Turnstile is rendered explicitly so we can hold the widget id and reset it
+     between attempts. This promise must exist before api.js runs, hence the
+     inline script ahead of it. -->
+<script>
+  window.veloraTurnstileReady = new Promise(function(resolve){
+    window.onTurnstileLoad = resolve;
+  });
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" async defer></script>
 <style>
   :root{
     --cream:#fbf8f7; --ink:#181818; --lime:#d8f477; --forest:#233028;
@@ -77,6 +86,7 @@
   .errlist{background:#fdecea;border:1px solid #f5c6c0;border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:13.5px;color:#a5281b}
   .errlist ul{margin:6px 0 0 18px}
   .submit-row{text-align:center;padding-top:8px}
+  .turnstile-box{display:flex;justify-content:center;margin-bottom:18px;min-height:65px}
   .note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:14px}
 
   .success{text-align:center;padding:80px 20px}
@@ -232,6 +242,7 @@
     <div class="hp"><label>Do not fill<input type="text" name="website_url_hp" tabindex="-1" autocomplete="off"></label></div>
 
     <div class="submit-row">
+      <div id="turnstileBox" class="turnstile-box"></div>
       <button type="submit" class="btn btn-lime" id="submitBtn" style="font-size:16px;padding:15px 40px">Submit application</button>
       <div class="note">Your data is encrypted in transit and at rest. Velora Capital never sells your information.</div>
     </div>
@@ -338,6 +349,31 @@
   canvas.addEventListener('touchstart',start,{passive:false}); canvas.addEventListener('touchmove',move,{passive:false}); canvas.addEventListener('touchend',end);
   document.getElementById('sigClear').onclick=function(){ ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; };
 
+  // ---- Turnstile ----
+  var TURNSTILE_SITEKEY = '0x4AAAAAAERbyLaeKoeU_dwR';
+  var turnstileId = null;
+  var turnstileToken = '';
+
+  window.veloraTurnstileReady.then(function(){
+    turnstileId = window.turnstile.render('#turnstileBox', {
+      sitekey: TURNSTILE_SITEKEY,
+      action: 'apply',
+      callback: function(token){ turnstileToken = token; },
+      'expired-callback': function(){ turnstileToken = ''; },
+      'error-callback': function(){ turnstileToken = ''; }
+    });
+  });
+
+  // Tokens are single-use, and this form posts via fetch without ever navigating
+  // away. Any attempt that does not end in success has to get a fresh token, or
+  // the retry sends a spent one and the server rejects it.
+  function resetTurnstile(){
+    turnstileToken = '';
+    if (turnstileId !== null && window.turnstile){
+      try { window.turnstile.reset(turnstileId); } catch(e){}
+    }
+  }
+
   // ---- submit ----
   var form = document.getElementById('applyForm');
   var btn = document.getElementById('submitBtn');
@@ -363,8 +399,9 @@
     if (!hasSig) errs.push('Please provide your signature.');
     if (!body.has_additional_owner) errs.push('Please indicate if there is an additional owner.');
     if (!body.has_open_advances) errs.push('Please indicate if you have open advances.');
+    if (!turnstileToken) errs.push('Please complete the human-verification check above the Submit button. If it has not finished loading, give it a moment and try again.');
 
-    if (errs.length){ showErrs(errs); return; }
+    if (errs.length){ showErrs(errs); resetTurnstile(); return; }
 
     btn.disabled = true; btn.textContent = 'Submitting…';
     try {
@@ -393,19 +430,21 @@
       body.signature_image = canvas.toDataURL('image/png');
       body.applicationId = prep.applicationId;
       body.paths = prep.uploads.map(function(u){ return { category:u.category, path:u.path }; });
+      body['cf-turnstile-response'] = turnstileToken;
 
       var r3 = await fetch('/api/submit-application', {
         method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify(body)
       });
       var out = await r3.json();
-      if (!r3.ok){ showErrs(out.details || [out.error || 'Submission failed.']); btn.disabled=false; btn.textContent='Submit application'; return; }
+      if (!r3.ok){ showErrs(out.details || [out.error || 'Submission failed.']); resetTurnstile(); btn.disabled=false; btn.textContent='Submit application'; return; }
 
       document.getElementById('formWrap').style.display='none';
       document.getElementById('successWrap').style.display='block';
       window.scrollTo(0,0);
     } catch(err){
       showErrs(['Something went wrong submitting your application. Please try again, or call us at 914-606-2010.']);
+      resetTurnstile();
       btn.disabled=false; btn.textContent='Submit application';
     }
   });
