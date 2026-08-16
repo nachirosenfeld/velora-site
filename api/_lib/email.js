@@ -14,11 +14,12 @@ const BUCKET = 'application-files';
 
 // Ceiling on the raw (pre-base64) bytes we will attach. Anything past it is
 // skipped and named in the email body rather than failing the whole send.
-// Note: base64 inflates the wire payload by ~4/3, so a full 38MB of raw
-// attachments is ~51MB on the wire — above Resend's 40MB cap. Real applications
-// (a handful of statements and photos) land far below this, but lower it to
-// ~28MB if large uploads ever start bouncing.
-const ATTACHMENT_BUDGET = 38 * 1024 * 1024;
+//
+// Resend's 40MB limit applies to the base64-encoded payload, and base64 inflates
+// raw bytes by ~4/3. So the budget has to be set in raw terms with that headroom
+// built in: 28MB raw encodes to ~37MB on the wire, safely under the cap, whereas
+// 38MB raw would encode to ~51MB and be rejected outright.
+const ATTACHMENT_BUDGET = 28 * 1024 * 1024;
 
 // Service-role client. Reads the private bucket; never reaches the browser.
 function serviceClient() {
