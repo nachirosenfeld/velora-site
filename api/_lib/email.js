@@ -4,12 +4,11 @@ import { buildApplicationPdf, fileNameFromPath } from './pdf.js';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// NOTE: onboarding@resend.dev can only deliver to the address that owns the
-// Resend account. Until veloracapitalgrp.com is verified in Resend, notify the
-// account owner's inbox. Swap NOTIFY_TO to admin@veloracapitalgrp.com once the
-// sending domain is verified.
-const NOTIFY_TO = 'nachirosenfeld51@gmail.com';
-const FROM = 'Velora Applications <onboarding@resend.dev>';
+// Sending on our own domain — this requires veloracapitalgrp.com to be a
+// verified domain in Resend, with the DNS records it issues in place. If sends
+// start failing with a domain error, check the domain's status in Resend first.
+const NOTIFY_TO = 'admin@veloracapitalgrp.com';
+const FROM = 'Velora Capital <applications@veloracapitalgrp.com>';
 
 const BUCKET = 'application-files';
 
