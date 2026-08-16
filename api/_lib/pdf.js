@@ -1,3 +1,4 @@
+import fs from 'node:fs';
 import { PDFDocument, StandardFonts, rgb } from 'pdf-lib';
 
 // Renders one application row into a branded, print-ready US Letter PDF.
@@ -10,15 +11,24 @@ const M = 54; // page margin
 const CONTENT_W = PAGE_W - M * 2; // 504
 const GUTTER = 24;
 const COL_W = (CONTENT_W - GUTTER) / 2; // 240
-const BAND_H = 110; // brand band, page 1 only
+const HEADER_H = 110; // logo + kicker block, page 1 only
 const FOOTER_TOP = 56; // content must stay above this
+const LOGO_W = 150; // placed width; height follows the asset's aspect ratio
 
 const FOREST = rgb(0x23 / 255, 0x30 / 255, 0x28 / 255); // #233028
-const LIME = rgb(0xd8 / 255, 0xf4 / 255, 0x77 / 255); // #d8f477
 const INK = rgb(0x18 / 255, 0x18 / 255, 0x18 / 255); // #181818
 const LABEL_GRAY = rgb(0.44, 0.45, 0.44);
-const HAIRLINE = rgb(0.88, 0.89, 0.88);
-const WHITE = rgb(1, 1, 1);
+const HAIRLINE = rgb(0xe0 / 255, 0xe0 / 255, 0xe0 / 255); // #e0e0e0
+
+// The real site logo (index.html's header mark), rasterized from that SVG with
+// the Inter webfont applied. Read once per cold start; pdf-lib takes PNG bytes.
+// Resolved via import.meta.url so the bundler traces it as a dependency.
+let LOGO_PNG = null;
+try {
+  LOGO_PNG = fs.readFileSync(new URL('./velora-logo.png', import.meta.url));
+} catch (err) {
+  console.error('[pdf] logo asset missing:', err?.message || err);
+}
 
 const LABEL_SIZE = 8;
 const VALUE_SIZE = 10;
@@ -179,6 +189,16 @@ export async function buildApplicationPdf(app = {}) {
 
   const submittedOn = fmtDate(app.created_at || app.agreed_terms_at || new Date().toISOString());
 
+  let logo = null;
+  if (LOGO_PNG) {
+    try {
+      logo = await pdf.embedPng(LOGO_PNG);
+    } catch (err) {
+      // Header still renders without it — better than failing the whole PDF.
+      console.error('[pdf] logo embed failed:', err?.message || err);
+    }
+  }
+
   pdf.setTitle(`Velora Capital Funding Application - ${text(app.legal_name)}`);
   pdf.setAuthor('Velora Capital Group');
   pdf.setSubject('Funding Application');
@@ -187,27 +207,27 @@ export async function buildApplicationPdf(app = {}) {
   let page = null;
   let y = 0;
 
-  function drawBand() {
-    page.drawRectangle({ x: 0, y: PAGE_H - BAND_H, width: PAGE_W, height: BAND_H, color: FOREST });
-    // Thin lime edge along the bottom of the band.
-    page.drawRectangle({ x: 0, y: PAGE_H - BAND_H, width: PAGE_W, height: 3, color: LIME });
-
-    page.drawText('velora', {
-      x: M, y: PAGE_H - 58, size: 26, font: bold, color: WHITE,
-    });
-    drawTracked(page, 'CAPITAL', {
-      x: M + 2, y: PAGE_H - 76, size: 9, font: regular, color: LIME, tracking: 3,
-    });
+  function drawHeader() {
+    // Logo top-left, as the embedded image — never redrawn from primitives.
+    if (logo) {
+      const h = LOGO_W * (logo.height / logo.width);
+      page.drawImage(logo, { x: M, y: PAGE_H - 48 - h, width: LOGO_W, height: h });
+    }
 
     const kicker = 'FUNDING APPLICATION';
     const kickerW = trackedWidth(kicker, bold, 10, 2);
     drawTracked(page, kicker, {
-      x: PAGE_W - M - kickerW, y: PAGE_H - 58, size: 10, font: bold, color: WHITE, tracking: 2,
+      x: PAGE_W - M - kickerW, y: PAGE_H - 70, size: 10, font: bold, color: INK, tracking: 2,
     });
     const dateLine = `Submitted ${submittedOn}`;
     page.drawText(dateLine, {
       x: PAGE_W - M - regular.widthOfTextAtSize(dateLine, 9),
-      y: PAGE_H - 76, size: 9, font: regular, color: LIME,
+      y: PAGE_H - 86, size: 9, font: regular, color: LABEL_GRAY,
+    });
+
+    // Hairline separating the header block from the body.
+    page.drawRectangle({
+      x: M, y: PAGE_H - HEADER_H - 8, width: CONTENT_W, height: 0.75, color: HAIRLINE,
     });
   }
 
@@ -215,10 +235,10 @@ export async function buildApplicationPdf(app = {}) {
     const first = pdf.getPageCount() === 0;
     page = pdf.addPage([PAGE_W, PAGE_H]);
     if (first) {
-      drawBand();
-      y = PAGE_H - BAND_H - 34;
+      drawHeader();
+      y = PAGE_H - HEADER_H - 34;
     } else {
-      // Continuation pages carry no band, so content starts at the margin.
+      // Continuation pages carry no header, so content starts at the margin.
       y = PAGE_H - M;
     }
   }
@@ -234,7 +254,6 @@ export async function buildApplicationPdf(app = {}) {
     });
     const ruleY = y - 18;
     page.drawRectangle({ x: M, y: ruleY, width: CONTENT_W, height: 0.75, color: HAIRLINE });
-    page.drawRectangle({ x: M, y: ruleY - 0.75, width: 64, height: 2.5, color: LIME });
     y = ruleY - 16;
   }
 
@@ -329,13 +348,6 @@ export async function buildApplicationPdf(app = {}) {
   );
   row(['Open Advances / Positions', fmtBool(app.has_open_advances)]);
 
-  const docs = [
-    ...(Array.isArray(app.bank_statement_paths) ? app.bank_statement_paths : []),
-    app.license_path,
-    app.voided_check_path,
-  ].filter(Boolean).map(fileNameFromPath);
-  rowFull('Documents Submitted', docs.length ? docs.join('  •  ') : DASH);
-
   // -- Consent & Compliance ---------------------------------------------------
   section('Consent & Compliance');
   row(
@@ -345,10 +357,6 @@ export async function buildApplicationPdf(app = {}) {
   row(
     ['SMS Transactional Consent', fmtBool(app.sms_transactional_consent)],
     ['SMS Marketing Consent', fmtBool(app.sms_marketing_consent)],
-  );
-  row(
-    ['Submitted From IP', text(app.submitted_ip)],
-    ['Application ID', text(app.id)],
   );
 
   // Signature — stored on the row as a data-URL PNG from the browser canvas.
