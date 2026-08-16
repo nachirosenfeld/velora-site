@@ -98,7 +98,7 @@ export default async function handler(req, res) {
   const { data: inserted, error: insErr } = await supabase
     .from('applications')
     .insert(row)
-    .select('id')
+    .select('*')
     .single();
 
   if (insErr) {
@@ -114,15 +114,14 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'Could not save application' });
   }
 
-  // Notification is non-fatal — the row is already saved.
+  // Notification is non-fatal — the row is already saved. It carries the full
+  // application PDF plus the uploaded documents, so give it the inserted row.
   const projectRef = (process.env.SUPABASE_URL || '').match(/https:\/\/([^.]+)\./)?.[1] || '';
-  await sendApplicationNotification({
-    applicationId: inserted.id,
-    legalName: v.data.legal_name,
-    ownerName: `${v.data.owner_first} ${v.data.owner_last}`,
-    fundingRequested: v.data.funding_requested,
-    projectRef,
-  });
+  try {
+    await sendApplicationNotification({ application: inserted, projectRef });
+  } catch (e) {
+    console.error('[submit] notification failed:', e?.message || e);
+  }
 
   return res.status(200).json({ ok: true, applicationId: inserted.id });
 }
