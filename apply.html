@@ -198,7 +198,7 @@
         </div>
         <div class="full"><label>Funding Amount Requested <span class="req">*</span></label><input type="text" name="funding_requested" inputmode="numeric" placeholder="$" required></div>
         <div class="full">
-          <label>Driver's license and voided check(s) <span class="req">*</span></label>
+          <label>Driver's license and voided check(s)</label>
           <div class="filezone" data-cat="license"><p>Driver's license — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG</p></div>
           <div class="chips" data-chips="license"></div>
           <div class="filezone" data-cat="voided_check" style="margin-top:12px"><p>Voided check — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG</p></div>
@@ -394,8 +394,6 @@
     // client checks
     if (!body.agreed_terms) errs.push('You must agree to the Terms & Conditions and Privacy Policy.');
     if (files.bank.length === 0) errs.push('Please upload at least one bank statement.');
-    if (files.license.length === 0) errs.push("Please upload your driver's license.");
-    if (files.voided_check.length === 0) errs.push('Please upload a voided check.');
     if (!hasSig) errs.push('Please provide your signature.');
     if (!body.has_additional_owner) errs.push('Please indicate if there is an additional owner.');
     if (!body.has_open_advances) errs.push('Please indicate if you have open advances.');
