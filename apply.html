@@ -213,7 +213,7 @@
       <div class="grid">
         <div class="full">
           <label>Last 4 months of business bank statements <span class="req">*</span></label>
-          <div class="filezone" data-cat="bank"><p>Drag & drop or click to upload</p><p class="hint">Up to 4 files · PDF, JPG, PNG</p></div>
+          <div class="filezone" data-cat="bank"><p>Drag & drop or click to upload</p><p class="hint">Up to 4 files · PDF, JPG, PNG · max 15MB each</p></div>
           <div class="chips" data-chips="bank"></div>
         </div>
         <div class="full"><label>Total Monthly Sales (CC, Cash, and Check) <span class="req">*</span></label><input type="text" name="total_monthly_sales" inputmode="numeric" placeholder="$" required></div>
@@ -234,9 +234,9 @@
         <div class="full"><label>Funding Amount Requested <span class="req">*</span></label><input type="text" name="funding_requested" inputmode="numeric" placeholder="$" required></div>
         <div class="full">
           <label>Driver's license and voided check(s)</label>
-          <div class="filezone" data-cat="license"><p>Driver's license — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG</p></div>
+          <div class="filezone" data-cat="license"><p>Driver's license — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG · max 15MB</p></div>
           <div class="chips" data-chips="license"></div>
-          <div class="filezone" data-cat="voided_check" style="margin-top:12px"><p>Voided check — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG</p></div>
+          <div class="filezone" data-cat="voided_check" style="margin-top:12px"><p>Voided check — drag & drop or click</p><p class="hint">1 file · PDF, JPG, PNG · max 15MB</p></div>
           <div class="chips" data-chips="voided_check"></div>
         </div>
       </div>
@@ -395,6 +395,14 @@
   var MAX = { bank: 4, license: 1, voided_check: 1 };
   var OK_EXT = ['pdf','png','jpg','jpeg','gif','tif','tiff'];
 
+  // Per-file ceiling. Sized to what the background CRM transfer can actually
+  // move: that push buffers each file whole and re-uploads it inside the
+  // function's 60s budget, so a file too big to transfer would be accepted here
+  // and then fail silently downstream. 15MB is ample for a statement PDF or a
+  // phone photo, and it fails at the point the merchant can still do something
+  // about it.
+  var MAX_BYTES = 15 * 1024 * 1024;
+
   function ext(n){ return (n.split('.').pop()||'').toLowerCase(); }
 
   document.querySelectorAll('.filezone').forEach(function(zone){
@@ -415,7 +423,7 @@
     for (var i=0;i<list.length;i++){
       var f = list[i];
       if (OK_EXT.indexOf(ext(f.name)) === -1){ alert('File type not allowed: '+f.name); continue; }
-      if (f.size > 45*1024*1024){ alert('File too large (max 45MB): '+f.name); continue; }
+      if (f.size > MAX_BYTES){ alert('File too large (max 15MB): '+f.name); continue; }
       if (files[cat].length >= MAX[cat]){ alert('Max '+MAX[cat]+' file(s) here.'); break; }
       files[cat].push(f);
     }

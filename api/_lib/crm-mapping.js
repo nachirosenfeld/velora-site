@@ -2,12 +2,14 @@
 //
 // One pure function. No I/O, no env, no logging — give it a row, get an object.
 //
-// THE ALLOWLIST IS LOAD-BEARING, NOT STYLE. The CRM treats a body containing
-// certain keys (company_website among them) as a bot and silently discards the
-// submission: it answers 200 with no submission_id and nothing is created. A
-// spread of our row would ship every column we ever add straight into that trap,
-// so the output is assembled key by key from EMIT below and nothing else. Adding
-// a field to the payload means adding a line here on purpose.
+// THE ALLOWLIST IS LOAD-BEARING, NOT STYLE. The CRM's honeypot trips on a
+// company_website key holding a non-empty string: it answers 200 with no
+// submission_id and nothing is created. Their schema otherwise strips unknown
+// keys silently, so a stray field is not itself fatal — but a spread of our row
+// would ship every column we ever add, and one of them landing on that name
+// loses the application with a success response. The output is assembled key by
+// key from EMIT below and nothing else. Adding a field to the payload means
+// adding a line here on purpose.
 
 // Their entity_type check constraint accepts exactly these six. Our form offers
 // five labels (apply.html select), which cover all but s_corp — we have no
@@ -110,6 +112,7 @@ const EMIT = [
   ['owner_ssn',                'ssn',                   str],
   ['owner_credit_score',       'credit_score',          int],
   ['ownership_pct',            'ownership_pct',         (v) => int(v, { max: 100 })],
+  ['contact_preference',       'best_contact_time',     str],
   ['additional_owner',         'has_additional_owner',  bool],
 
   // Financials

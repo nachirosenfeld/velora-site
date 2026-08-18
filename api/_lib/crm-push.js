@@ -82,32 +82,42 @@ function failure(reason) {
 }
 
 // Turn a non-2xx (or ambiguous 2xx) CRM response into the recorded status.
+//
+// Their error bodies are { ok: false, error: "<reason>", issues?: [...] }. The
+// `error` string is the diagnosable part — upload-url alone returns 400 for four
+// different reasons (invalid_json, files must be 1-12 entries, bad category: X,
+// unsupported file type: X) — so record what they actually said rather than a
+// fixed label that reads the same for all of them.
 async function classifyResponse(res, phaseLabel) {
   const { status } = res;
 
-  if (status === 400) return failure('invalid_json');
+  let body = null;
+  try {
+    body = await res.json();
+  } catch {
+    /* not JSON — fall through to the status-derived label */
+  }
+  const detail = typeof body?.error === 'string' && body.error ? body.error : '';
+
+  if (status === 400) return failure(`${phaseLabel}: ${detail || 'invalid_json'}`);
   if (status === 401) return failure('auth: secret rejected');
   if (status === 429) {
     const retry = res.headers.get('retry-after');
     return failure(`rate_limited${retry ? ` (retry-after: ${retry})` : ''}`);
   }
   if (status === 422) {
-    let issues = [];
-    try {
-      const body = await res.json();
-      if (Array.isArray(body?.issues)) {
-        issues = body.issues.map((i) => {
+    // issues[].path already arrives joined ("owner_email"), but tolerate the
+    // array form in case that changes.
+    const issues = Array.isArray(body?.issues)
+      ? body.issues.map((i) => {
           const path = Array.isArray(i?.path) ? i.path.join('.') : String(i?.path ?? '');
           return `${path}: ${i?.message ?? ''}`.trim();
-        });
-      }
-    } catch {
-      /* body was not JSON — fall through to the bare label */
-    }
-    return failure(issues.length ? `422 ${issues.join('; ')}` : '422 validation failed');
+        })
+      : [];
+    return failure(issues.length ? `422 ${issues.join('; ')}` : `422 ${detail || 'validation failed'}`);
   }
-  if (status >= 500) return failure('submission_failed');
-  return failure(`${phaseLabel}: unexpected HTTP ${status}`);
+  if (status >= 500) return failure(detail || 'submission_failed');
+  return failure(`${phaseLabel}: unexpected HTTP ${status}${detail ? ` (${detail})` : ''}`);
 }
 
 export async function pushApplicationToCrm({ application } = {}) {
@@ -312,10 +322,10 @@ export async function pushApplicationToCrm({ application } = {}) {
 
     const submissionId = json?.submission_id;
     if (!submissionId) {
-      // 200 with no id is their honeypot: the body carried a key it treats as a
-      // bot signal and the submission was silently discarded. That can only mean
-      // our allowlist leaked a forbidden key — a code bug in crm-mapping.js, not
-      // a transient failure. Retrying will not help.
+      // 200 with no id is their honeypot: the body carried company_website as a
+      // non-empty string and the submission was silently discarded. That can only
+      // mean our allowlist leaked a forbidden key — a code bug in crm-mapping.js,
+      // not a transient failure. Retrying will not help.
       console.error(
         '[crm] HONEYPOT: 200 with no submission_id — the outgoing body contained a forbidden key. ' +
         'Check the EMIT allowlist in _lib/crm-mapping.js. Keys sent: ' + Object.keys(body).join(', ')
