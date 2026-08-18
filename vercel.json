@@ -1,3 +1,8 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "functions": {
+    "api/submit-application.js": {
+      "maxDuration": 60
+    }
+  }
 }

@@ -1,6 +1,8 @@
+import { waitUntil } from '@vercel/functions';
 import { supabase, BUCKET } from './_lib/supabase.js';
 import { validateApplication } from './_lib/validate.js';
 import { sendApplicationNotification } from './_lib/email.js';
+import { pushApplicationToCrm } from './_lib/crm-push.js';
 
 // Step 3 of the two-step upload. Files are already in the private bucket (the
 // browser uploaded them directly using the signed URLs from step 1). This
@@ -19,6 +21,37 @@ function originOk(req) {
   if (ALLOWED_ORIGINS.includes(o)) return true;
   if (o.endsWith('.vercel.app')) return true; // preview deployments
   return false;
+}
+
+// The three folders create-upload-urls writes into, under the applicationId.
+const CATEGORY_FOLDERS = ['bank-statements', 'license', 'voided-check'];
+
+// Storage already records size and mimetype per object, so read them back from
+// there rather than trusting what the browser claimed. Anything we cannot read
+// stays null; this is metadata, never a reason to fail a submission.
+async function collectFileMetadata(applicationId) {
+  const map = new Map();
+  for (const folder of CATEGORY_FOLDERS) {
+    try {
+      const { data, error } = await supabase.storage
+        .from(BUCKET)
+        .list(`${applicationId}/${folder}`, { limit: 100 });
+      if (error) {
+        console.error(`[submit] list error for ${folder}:`, error.message);
+        continue;
+      }
+      for (const obj of data || []) {
+        const size = Number(obj?.metadata?.size);
+        map.set(`${applicationId}/${folder}/${obj.name}`, {
+          sizeBytes: Number.isFinite(size) ? size : null,
+          mimeType: obj?.metadata?.mimetype || null,
+        });
+      }
+    } catch (e) {
+      console.error(`[submit] list threw for ${folder}:`, e?.message || e);
+    }
+  }
+  return map;
 }
 
 function clientIp(req) {
@@ -122,25 +155,27 @@ export default async function handler(req, res) {
     }
   }
 
-  // Confirm the uploaded objects actually exist in the bucket.
-  try {
-    const { data: listed, error: listErr } = await supabase.storage
-      .from(BUCKET)
-      .list(applicationId, { limit: 100 });
-    if (listErr) {
-      console.error('[submit] list error:', listErr.message);
-    }
-    // (We don't hard-fail on a missing file; we record what the client sent and
-    //  the folder is inspectable. But we do sort paths into their columns.)
-  } catch (e) {
-    console.error('[submit] list threw:', e?.message || e);
-  }
+  // Confirm the uploaded objects actually exist, and pick up the size/mimetype
+  // Storage recorded for each. We don't hard-fail on a missing file; the folder
+  // stays inspectable and the paths are recorded either way.
+  const fileMeta = await collectFileMetadata(applicationId);
 
-  // Sort file paths into their DB columns by category.
+  // Sort file paths into their DB columns by category, and build the canonical
+  // files[] alongside. The three path columns remain the read path for the
+  // notification email (_lib/email.js), so both are written.
   const bank = [];
   let license = null;
   let voided = null;
+  const files = [];
   for (const p of paths) {
+    const known = fileMeta.get(p.path) || {};
+    files.push({
+      category: p.category,
+      path: p.path,
+      filename: String(p.path).replace(/^.*\//, ''),
+      sizeBytes: known.sizeBytes ?? null,
+      mimeType: known.mimeType ?? null,
+    });
     if (p.category === 'bank') bank.push(p.path);
     else if (p.category === 'license') license = p.path;
     else if (p.category === 'voided_check') voided = p.path;
@@ -148,12 +183,17 @@ export default async function handler(req, res) {
 
   const row = {
     ...v.data,
+    application_id: applicationId,
     bank_statement_paths: bank,
     license_path: license,
     voided_check_path: voided,
+    files,
     submitted_ip: ip,
     agreed_terms_at: new Date().toISOString(),
     status: 'new',
+    // Flipped to synced/failed by the background push. A row still reading
+    // 'pending' means the push never resolved at all.
+    crm_sync_status: 'pending',
   };
 
   const { data: inserted, error: insErr } = await supabase
@@ -182,6 +222,20 @@ export default async function handler(req, res) {
     await sendApplicationNotification({ application: inserted, projectRef });
   } catch (e) {
     console.error('[submit] notification failed:', e?.message || e);
+  }
+
+  // CRM push — after the insert and after the email, and deliberately not
+  // awaited: the merchant gets their 200 now while the file transfer continues
+  // in the background. pushApplicationToCrm never throws and never touches the
+  // response, so a CRM outage cannot turn a saved application into an error.
+  try {
+    waitUntil(pushApplicationToCrm({ application: inserted }));
+  } catch (e) {
+    // waitUntil throws if there is no surrounding request context (local `vercel
+    // dev`, or a runtime that doesn't provide it). Fall back to inline so the
+    // push still happens; it costs the merchant the transfer latency.
+    console.error('[submit] waitUntil unavailable, pushing inline:', e?.message || e);
+    await pushApplicationToCrm({ application: inserted });
   }
 
   return res.status(200).json({ ok: true, applicationId: inserted.id });

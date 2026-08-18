@@ -103,6 +103,9 @@
   .legal{margin-top:34px;font-size:12px;color:#9a948e;line-height:1.55;max-width:760px}
   .copyright{margin-top:18px;font-size:12.5px;color:var(--muted)}
   .hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
+  [hidden]{display:none!important}
+  .helper{font-size:12.5px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:12px}
+  .helper .count{flex-shrink:0;font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -179,6 +182,30 @@
       </div>
     </div>
 
+    <!-- SECOND OWNER — revealed only when "Is there an additional owner?" is Yes.
+         Flipping back to No hides this and clears every value, so a part-filled
+         block can never ride along on a submission that says there is no
+         second owner. -->
+    <div class="section" id="partnerSection" hidden>
+      <h2>Second owner information</h2>
+      <div class="sub">Details for the additional owner.</div>
+      <div class="grid">
+        <div><label>First Name</label><input type="text" name="partner_first_name"></div>
+        <div><label>Last Name</label><input type="text" name="partner_last_name"></div>
+        <div><label>Cell Phone Number</label><input type="tel" name="partner_cell" inputmode="numeric" placeholder="(000) 000-0000"></div>
+        <div><label>Email <span class="req">*</span></label><input type="email" name="partner_email" placeholder="example@example.com"></div>
+        <div class="full"><label>Home Address</label><input type="text" name="partner_home_street" placeholder="Street address"></div>
+        <div class="full"><input type="text" name="partner_home_street2" placeholder="Street address line 2"></div>
+        <div><input type="text" name="partner_home_city" placeholder="City"></div>
+        <div><input type="text" name="partner_home_state" placeholder="State"></div>
+        <div><input type="text" name="partner_home_zip" placeholder="Zip code"></div>
+        <div><label>Date of Birth</label><input type="date" name="partner_dob"></div>
+        <div><label>SSN #</label><input type="text" name="partner_ssn" inputmode="numeric" placeholder="000-00-0000"></div>
+        <div><label>Approximate Credit Score</label><input type="text" name="partner_credit_score" inputmode="numeric" placeholder="e.g. 680"></div>
+        <div><label>Ownership %</label><input type="text" name="partner_ownership_pct" inputmode="numeric" placeholder="e.g. 50"></div>
+      </div>
+    </div>
+
     <!-- FINANCIALS -->
     <div class="section">
       <h2>Business financials</h2>
@@ -194,6 +221,14 @@
           <div class="radio-row">
             <div class="radio-opt"><input type="radio" id="oa_y" name="has_open_advances" value="Yes"><label for="oa_y">Yes</label></div>
             <div class="radio-opt"><input type="radio" id="oa_n" name="has_open_advances" value="No"><label for="oa_n">No</label></div>
+          </div>
+        </div>
+        <div class="full" id="advanceDetailWrap" hidden>
+          <label>Who are the advances with, how many positions, and what are the balances?</label>
+          <textarea name="open_advance_detail" id="advanceDetail" maxlength="500" rows="4"></textarea>
+          <div class="helper">
+            <span>An estimate is fine — you don't need exact figures.</span>
+            <span class="count" id="advanceCount">0/500</span>
           </div>
         </div>
         <div class="full"><label>Funding Amount Requested <span class="req">*</span></label><input type="text" name="funding_requested" inputmode="numeric" placeholder="$" required></div>
@@ -287,6 +322,74 @@
 
 <script>
 (function(){
+  // ---- referral code ----
+  // ?ref=abc123 is captured once on arrival and kept in sessionStorage so it
+  // survives the merchant navigating within the tab. The shape test is the same
+  // one the server re-applies; a value that fails is dropped whole rather than
+  // stripped into something that would pass.
+  var REF_KEY = 'velora.apply.ref';
+  var REF_RE = /^[a-z0-9]{2,8}$/;
+
+  function captureRef(){
+    try {
+      var raw = new URLSearchParams(window.location.search).get('ref');
+      if (raw == null) return;
+      var v = String(raw).trim().toLowerCase();
+      if (REF_RE.test(v)) sessionStorage.setItem(REF_KEY, v);
+    } catch(e){}
+  }
+  function storedRef(){
+    try {
+      var v = sessionStorage.getItem(REF_KEY);
+      return (v && REF_RE.test(v)) ? v : '';
+    } catch(e){ return ''; }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', captureRef);
+  } else {
+    captureRef();
+  }
+
+  // ---- application id ----
+  // The UUID that prefixes every uploaded object's storage path. Minted by
+  // create-upload-urls, held here between step 1 and step 3, and sent back at
+  // submit so the row can record which storage folder belongs to it.
+  var APPID_KEY = 'velora.apply.appid';
+  function rememberAppId(id){ try { sessionStorage.setItem(APPID_KEY, id); } catch(e){} }
+  function storedAppId(){ try { return sessionStorage.getItem(APPID_KEY) || ''; } catch(e){ return ''; } }
+
+  // ---- conditional sections ----
+  function clearFields(root){
+    root.querySelectorAll('input, textarea, select').forEach(function(el){
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+      else el.value = '';
+    });
+  }
+  function bindReveal(yesId, noId, panel, afterHide){
+    function sync(){
+      var show = document.getElementById(yesId).checked;
+      panel.hidden = !show;
+      if (!show){ clearFields(panel); if (afterHide) afterHide(); }
+    }
+    document.getElementById(yesId).addEventListener('change', sync);
+    document.getElementById(noId).addEventListener('change', sync);
+    sync();
+  }
+
+  var advanceDetail = document.getElementById('advanceDetail');
+  var advanceCount = document.getElementById('advanceCount');
+  var ADVANCE_MAX = 500;
+  function syncAdvanceCount(){
+    if (advanceDetail.value.length > ADVANCE_MAX){
+      advanceDetail.value = advanceDetail.value.slice(0, ADVANCE_MAX);
+    }
+    advanceCount.textContent = advanceDetail.value.length + '/' + ADVANCE_MAX;
+  }
+  advanceDetail.addEventListener('input', syncAdvanceCount);
+
+  bindReveal('ao_y', 'ao_n', document.getElementById('partnerSection'));
+  bindReveal('oa_y', 'oa_n', document.getElementById('advanceDetailWrap'), syncAdvanceCount);
+
   // ---- file handling ----
   var files = { bank: [], license: [], voided_check: [] };
   var MAX = { bank: 4, license: 1, voided_check: 1 };
@@ -397,6 +500,12 @@
     if (!hasSig) errs.push('Please provide your signature.');
     if (!body.has_additional_owner) errs.push('Please indicate if there is an additional owner.');
     if (!body.has_open_advances) errs.push('Please indicate if you have open advances.');
+    if (document.getElementById('ao_y').checked && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(body.partner_email||'').trim())) {
+      errs.push('Please enter a valid email for the second owner.');
+    }
+    if (String(body.open_advance_detail||'').length > ADVANCE_MAX) {
+      errs.push('Open advance details must be ' + ADVANCE_MAX + ' characters or fewer.');
+    }
     if (!turnstileToken) errs.push('Please complete the human-verification check above the Submit button. If it has not finished loading, give it a moment and try again.');
 
     if (errs.length){ showErrs(errs); resetTurnstile(); return; }
@@ -415,6 +524,7 @@
       });
       if (!r1.ok) throw new Error('upload-prep');
       var prep = await r1.json();
+      rememberAppId(prep.applicationId);
 
       // Step 2: upload each file directly to Supabase using its signed URL
       var allFiles = files.bank.concat(files.license, files.voided_check);
@@ -426,9 +536,14 @@
 
       // Step 3: submit the application record
       body.signature_image = canvas.toDataURL('image/png');
-      body.applicationId = prep.applicationId;
+      body.applicationId = storedAppId() || prep.applicationId;
       body.paths = prep.uploads.map(function(u){ return { category:u.category, path:u.path }; });
       body['cf-turnstile-response'] = turnstileToken;
+
+      // Present or absent — never null, never "". The server treats a missing
+      // key and an invalid code identically, but omitting keeps the contract clean.
+      var ref = storedRef();
+      if (ref) body.ref = ref;
 
       var r3 = await fetch('/api/submit-application', {
         method:'POST', headers:{'Content-Type':'application/json'},
