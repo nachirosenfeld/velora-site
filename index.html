@@ -38,13 +38,20 @@
   @media(max-width:820px){.navlinks{display:none}}
 
   /* hero */
-  .hero{text-align:center;padding:72px 0 30px}
+  .hero{text-align:center;padding:72px 0 30px;position:relative}
   .rating{font-size:14px;color:var(--muted);font-weight:500;margin-bottom:22px;display:flex;gap:8px;align-items:center;justify-content:center}
   .stars{color:#1c9a5e;letter-spacing:1px}
   .hero h1{font-size:clamp(42px,6vw,78px);line-height:1.04;font-weight:600;letter-spacing:-.02em;margin-bottom:22px}
   .hero p.sub{font-size:19px;color:#333;max-width:520px;margin:0 auto 34px;line-height:1.55}
   .cta-row{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap}
   select.amount{font-family:inherit;font-size:15px;font-weight:500;padding:14px 22px;border-radius:999px;border:1px solid #d8d2cc;background:#fff;color:var(--ink);min-width:250px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 20px center}
+
+  /* advisor */
+  .advisor{position:absolute;right:-8px;bottom:-30px;width:230px;z-index:5;pointer-events:none}
+  .advisor img{width:100%;height:auto;display:block}
+  .advisor-bubble{position:absolute;top:8px;left:-118px;background:#fff;border:1px solid var(--line);border-radius:16px 16px 4px 16px;padding:11px 15px;font-size:13.5px;font-weight:500;color:#1C2B47;line-height:1.35;width:150px;box-shadow:0 6px 20px rgba(28,43,71,.12)}
+  .advisor-bubble:after{content:"";position:absolute;right:-8px;bottom:14px;width:0;height:0;border:8px solid transparent;border-left-color:#fff;border-right:0}
+  @media(max-width:1050px){.advisor{display:none}}
 
   /* stat cards */
   .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:56px 0 20px}
@@ -136,6 +143,10 @@
 
   <!-- HERO -->
   <section class="hero">
+    <div class="advisor" aria-hidden="true">
+      <div class="advisor-bubble">Hi! Need funding? I can help.</div>
+      <img src="/assets/advisor-web.png" alt="Velora funding advisor">
+    </div>
     <div class="rating"><span class="stars">★★★★★</span> Trusted by small business owners nationwide</div>
     <h1>Business funding,<br><span class="italic">without the wait.</span></h1>
     <p class="sub">Velora Capital connects business owners with the working capital they need — fast decisions, straight answers, no runaround.</p>
