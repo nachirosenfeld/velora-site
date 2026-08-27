@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Velora Capital | Business funding, fast</title>
-<meta name="description" content="Working capital, SBA loans, equipment financing and lines of credit from $10,000 to $500,000. Funding decisions in 24 hours, no cost to apply.">
+<meta name="description" content="Working capital, SBA loans, equipment financing and lines of credit from $5,000 to $5 million. Funding decisions in 24 hours, no cost to apply.">
 <meta name="theme-color" content="#FAF9F6">
 <link rel="icon" type="image/svg+xml" href="velora-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -169,26 +169,41 @@
     background:var(--white);
     border:1px solid var(--line);
     border-radius:var(--r-surface);
-    padding:28px;
+    /* no bottom padding: the note below bleeds to the card edge */
+    padding:26px 26px 0;
     box-shadow:var(--shadow-lg);
     width:100%;
+    overflow:hidden;
   }
-  .summary-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
-  .summary-top h2{font-size:15px;font-weight:600;letter-spacing:0}
+  .summary-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:20px}
+  .summary-top h2{
+    font-size:11.5px;font-weight:600;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--body);
+  }
+  /* quiet outline rather than a filled pill, so the marker sits with
+     the label instead of floating on top of the card */
   .chip{
-    font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
-    color:var(--navy);background:var(--tint-deep);
-    padding:5px 11px;border-radius:var(--r-pill);
+    font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
+    color:var(--accent-ink);background:transparent;
+    border:1px solid rgba(47,107,255,.30);
+    padding:3px 9px;border-radius:var(--r-pill);
   }
-  .summary-amount{font-size:44px;font-weight:700;color:var(--navy);letter-spacing:-.03em;line-height:1}
-  .summary-amount-lbl{font-size:14.5px;margin-top:7px;margin-bottom:22px}
-  .summary-rows{border-top:1px solid var(--line);padding-top:6px}
-  .summary-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:11px 0;font-size:14.5px}
+  .summary-amount{font-size:48px;font-weight:700;color:var(--navy);letter-spacing:-.038em;line-height:1}
+  .summary-amount-lbl{font-size:14px;margin-top:8px;margin-bottom:22px;color:var(--body)}
+  .summary-rows{border-top:1px solid var(--line)}
+  .summary-row{
+    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+    padding:13px 0;font-size:14px;
+  }
+  .summary-row + .summary-row{box-shadow:inset 0 1px 0 rgba(228,232,240,.75)}
   .summary-row dt{color:var(--body)}
-  .summary-row dd{color:var(--navy);font-weight:600}
+  .summary-row dd{color:var(--navy);font-weight:600;text-align:right}
+  /* footer of the card, bled to the edges so it reads as card
+     structure rather than a box dropped inside it */
   .summary-note{
-    margin-top:14px;padding:12px 14px;background:var(--tint);
-    border-radius:10px;font-size:13px;color:var(--navy);
+    margin:20px -26px 0;padding:15px 26px;
+    background:var(--tint);border-top:1px solid var(--line);
+    font-size:12.5px;line-height:1.5;color:var(--body);
   }
 
   /* ---------------- trust strip ---------------- */
@@ -225,7 +240,7 @@
 
   /* ---------------- shared section furniture ---------------- */
   section{padding:104px 0}
-  #products,#why,#how,#faq,#contact{scroll-margin-top:96px}
+  #products,#industries,#why,#how,#testimonials,#faq,#contact{scroll-margin-top:96px}
   /* surface rhythm: tinted, cream, white, cream, navy. One light theme
      throughout, alternating so sections read as distinct moments. */
   .s-tint{
@@ -277,6 +292,38 @@
     letter-spacing:.005em;
   }
   .tile-navy .tile-amount{color:var(--white)}
+
+  /* ---------------- industries: tag cluster ---------------- */
+  .inds{display:flex;flex-wrap:wrap;gap:11px}
+  .ind{
+    display:inline-flex;align-items:center;
+    padding:13px 22px;border-radius:var(--r-pill);
+    background:var(--white);border:1px solid var(--line);
+    font-size:15.5px;font-weight:500;color:var(--navy);
+    box-shadow:var(--shadow-sm);
+    transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  }
+  .ind:hover{border-color:var(--tint-deep);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+
+  /* ---------------- testimonials ---------------- */
+  .quotes{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  .quote{
+    display:flex;flex-direction:column;
+    background:var(--white);border:1px solid var(--line);
+    border-radius:var(--r-surface);padding:34px;
+    box-shadow:var(--shadow-sm);
+  }
+  .quote-rule{width:40px;height:3px;border-radius:2px;background:var(--accent);margin-bottom:24px}
+  .quote blockquote p{
+    font-size:19.5px;line-height:1.5;letter-spacing:-.012em;
+    color:var(--navy);font-weight:500;
+  }
+  .quote figcaption{
+    margin-top:auto;padding-top:28px;font-size:14px;color:var(--body);
+  }
+  .quote-name{display:block;color:var(--navy);font-weight:600;margin-bottom:2px}
+  .head-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .head-row h2{margin-bottom:0}
 
   /* ---------------- why: two column, hairline rows ---------------- */
   .why-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:start}
@@ -386,6 +433,7 @@
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
     .bento{grid-template-columns:repeat(2,1fr)}
     .bento > .tile-wide{grid-column:span 1}
+    .quotes{grid-template-columns:1fr}
     .track{grid-template-columns:1fr;gap:0}
     .step{padding:30px 0 0 0}
     .step + .step{padding-left:0;border-left:0}
@@ -467,7 +515,7 @@
       <div class="hero-grid">
         <div>
           <h1>Business funding,<br>without the wait.</h1>
-          <p class="sub">Working capital from $10,000 to $500,000, matched to your revenue by an advisor who picks up the phone.</p>
+          <p class="sub">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
           <div class="hero-cta">
             <a href="/apply" class="btn btn-primary btn-lg">Apply now</a>
             <a href="#products" class="btn btn-quiet btn-lg">What we fund</a>
@@ -523,7 +571,7 @@
         </span>
         <span class="trust-item">
           <svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 2l6.5 2.6v4.6c0 3.7-2.6 6.9-6.5 8.2-3.9-1.3-6.5-4.5-6.5-8.2V4.6z"/><path d="M7.4 9.9l1.9 1.9 3.6-3.6"/></svg>
-          Trusted by 10,000+ business owners
+          Trusted by 500+ business owners
         </span>
         <span class="trust-item">
           <svg class="tick" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>
@@ -542,7 +590,7 @@
           <span>To a funding decision</span>
         </div>
         <div class="band-stat">
-          <b class="num">$500K</b>
+          <b class="num">$5M</b>
           <span>In available capital</span>
         </div>
         <div class="band-stat">
@@ -569,7 +617,7 @@
         <article class="tile tile-wide tile-navy">
           <h3>Working Capital</h3>
           <p>Cover payroll, inventory or day-to-day operations with fast, flexible funding that follows your cash cycle rather than a fixed calendar.</p>
-          <p class="tile-amount num">$10,000 to $500,000</p>
+          <p class="tile-amount num">$5,000 to $5 million</p>
         </article>
         <article class="tile tile-tint">
           <h3>SBA Loans</h3>
@@ -596,6 +644,28 @@
           <p>Funding that flexes with your cash flow, tied to your monthly revenue.</p>
           <p class="tile-amount">Repayment follows sales</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHO WE FUND: tag cluster -->
+  <section id="industries" class="s-white">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>Who we fund.</h2>
+        <p>Owner-operated businesses across the trades, services and retail. If your industry is not listed, your advisor can tell you where you stand.</p>
+      </div>
+      <div class="inds">
+        <span class="ind">Restaurants and food service</span>
+        <span class="ind">Construction and trades</span>
+        <span class="ind">Retail and e-commerce</span>
+        <span class="ind">Trucking and logistics</span>
+        <span class="ind">Auto repair</span>
+        <span class="ind">Healthcare and dental</span>
+        <span class="ind">Salons and spas</span>
+        <span class="ind">Professional services</span>
+        <span class="ind">Landscaping</span>
+        <span class="ind">Light manufacturing</span>
       </div>
     </div>
   </section>
@@ -649,6 +719,44 @@
           <h3>Get funded</h3>
           <p>Pick your offer and get capital in your account, often within 24 hours of approval.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <!-- PLACEHOLDER CONTENT. Both the quote bodies and the bracketed
+       attributions are sample copy written to size the component. They
+       must be replaced with real, substantiated customer statements
+       (with permission on file) before this page goes to production. -->
+  <section id="testimonials" class="s-tint">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="head-row">
+          <h2>What owners say.</h2>
+          <span class="chip">Placeholder copy</span>
+        </div>
+      </div>
+      <div class="quotes">
+        <figure class="quote">
+          <div class="quote-rule" aria-hidden="true"></div>
+          <blockquote>
+            <p>“I sent bank statements on a Monday and the funds cleared Wednesday. I always knew who to call.”</p>
+          </blockquote>
+          <figcaption>
+            <span class="quote-name">[Client name]</span>
+            [Business type], [City, State]
+          </figcaption>
+        </figure>
+        <figure class="quote">
+          <div class="quote-rule" aria-hidden="true"></div>
+          <blockquote>
+            <p>“They talked me out of an option that did not fit my margins. That is the call I needed.”</p>
+          </blockquote>
+          <figcaption>
+            <span class="quote-name">[Client name]</span>
+            [Business type], [City, State]
+          </figcaption>
+        </figure>
       </div>
     </div>
   </section>
