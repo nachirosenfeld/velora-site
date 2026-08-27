@@ -60,28 +60,6 @@
   .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px;width:100%}
   .num{font-variant-numeric:tabular-nums}
 
-  /* ---------------------------------------------------------------
-     The Velora mark. The two slanted bars are lifted straight off the
-     wordmark (the logo path runs 14 across for 27 down, so skewX(-27deg)
-     matches its exact rake). Reused at three scales as the site's one
-     recurring graphic: section markers, accent rules, and a watermark.
-     Brand-derived, not invented decoration.
-  ----------------------------------------------------------------*/
-  .mark{display:inline-flex;gap:5px;flex-shrink:0}
-  .mark i{display:block;width:7px;height:22px;background:var(--accent);transform:skewX(-27deg)}
-  .mark-lg i{width:11px;height:36px}
-  .mark-sm{gap:4px}
-  .mark-sm i{width:5px;height:15px}
-  .mark-quiet i{background:var(--tint-deep)}
-  .mark-navy i{background:var(--navy)}
-  .mark-white i{background:rgba(255,255,255,.55)}
-  /* oversized, low-contrast watermark for navy surfaces */
-  .mark-ghost{
-    position:absolute;pointer-events:none;display:flex;gap:26px;
-    opacity:.07;
-  }
-  .mark-ghost i{display:block;width:58px;height:230px;background:#fff;transform:skewX(-27deg)}
-
   /* focus: never removed, only replaced */
   :where(a,button,summary,[tabindex]):focus-visible{
     outline:2px solid var(--accent);
@@ -273,13 +251,9 @@
   }
   .s-white{background:var(--white);border-bottom:1px solid var(--line)}
   .sec-head{max-width:44rem;margin-bottom:52px}
-  .sec-head .mark{margin-bottom:22px}
   .sec-head h2{font-size:clamp(34px,4.6vw,52px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px}
   .sec-head p{font-size:18.5px;max-width:38rem}
-  /* one section is allowed to be much louder than the others, so the
-     page has a peak instead of a flat line */
-  .sec-head-xl h2{font-size:clamp(40px,6.4vw,78px);line-height:1.02;letter-spacing:-.035em}
-  .sec-head-xl p{font-size:21px;max-width:34rem;color:var(--body)}
+  /* Why Velora carries the page's peak scale; see .why-grid h2 */
 
   /* ---------------- products: bento, 6 items / 6 cells ---------------- */
   /* 6 items, 3x3 grid, hero tile takes a 2x2 block. Nine cells, all
@@ -291,7 +265,6 @@
   .tile.tile-hero h3{font-size:32px;letter-spacing:-.028em;margin-bottom:14px}
   .tile.tile-hero p{font-size:17.5px;max-width:30rem}
   .tile.tile-hero .tile-amount{font-size:23px;font-weight:700;letter-spacing:-.022em}
-  .tile.tile-hero .mark{margin-bottom:auto;padding-bottom:30px}
   .tile{
     position:relative;
     border:1px solid var(--line);border-radius:var(--r-surface);
@@ -344,7 +317,6 @@
     border-radius:var(--r-surface);padding:34px;
     box-shadow:var(--shadow-sm);
   }
-  .quote .mark{margin-bottom:24px}
   .quote blockquote p{
     font-size:19.5px;line-height:1.5;letter-spacing:-.012em;
     color:var(--navy);font-weight:500;
@@ -359,7 +331,6 @@
   /* ---------------- why: two column, hairline rows ---------------- */
   .why-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:start}
   .why-head{position:sticky;top:112px}
-  .why-head .mark{margin-bottom:26px}
   /* the page's loudest headline: this is the argument the brand rests on */
   .why-grid h2{font-size:clamp(38px,5.6vw,68px);font-weight:700;line-height:1.02;letter-spacing:-.036em}
   .why-lead{font-size:18px;margin-top:24px;max-width:26rem}
@@ -433,7 +404,6 @@
     content:"";position:absolute;left:0;right:0;top:0;height:2px;
     background:linear-gradient(90deg,transparent,var(--accent),transparent);
   }
-  .close-cta .mark-ghost{left:6%;top:50%;transform:translateY(-50%) rotate(0deg)}
   .close-inner{position:relative;z-index:1}
   .close-cta h2{color:var(--white);font-size:clamp(36px,5.2vw,62px);font-weight:700;letter-spacing:-.034em;margin-bottom:16px}
   .close-cta p{color:var(--body-on-navy);font-size:18.5px;margin:0 auto 34px;max-width:34rem}
@@ -453,6 +423,48 @@
   .foot-org{font-weight:600}
   .legal{margin-top:52px;padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--body);max-width:60rem;line-height:1.65}
   .copyright{margin-top:18px;font-size:13px;color:var(--body)}
+
+  /* ---------------------------------------------------------------
+     Motion. Opacity and transform only, so every reveal stays on the
+     compositor. Double-gated: the .js class is set by an inline script,
+     so a page without script renders fully visible, and the whole block
+     sits inside prefers-reduced-motion: no-preference, so opting out
+     leaves nothing hidden rather than hiding content it never reveals.
+     Once a reveal finishes, script strips the classes off, handing the
+     element back to its own hover transitions.
+  ----------------------------------------------------------------*/
+  @media (prefers-reduced-motion: no-preference){
+    .js .reveal{
+      opacity:0;transform:translateY(16px);
+      transition:opacity .55s cubic-bezier(.16,1,.3,1),
+                 transform .55s cubic-bezier(.16,1,.3,1);
+    }
+    .js .reveal.is-in{opacity:1;transform:none}
+
+    /* grouped items step in behind their container */
+    .js .stagger > *{
+      opacity:0;transform:translateY(16px);
+      transition:opacity .5s cubic-bezier(.16,1,.3,1),
+                 transform .5s cubic-bezier(.16,1,.3,1);
+    }
+    .js .stagger.is-in > *{opacity:1;transform:none}
+    .js .stagger.is-in > *:nth-child(2){transition-delay:65ms}
+    .js .stagger.is-in > *:nth-child(3){transition-delay:130ms}
+    .js .stagger.is-in > *:nth-child(4){transition-delay:195ms}
+    .js .stagger.is-in > *:nth-child(5){transition-delay:250ms}
+    .js .stagger.is-in > *:nth-child(6){transition-delay:305ms}
+    .js .stagger.is-in > *:nth-child(n+7){transition-delay:350ms}
+
+    /* hero runs on load, in reading order, ending on the card */
+    .js .hero-in{
+      opacity:0;transform:translateY(18px);
+      animation:heroIn .6s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .js .hero-in-2{animation-delay:.08s}
+    .js .hero-in-3{animation-delay:.16s}
+    .js .hero-in-4{animation-delay:.20s}
+    @keyframes heroIn{to{opacity:1;transform:none}}
+  }
 
   /* ---------------- responsive ---------------- */
   @media(max-width:1000px){
@@ -510,6 +522,7 @@
     }
   }
 </style>
+<script>document.documentElement.classList.add('js')</script>
 </head>
 <body>
 
@@ -555,15 +568,15 @@
     <div class="wrap">
       <div class="hero-grid">
         <div>
-          <h1>Business funding,<br>without the wait.</h1>
-          <p class="sub">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
-          <div class="hero-cta">
+          <h1 class="hero-in">Business funding,<br>without the wait.</h1>
+          <p class="sub hero-in hero-in-2">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
+          <div class="hero-cta hero-in hero-in-3">
             <a href="/apply" class="btn btn-primary btn-lg">Apply now</a>
             <a href="#products" class="btn btn-quiet btn-lg">What we fund</a>
           </div>
         </div>
 
-        <div class="summary-wrap">
+        <div class="summary-wrap hero-in hero-in-4">
         <div class="summary">
           <div class="summary-top">
             <h2>Funding summary</h2>
@@ -598,7 +611,7 @@
   <!-- TRUST SIGNALS: directly below the hero, not inside it -->
   <div class="trust">
     <div class="wrap">
-      <div class="trust-row">
+      <div class="trust-row reveal">
         <span class="trust-item">
           <span class="stars" role="img" aria-label="Rated 5 out of 5 by business owners">
             <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" focusable="false"><path d="M10 1.6l2.4 5 5.5.8-4 3.8 1 5.4-4.9-2.6-4.9 2.6 1-5.4-4-3.8 5.5-.8z"/></svg>
@@ -624,7 +637,7 @@
   <!-- FULL-WIDTH NAVY STAT BAND -->
   <div class="band">
     <div class="wrap">
-      <div class="band-grid">
+      <div class="band-grid stagger">
         <div class="band-stat">
           <b class="num">24 hours</b>
           <span>To a funding decision</span>
@@ -648,14 +661,12 @@
   <!-- PRODUCTS: bento, six items across six cells -->
   <section id="products" class="s-tint">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="mark" aria-hidden="true"><i></i><i></i></span>
+      <div class="sec-head reveal">
         <h2>Capital that fits how your business actually runs.</h2>
         <p>Six ways to fund growth, matched to your revenue, your timeline and your industry.</p>
       </div>
-      <div class="bento">
+      <div class="bento stagger">
         <article class="tile tile-hero tile-navy">
-          <span class="mark mark-white" aria-hidden="true"><i></i><i></i></span>
           <h3>Working Capital</h3>
           <p>The one most owners come for. Cover payroll, inventory or a slow month with funding that follows your cash cycle instead of a fixed calendar.</p>
           <p class="tile-amount num">$5,000 to $5 million</p>
@@ -692,12 +703,11 @@
   <!-- WHO WE FUND: tag cluster -->
   <section id="industries" class="s-white">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="mark mark-quiet" aria-hidden="true"><i></i><i></i></span>
+      <div class="sec-head reveal">
         <h2>Who we fund.</h2>
         <p>Owner-operated businesses, mostly in the trades, services and retail. If you do not see yours here, ask anyway. Your advisor will tell you straight where you stand.</p>
       </div>
-      <div class="inds">
+      <div class="inds stagger">
         <span class="ind">Restaurants and food service</span>
         <span class="ind">Construction and trades</span>
         <span class="ind">Retail and e-commerce</span>
@@ -716,12 +726,11 @@
   <section id="why">
     <div class="wrap">
       <div class="why-grid">
-        <div class="why-head">
-          <span class="mark mark-lg" aria-hidden="true"><i></i><i></i></span>
+        <div class="why-head reveal">
           <h2>A funding partner, not a call center.</h2>
           <p class="why-lead">Most owners do not need a hundred options. They need the right one, quickly, from someone who picks up the phone.</p>
         </div>
-        <div class="why-list">
+        <div class="why-list stagger">
           <div class="why-item">
             <h3>Real people, real answers</h3>
             <p>You work with one advisor from application to funding, not a rotating queue. You get straight talk on what you qualify for and what you do not.</p>
@@ -742,12 +751,11 @@
   <!-- HOW IT WORKS: connected track, no step numbering -->
   <section id="how" class="s-white">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="mark mark-quiet" aria-hidden="true"><i></i><i></i></span>
+      <div class="sec-head reveal">
         <h2>Funded in three steps.</h2>
         <p>No stacks of paperwork, no waiting weeks to hear back.</p>
       </div>
-      <div class="track">
+      <div class="track stagger">
         <div class="step">
           <div class="step-rule"></div>
           <h3>Apply in minutes</h3>
@@ -774,15 +782,14 @@
        (with permission on file) before this page goes to production. -->
   <section id="testimonials" class="s-tint">
     <div class="wrap">
-      <div class="sec-head">
+      <div class="sec-head reveal">
         <div class="head-row">
           <h2>What owners say.</h2>
           <span class="chip">Placeholder copy</span>
         </div>
       </div>
-      <div class="quotes">
+      <div class="quotes stagger">
         <figure class="quote">
-          <span class="mark mark-sm" aria-hidden="true"><i></i><i></i></span>
           <blockquote>
             <p>“I sent bank statements on a Monday and the funds cleared Wednesday. I always knew who to call.”</p>
           </blockquote>
@@ -792,7 +799,6 @@
           </figcaption>
         </figure>
         <figure class="quote">
-          <span class="mark mark-sm" aria-hidden="true"><i></i><i></i></span>
           <blockquote>
             <p>“They talked me out of an option that did not fit my margins. That is the call I needed.”</p>
           </blockquote>
@@ -808,11 +814,10 @@
   <!-- FAQ -->
   <section id="faq">
     <div class="wrap">
-      <div class="sec-head">
-        <span class="mark mark-quiet" aria-hidden="true"><i></i><i></i></span>
+      <div class="sec-head reveal">
         <h2>The questions owners actually ask.</h2>
       </div>
-      <div class="faq">
+      <div class="faq stagger">
         <details>
           <summary>How fast can I get funded?<span class="sign" aria-hidden="true"></span></summary>
           <p class="answer">Most applications receive a decision within 24 hours. Once you accept an offer, funds often reach your account the same day or the next business day, depending on the funding partner and your bank.</p>
@@ -840,8 +845,7 @@
   <!-- CLOSING CTA -->
   <section id="apply-cta">
     <div class="wrap">
-      <div class="close-cta">
-        <span class="mark-ghost" aria-hidden="true"><i></i><i></i></span>
+      <div class="close-cta reveal">
         <div class="close-inner">
           <h2>Ready when you are.</h2>
           <p>See what your business qualifies for. It takes about a minute, and it costs nothing to find out.</p>
@@ -893,6 +897,40 @@
     <p class="copyright">© 2026 Velora Capital LLC. All rights reserved.</p>
   </div>
 </footer>
+
+<script>
+(function () {
+  // Reduced motion, or a browser without IntersectionObserver, gets the
+  // finished page. Nothing is hidden in either case: the CSS that hides
+  // reveal targets lives inside prefers-reduced-motion: no-preference.
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) return;
+
+  var targets = document.querySelectorAll('.reveal, .stagger');
+  if (!targets.length) return;
+
+  var io = new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      var entry = entries[i];
+      if (!entry.isIntersecting) continue;
+      var el = entry.target;
+      io.unobserve(el);
+      el.classList.add('is-in');
+      // Once the reveal has played, strip the classes so the element is
+      // governed by its own rules again. Tiles, pills and FAQ rows carry
+      // their own hover transitions, and leaving the reveal transition in
+      // place would slow those to the reveal's duration.
+      window.setTimeout(function (node) {
+        return function () {
+          node.classList.remove('reveal', 'stagger', 'is-in');
+        };
+      }(el), 1200);
+    }
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+
+  for (var j = 0; j < targets.length; j++) io.observe(targets[j]);
+})();
+</script>
 
 </body>
 </html>
