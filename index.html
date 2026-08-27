@@ -37,6 +37,11 @@
     --r-surface:16px;
     --r-pill:999px;
     --wrap:1200px;
+    /* shadows are tinted navy, never neutral black, so depth reads as
+       part of the palette rather than dirt on the page */
+    --shadow-sm:0 1px 2px rgba(28,43,71,.05), 0 2px 6px rgba(28,43,71,.05);
+    --shadow-md:0 2px 6px rgba(28,43,71,.05), 0 14px 32px rgba(28,43,71,.08);
+    --shadow-lg:0 4px 12px rgba(28,43,71,.06), 0 30px 70px rgba(28,43,71,.14);
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth;color-scheme:light;-webkit-text-size-adjust:100%}
@@ -77,8 +82,8 @@
     -webkit-backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line);
   }
-  nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:72px}
-  .logo svg{height:34px;width:auto;display:block}
+  nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:80px}
+  .logo svg{height:60px;width:auto;display:block}
   .navlinks{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;white-space:nowrap}
   .navlinks a{color:var(--navy);transition:color .15s ease}
   .navlinks a:hover{color:var(--accent)}
@@ -128,27 +133,45 @@
   /* ---------------- hero ---------------- */
   .hero{
     position:relative;
-    padding:72px 0 84px;
+    padding:88px 0 96px;
     background:
-      radial-gradient(900px 460px at 78% 18%, var(--tint-deep) 0%, rgba(221,231,255,0) 68%),
-      linear-gradient(180deg, var(--tint) 0%, var(--cream) 62%);
+      radial-gradient(760px 520px at 84% 8%, rgba(47,107,255,.16) 0%, rgba(47,107,255,0) 62%),
+      radial-gradient(680px 420px at 6% 96%, rgba(47,107,255,.07) 0%, rgba(47,107,255,0) 70%),
+      linear-gradient(172deg, var(--tint) 0%, #F3F6FE 38%, var(--cream) 82%);
+  }
+  /* hairline that closes the hero against the strip below */
+  .hero::after{
+    content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+    background:linear-gradient(90deg,transparent,var(--tint-deep) 22%,var(--tint-deep) 78%,transparent);
   }
   .hero-grid{
-    display:grid;grid-template-columns:1.05fr .95fr;
-    gap:64px;align-items:center;
+    display:grid;grid-template-columns:1.18fr .82fr;
+    gap:60px;align-items:center;
   }
-  .hero h1{font-size:clamp(40px,5.2vw,62px);margin-bottom:20px}
-  .hero .sub{font-size:19px;max-width:33rem;margin-bottom:32px}
+  /* capped so "Business funding," holds one line and the headline
+     stays at two lines on desktop */
+  .hero h1{font-size:clamp(42px,5.2vw,66px);letter-spacing:-.032em;line-height:1.04;margin-bottom:24px}
+  .hero .sub{font-size:19.5px;max-width:31rem;margin-bottom:36px}
   .hero-cta{display:flex;flex-wrap:wrap;gap:12px}
 
   /* funding summary: a real component, rendered live, not a screenshot */
+  .summary-wrap{position:relative;max-width:430px;margin-left:auto;width:100%}
+  /* offset panel behind the card: gives the hero asset real depth
+     without a drop shadow doing all the work */
+  .summary-wrap::before{
+    content:"";position:absolute;inset:22px -18px -18px 22px;
+    border-radius:var(--r-surface);
+    background:linear-gradient(150deg,var(--tint-deep),rgba(47,107,255,.10));
+    border:1px solid rgba(47,107,255,.16);
+  }
   .summary{
+    position:relative;
     background:var(--white);
     border:1px solid var(--line);
     border-radius:var(--r-surface);
-    padding:26px;
-    box-shadow:0 24px 60px rgba(28,43,71,.10);
-    max-width:420px;margin-left:auto;width:100%;
+    padding:28px;
+    box-shadow:var(--shadow-lg);
+    width:100%;
   }
   .summary-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
   .summary-top h2{font-size:15px;font-weight:600;letter-spacing:0}
@@ -169,10 +192,10 @@
   }
 
   /* ---------------- trust strip ---------------- */
-  .trust{border-bottom:1px solid var(--line);background:var(--cream)}
+  .trust{background:var(--white);border-bottom:1px solid var(--line)}
   .trust-row{
     display:flex;flex-wrap:wrap;align-items:center;gap:14px 44px;
-    padding:22px 0;font-size:14.5px;font-weight:500;color:var(--navy);
+    padding:26px 0;font-size:14.5px;font-weight:500;color:var(--navy);
   }
   .trust-item{display:flex;align-items:center;gap:9px}
   .stars{display:flex;gap:2px;color:var(--accent)}
@@ -180,22 +203,41 @@
   .tick{width:17px;height:17px;flex-shrink:0;color:var(--accent)}
 
   /* ---------------- navy stat band ---------------- */
-  .band{background:var(--navy);color:var(--white)}
+  .band{
+    position:relative;color:var(--white);
+    background:
+      radial-gradient(900px 300px at 12% 0%, rgba(47,107,255,.30) 0%, rgba(47,107,255,0) 68%),
+      linear-gradient(115deg, var(--navy) 0%, var(--navy) 42%, var(--navy-soft) 100%);
+  }
+  /* accent rule reading across the top of the band */
+  .band::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:2px;
+    background:linear-gradient(90deg,var(--accent) 0%,rgba(47,107,255,.28) 46%,transparent 82%);
+  }
   .band-grid{
     display:grid;grid-template-columns:repeat(4,1fr);
-    gap:32px;padding:56px 0;
+    gap:32px;padding:68px 0;
   }
-  .band-stat{border-left:1px solid var(--line-on-navy);padding-left:24px}
+  .band-stat{border-left:1px solid var(--line-on-navy);padding-left:26px}
   .band-stat:first-child{border-left:0;padding-left:0}
-  .band-stat b{display:block;font-size:40px;font-weight:700;color:var(--white);letter-spacing:-.025em;line-height:1.05}
-  .band-stat span{display:block;margin-top:8px;font-size:14.5px;color:var(--body-on-navy)}
+  .band-stat b{display:block;font-size:clamp(38px,3.6vw,50px);font-weight:700;color:var(--white);letter-spacing:-.03em;line-height:1}
+  .band-stat span{display:block;margin-top:11px;font-size:14.5px;color:var(--body-on-navy);max-width:14rem}
 
   /* ---------------- shared section furniture ---------------- */
-  section{padding:96px 0}
-  #products,#why,#how,#faq,#contact{scroll-margin-top:88px}
-  .sec-head{max-width:44rem;margin-bottom:44px}
-  .sec-head h2{font-size:clamp(30px,4vw,44px);margin-bottom:14px}
-  .sec-head p{font-size:18px}
+  section{padding:104px 0}
+  #products,#why,#how,#faq,#contact{scroll-margin-top:96px}
+  /* surface rhythm: tinted, cream, white, cream, navy. One light theme
+     throughout, alternating so sections read as distinct moments. */
+  .s-tint{
+    background:
+      radial-gradient(720px 380px at 88% 6%, rgba(47,107,255,.10) 0%, rgba(47,107,255,0) 66%),
+      linear-gradient(180deg,#F4F7FE 0%, var(--cream) 76%);
+    border-bottom:1px solid var(--line);
+  }
+  .s-white{background:var(--white);border-bottom:1px solid var(--line)}
+  .sec-head{max-width:44rem;margin-bottom:52px}
+  .sec-head h2{font-size:clamp(34px,4.6vw,52px);letter-spacing:-.028em;margin-bottom:16px}
+  .sec-head p{font-size:18.5px}
   .eyebrow{
     display:block;font-size:12px;font-weight:600;
     letter-spacing:.14em;text-transform:uppercase;
@@ -205,51 +247,79 @@
   /* ---------------- products: bento, 6 items / 6 cells ---------------- */
   .bento{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(0,auto);gap:18px}
   .tile{
+    position:relative;
     border:1px solid var(--line);border-radius:var(--r-surface);
-    padding:28px;background:var(--white);
+    padding:30px;background:var(--white);
     display:flex;flex-direction:column;
+    box-shadow:var(--shadow-sm);
+    transition:box-shadow .18s ease, transform .18s ease, border-color .18s ease;
   }
-  .tile h3{font-size:19px;margin-bottom:9px}
+  .tile:hover{box-shadow:var(--shadow-md);transform:translateY(-3px);border-color:var(--tint-deep)}
+  .tile h3{font-size:20px;margin-bottom:10px}
   .tile p{font-size:15px}
   .tile-wide{grid-column:span 2}
-  .tile-navy{background:var(--navy);border-color:var(--navy)}
+  .tile-navy{
+    border-color:transparent;box-shadow:var(--shadow-md);
+    background:
+      radial-gradient(560px 260px at 88% 0%, rgba(47,107,255,.34) 0%, rgba(47,107,255,0) 70%),
+      linear-gradient(125deg, var(--navy) 40%, var(--navy-soft) 100%);
+  }
+  .tile-navy:hover{border-color:transparent;box-shadow:var(--shadow-lg)}
   .tile-navy h3{color:var(--white)}
   .tile-navy p{color:var(--body-on-navy)}
   .tile-tint{
-    background:linear-gradient(150deg,var(--tint-deep) 0%,var(--tint) 55%,var(--white) 100%);
-    border-color:var(--tint-deep);
+    background:linear-gradient(150deg,var(--tint-deep) 0%,var(--tint) 52%,var(--white) 100%);
+    border-color:rgba(47,107,255,.18);
   }
   .tile-amount{
-    margin-top:auto;padding-top:20px;
-    font-size:14px;font-weight:600;color:var(--navy);
+    margin-top:auto;padding-top:22px;
+    font-size:13.5px;font-weight:600;color:var(--navy);
+    letter-spacing:.005em;
   }
   .tile-navy .tile-amount{color:var(--white)}
 
   /* ---------------- why: two column, hairline rows ---------------- */
-  .why-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start}
-  .why-grid h2{font-size:clamp(30px,4vw,44px)}
+  .why-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:start}
+  .why-head{position:sticky;top:112px}
+  .why-grid h2{font-size:clamp(34px,4.6vw,52px);letter-spacing:-.028em}
+  .why-rule{width:64px;height:3px;background:var(--accent);margin-top:26px;border-radius:2px}
   .why-list{display:grid}
-  .why-item{padding:26px 0;border-top:1px solid var(--line)}
+  .why-item{padding:30px 0 30px 30px;border-top:1px solid var(--line);position:relative}
   .why-item:first-child{border-top:0;padding-top:0}
-  .why-item h3{font-size:20px;margin-bottom:8px}
-  .why-item p{font-size:15.5px;max-width:36rem}
+  /* marker doubles as the row's left rule, so it organises rather than decorates */
+  .why-item::before{
+    content:"";position:absolute;left:0;top:32px;bottom:6px;width:2px;
+    background:var(--tint-deep);border-radius:2px;
+  }
+  .why-item:first-child::before{top:6px}
+  .why-item:hover::before{background:var(--accent)}
+  .why-item h3{font-size:21px;margin-bottom:9px}
+  .why-item p{font-size:16px;max-width:36rem}
 
   /* ---------------- how it works: connected track ---------------- */
   .track{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-  .step{position:relative;padding:34px 30px 0 0}
-  .step + .step{padding-left:30px}
-  .step h3{font-size:19px;margin-bottom:9px}
-  .step p{font-size:15.5px;max-width:24rem}
-  .step-rule{height:2px;background:var(--tint-deep)}
+  .step{position:relative;padding:30px 34px 0 0}
+  .step + .step{padding-left:34px;border-left:1px solid var(--line)}
+  .step h3{font-size:21px;margin-bottom:10px}
+  .step p{font-size:16px;max-width:24rem}
+  .step-rule{height:3px;border-radius:2px;background:var(--tint-deep);margin-bottom:26px}
   .step:first-child .step-rule{background:var(--accent)}
+  .step:nth-child(2) .step-rule{background:linear-gradient(90deg,rgba(47,107,255,.55),var(--tint-deep))}
 
   /* ---------------- faq ---------------- */
-  .faq{max-width:52rem}
-  .faq details{border-bottom:1px solid var(--line)}
+  .faq{max-width:56rem}
+  .faq details{
+    border:1px solid var(--line);border-radius:var(--r-surface);
+    background:var(--white);margin-bottom:12px;
+    box-shadow:var(--shadow-sm);
+    transition:box-shadow .18s ease, border-color .18s ease;
+  }
+  .faq details:hover{box-shadow:var(--shadow-md);border-color:var(--tint-deep)}
+  .faq details[open]{border-color:rgba(47,107,255,.28);box-shadow:var(--shadow-md)}
   .faq summary{
     list-style:none;cursor:pointer;
     display:flex;align-items:center;justify-content:space-between;gap:24px;
-    padding:24px 0;font-size:17.5px;font-weight:600;color:var(--navy);
+    padding:24px 26px;font-size:18px;font-weight:600;color:var(--navy);
   }
   .faq summary::-webkit-details-marker{display:none}
   .faq summary:hover{color:var(--accent)}
@@ -263,21 +333,30 @@
   .faq .sign::before{top:9px;left:0;width:20px;height:2px}
   .faq .sign::after{left:9px;top:0;width:2px;height:20px}
   .faq details[open] .sign{transform:rotate(45deg)}
-  .faq .answer{padding:0 0 26px;font-size:16px;max-width:46rem}
+  .faq .answer{padding:0 26px 26px;font-size:16px;max-width:46rem}
 
   /* ---------------- closing cta ---------------- */
   .close-cta{
-    background:var(--navy);border-radius:var(--r-surface);
-    padding:72px 40px;text-align:center;color:var(--white);
+    position:relative;overflow:hidden;
+    border-radius:var(--r-surface);
+    padding:96px 40px;text-align:center;color:var(--white);
+    box-shadow:var(--shadow-lg);
+    background:
+      radial-gradient(680px 340px at 50% 0%, rgba(47,107,255,.34) 0%, rgba(47,107,255,0) 68%),
+      linear-gradient(155deg, var(--navy-soft) 0%, var(--navy) 58%);
   }
-  .close-cta h2{color:var(--white);font-size:clamp(30px,4vw,44px);margin-bottom:14px}
-  .close-cta p{color:var(--body-on-navy);font-size:18px;margin:0 auto 30px;max-width:34rem}
+  .close-cta::before{
+    content:"";position:absolute;left:0;right:0;top:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  }
+  .close-cta h2{color:var(--white);font-size:clamp(34px,4.6vw,54px);letter-spacing:-.028em;margin-bottom:16px}
+  .close-cta p{color:var(--body-on-navy);font-size:18.5px;margin:0 auto 34px;max-width:34rem}
 
   /* ---------------- footer ---------------- */
   footer{border-top:1px solid var(--line);padding:64px 0 44px;margin-top:8px}
   .foot{display:grid;grid-template-columns:1.2fr 2fr;gap:56px}
-  .foot-brand svg{height:30px;width:auto;display:block;margin-bottom:16px}
-  .foot-brand p{font-size:14.5px;max-width:22rem}
+  .foot-brand svg{height:56px;width:auto;display:block;margin-bottom:20px}
+  .foot-brand p{font-size:15px;max-width:22rem}
   .foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
   .foot-col h3{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--body);margin-bottom:16px}
   .foot-col a{display:block;font-size:15px;color:var(--navy);margin-bottom:11px}
@@ -291,9 +370,11 @@
 
   /* ---------------- responsive ---------------- */
   @media(max-width:1000px){
-    .hero-grid{grid-template-columns:1fr;gap:44px}
-    .summary{margin-left:0;max-width:none}
+    .hero-grid{grid-template-columns:1fr;gap:52px}
+    .summary-wrap{margin-left:0;max-width:none}
+    .summary-wrap::before{inset:18px -12px -12px 18px}
     .why-grid{grid-template-columns:1fr;gap:32px}
+    .why-head{position:static}
     .band-grid{grid-template-columns:repeat(2,1fr);gap:28px}
     .band-stat:nth-child(3){border-left:0;padding-left:0}
   }
@@ -306,26 +387,28 @@
     .bento{grid-template-columns:repeat(2,1fr)}
     .bento > .tile-wide{grid-column:span 1}
     .track{grid-template-columns:1fr;gap:0}
-    .step{padding:28px 0 0 0}
-    .step + .step{padding-left:0}
+    .step{padding:30px 0 0 0}
+    .step + .step{padding-left:0;border-left:0}
+    .step-rule{margin-bottom:20px}
     .foot{grid-template-columns:1fr;gap:40px}
   }
   @media(max-width:640px){
     .wrap{padding:0 20px}
     /* keep logo + CTA + menu on one line down to 360px */
-    nav{gap:10px}
+    nav{gap:10px;height:72px}
     .btn{padding:11px 18px;font-size:14.5px}
     .btn-lg{padding:15px 26px;font-size:15.5px}
     .menu summary{padding:9px 14px;font-size:14.5px}
-    .logo svg{height:30px}
-    section{padding:64px 0}
+    .logo svg{height:44px}
+    .foot-brand svg{height:46px}
+    section{padding:72px 0}
+    .close-cta{padding:64px 24px}
     .hero{padding:52px 0 60px}
     .band-grid{grid-template-columns:1fr;gap:24px;padding:44px 0}
     .band-stat{border-left:0;padding-left:0}
     .bento{grid-template-columns:1fr}
     .bento > .tile-wide{grid-column:span 1}
     .foot-cols{grid-template-columns:1fr;gap:32px}
-    .close-cta{padding:52px 24px}
     .trust-row{gap:12px 26px}
   }
 
@@ -391,6 +474,7 @@
           </div>
         </div>
 
+        <div class="summary-wrap">
         <div class="summary">
           <div class="summary-top">
             <h2>Funding summary</h2>
@@ -417,6 +501,7 @@
             </div>
           </dl>
           <p class="summary-note">Figures are an illustration of a typical request, not an offer of credit.</p>
+        </div>
         </div>
       </div>
     </div>
@@ -473,7 +558,7 @@
   </div>
 
   <!-- PRODUCTS: bento, six items across six cells -->
-  <section id="products">
+  <section id="products" class="s-tint">
     <div class="wrap">
       <div class="sec-head">
         <span class="eyebrow">What we fund</span>
@@ -519,8 +604,9 @@
   <section id="why">
     <div class="wrap">
       <div class="why-grid">
-        <div>
+        <div class="why-head">
           <h2>A funding partner, not a call center.</h2>
+          <div class="why-rule" aria-hidden="true"></div>
         </div>
         <div class="why-list">
           <div class="why-item">
@@ -541,7 +627,7 @@
   </section>
 
   <!-- HOW IT WORKS: connected track, no step numbering -->
-  <section id="how">
+  <section id="how" class="s-white">
     <div class="wrap">
       <div class="sec-head">
         <h2>Funded in three steps.</h2>
