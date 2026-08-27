@@ -87,7 +87,14 @@
   .navlinks{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;white-space:nowrap}
   .navlinks a{color:var(--navy);transition:color .15s ease}
   .navlinks a:hover{color:var(--accent)}
-  .nav-right{display:flex;align-items:center;gap:14px}
+  .nav-right{display:flex;align-items:center;gap:18px}
+  /* the number is the most on-message trust signal this brand has:
+     the page promises an advisor who picks up, so show the line */
+  .navphone{
+    font-size:15px;font-weight:600;color:var(--navy);white-space:nowrap;
+    transition:color .15s ease;
+  }
+  .navphone:hover{color:var(--accent)}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;
@@ -153,6 +160,13 @@
   .hero h1{font-size:clamp(42px,5.2vw,66px);letter-spacing:-.032em;line-height:1.04;margin-bottom:24px}
   .hero .sub{font-size:19.5px;max-width:31rem;margin-bottom:36px}
   .hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+  /* every comparable lender carries its status disclosure at the top of
+     the page rather than only in the footer. Styled as legal, not as
+     marketing microcopy. */
+  .hero-disclosure{
+    margin-top:22px;max-width:30rem;
+    font-size:12.5px;line-height:1.5;color:var(--body);
+  }
 
   /* funding summary: a real component, rendered live, not a screenshot */
   .summary-wrap{position:relative;max-width:430px;margin-left:auto;width:100%}
@@ -240,7 +254,7 @@
 
   /* ---------------- shared section furniture ---------------- */
   section{padding:104px 0}
-  #products,#industries,#why,#how,#testimonials,#faq,#contact{scroll-margin-top:96px}
+  #products,#uses,#industries,#why,#how,#testimonials,#faq,#contact{scroll-margin-top:96px}
   /* surface rhythm: tinted, cream, white, cream, navy. One light theme
      throughout, alternating so sections read as distinct moments. */
   .s-tint{
@@ -296,6 +310,24 @@
     letter-spacing:.005em;
   }
   .tile-navy .tile-amount{color:var(--white)}
+
+  /* ---------------- uses: checklist panel ---------------- */
+  .uses-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:60px;align-items:start}
+  .uses-grid h2{font-size:clamp(32px,4.2vw,46px);font-weight:700;letter-spacing:-.03em}
+  .uses-grid .lead{font-size:17.5px;margin-top:18px;max-width:26rem}
+  .uses-panel{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:var(--r-surface);padding:34px 38px;
+    box-shadow:var(--shadow-md);
+  }
+  .uses-list{
+    display:grid;grid-template-columns:repeat(2,1fr);
+    gap:18px 34px;
+  }
+  .use{display:flex;align-items:flex-start;gap:12px;font-size:16px;color:var(--navy)}
+  .use svg{
+    width:19px;height:19px;flex-shrink:0;margin-top:2px;color:var(--accent);
+  }
 
   /* ---------------- industries: tag cluster ---------------- */
   .inds{display:flex;flex-wrap:wrap;gap:11px}
@@ -421,7 +453,10 @@
   .foot-col address span{display:block;font-size:15px;color:var(--navy);margin-bottom:11px}
   .foot-col address a{margin-bottom:11px}
   .foot-org{font-weight:600}
-  .legal{margin-top:52px;padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--body);max-width:60rem;line-height:1.65}
+  .legal{margin-top:52px;padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--body);max-width:60rem;line-height:1.65;scroll-margin-top:110px}
+  .legal-tight{margin-top:14px;padding-top:0;border-top:0}
+  .fn{font-size:.5em;vertical-align:super;font-weight:600;margin-left:2px;color:var(--body-on-navy)}
+  .fn:hover{color:var(--white)}
   .copyright{margin-top:18px;font-size:13px;color:var(--body)}
 
   /* ---------------------------------------------------------------
@@ -473,6 +508,7 @@
     .summary-wrap::before{inset:18px -12px -12px 18px}
     .why-grid{grid-template-columns:1fr;gap:32px}
     .why-head{position:static}
+    .uses-grid{grid-template-columns:1fr;gap:34px}
     .band-grid{grid-template-columns:repeat(2,1fr);gap:28px}
     .band-stat:nth-child(3){border-left:0;padding-left:0}
   }
@@ -480,6 +516,7 @@
     /* links collapse into the disclosure, but the primary CTA stays
        visible: it is the page's conversion path. */
     .navlinks{display:none}
+    .navphone{display:none}
     .menu{display:block}
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
@@ -509,6 +546,8 @@
     .band-grid{grid-template-columns:1fr;gap:24px;padding:44px 0}
     .band-stat{border-left:0;padding-left:0}
     .bento{grid-template-columns:1fr}
+    .uses-list{grid-template-columns:1fr;gap:16px}
+    .uses-panel{padding:26px 22px}
     .foot-cols{grid-template-columns:1fr;gap:32px}
     .trust-row{gap:12px 26px}
   }
@@ -544,6 +583,7 @@
       </div>
 
       <div class="nav-right">
+        <a class="navphone" href="tel:+19146062010">914-606-2010</a>
         <a href="/apply" class="btn btn-primary">Apply now</a>
         <details class="menu">
           <summary aria-label="Open navigation menu">Menu</summary>
@@ -553,6 +593,7 @@
             <a href="#why">Why Velora</a>
             <a href="#faq">FAQ</a>
             <a href="#contact">Contact</a>
+            <a href="tel:+19146062010">Call 914-606-2010</a>
             <a href="/apply">Apply now</a>
           </div>
         </details>
@@ -574,6 +615,7 @@
             <a href="/apply" class="btn btn-primary btn-lg">Apply now</a>
             <a href="#products" class="btn btn-quiet btn-lg">What we fund</a>
           </div>
+          <p class="hero-disclosure hero-in hero-in-3">Velora Capital is a business financing brokerage, not a lender. We do not make credit decisions, and funding is not guaranteed.</p>
         </div>
 
         <div class="summary-wrap hero-in hero-in-4">
@@ -639,7 +681,7 @@
     <div class="wrap">
       <div class="band-grid stagger">
         <div class="band-stat">
-          <b class="num">24 hours</b>
+          <b class="num">24 hours<a class="fn" href="#footnotes" aria-label="See footnote on funding decision timing">&#8224;</a></b>
           <span>To a funding decision</span>
         </div>
         <div class="band-stat">
@@ -696,6 +738,30 @@
           <p>Funding that flexes with your cash flow, tied to your monthly revenue.</p>
           <p class="tile-amount">Repayment follows sales</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT OWNERS USE IT FOR: checklist panel -->
+  <section id="uses">
+    <div class="wrap">
+      <div class="uses-grid">
+        <div class="reveal">
+          <h2>What owners actually use it for.</h2>
+          <p class="lead">Funding is rarely abstract. It is a payroll run, a truck, a slow February. These are the reasons owners call us.</p>
+        </div>
+        <div class="uses-panel reveal">
+          <div class="uses-list stagger">
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Cover payroll through a slow month</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Buy inventory before a busy season</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Replace or upgrade equipment</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Expand or renovate a location</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Bridge the gap while invoices clear</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Consolidate existing business debt</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Hire and train new staff</span>
+            <span class="use"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 10.5l4 4 8-9"/></svg>Take on a job that needs cash up front</span>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -891,7 +957,10 @@
         </div>
       </div>
     </div>
-    <p class="legal">
+    <p class="legal" id="footnotes">
+      &#8224; Funding decisions are typically returned within 24 hours of a completed application. Timing depends on the funding partner and on how quickly documents are provided, and is not guaranteed.
+    </p>
+    <p class="legal legal-tight">
       Velora Capital LLC is a business financing brokerage and does not make credit decisions or guarantee funding. Approval, rates, and terms vary based on the business profile and the funding partner, and are not guaranteed. All product names and amounts shown are illustrative.
     </p>
     <p class="copyright">© 2026 Velora Capital LLC. All rights reserved.</p>
