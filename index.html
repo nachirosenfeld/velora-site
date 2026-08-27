@@ -221,7 +221,12 @@
   }
 
   /* ---------------- trust strip ---------------- */
-  .trust{background:var(--white);border-bottom:1px solid var(--line)}
+  .trust{
+    background:
+      radial-gradient(640px 200px at 50% 0%, rgba(47,107,255,.07) 0%, rgba(47,107,255,0) 70%),
+      linear-gradient(180deg,#FBFCFE 0%,#F6F9FE 100%);
+    border-bottom:1px solid var(--line);
+  }
   .trust-row{
     display:flex;flex-wrap:wrap;align-items:center;gap:14px 44px;
     padding:26px 0;font-size:14.5px;font-weight:500;color:var(--navy);
@@ -250,20 +255,41 @@
   .band-stat{border-left:1px solid var(--line-on-navy);padding-left:26px}
   .band-stat:first-child{border-left:0;padding-left:0}
   .band-stat b{display:block;font-size:clamp(38px,3.6vw,50px);font-weight:700;color:var(--white);letter-spacing:-.03em;line-height:1}
-  .band-stat span{display:block;margin-top:11px;font-size:14.5px;color:var(--body-on-navy);max-width:14rem}
+  .band-stat span{display:block;margin-top:11px;font-size:14.5px;color:var(--body-on-navy);max-width:15rem}
 
   /* ---------------- shared section furniture ---------------- */
   section{padding:104px 0}
   #products,#uses,#industries,#why,#how,#testimonials,#faq,#contact{scroll-margin-top:96px}
-  /* surface rhythm: tinted, cream, white, cream, navy. One light theme
-     throughout, alternating so sections read as distinct moments. */
-  .s-tint{
+
+  /* ---------------------------------------------------------------
+     Surface system. Nothing on this page sits on flat white. Four
+     surfaces, each an in-palette wash with its radial placed at a
+     different corner, alternated so no two neighbours match and the
+     colour carries from the hero all the way to the footer. Every one
+     of these stays above 0.89 relative luminance, so navy headings
+     (12.7:1) and body text (6.2:1) clear WCAG AA on all of them.
+  ----------------------------------------------------------------*/
+  .s-1{ /* pale blue, wash top right */
     background:
-      radial-gradient(720px 380px at 88% 6%, rgba(47,107,255,.10) 0%, rgba(47,107,255,0) 66%),
-      linear-gradient(180deg,#F4F7FE 0%, var(--cream) 76%);
-    border-bottom:1px solid var(--line);
+      radial-gradient(880px 470px at 88% 2%, rgba(47,107,255,.11) 0%, rgba(47,107,255,0) 64%),
+      linear-gradient(180deg,#F1F5FD 0%,#F8FAFE 60%,#FBFAF8 100%);
   }
-  .s-white{background:var(--white);border-bottom:1px solid var(--line)}
+  .s-2{ /* warm cream settling into blue, wash bottom left */
+    background:
+      radial-gradient(780px 430px at 5% 98%, rgba(47,107,255,.09) 0%, rgba(47,107,255,0) 68%),
+      linear-gradient(180deg,#FBFAF8 0%,#F5F8FD 100%);
+  }
+  .s-3{ /* lightest paper, wash top left */
+    background:
+      radial-gradient(740px 410px at 10% 0%, rgba(47,107,255,.08) 0%, rgba(47,107,255,0) 66%),
+      linear-gradient(180deg,#FDFDFE 0%,#F6F9FE 100%);
+  }
+  .s-4{ /* deepest tint, wash held to the right edge */
+    background:
+      radial-gradient(920px 540px at 94% 48%, rgba(47,107,255,.14) 0%, rgba(47,107,255,0) 62%),
+      linear-gradient(158deg,#EDF2FE 0%,#F6F9FE 56%,#FBFAF8 100%);
+  }
+  .s-1,.s-2,.s-3,.s-4{border-bottom:1px solid var(--line)}
   .sec-head{max-width:44rem;margin-bottom:52px}
   .sec-head h2{font-size:clamp(34px,4.6vw,52px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px}
   .sec-head p{font-size:18.5px;max-width:38rem}
@@ -378,6 +404,11 @@
   .why-item:hover::before{background:var(--accent)}
   .why-item h3{font-size:21px;margin-bottom:9px}
   .why-item p{font-size:16px;max-width:36rem}
+  /* the lead differentiator gets more room than the rows under it */
+  .why-item-lead{padding-bottom:34px}
+  .why-item-lead h3{font-size:26px;letter-spacing:-.022em;margin-bottom:12px}
+  .why-item-lead p{font-size:17.5px}
+  .why-item-lead::before{background:var(--accent)}
 
   /* ---------------- how it works: connected track ---------------- */
   .track{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
@@ -441,7 +472,12 @@
   .close-cta p{color:var(--body-on-navy);font-size:18.5px;margin:0 auto 34px;max-width:34rem}
 
   /* ---------------- footer ---------------- */
-  footer{border-top:1px solid var(--line);padding:152px 0 44px;background:var(--white)}
+  footer{
+    border-top:1px solid var(--line);padding:152px 0 44px;
+    background:
+      radial-gradient(900px 520px at 92% 42%, rgba(47,107,255,.13) 0%, rgba(47,107,255,0) 62%),
+      linear-gradient(158deg,#EDF2FE 0%,#F6F9FE 56%,#FBFAF8 100%);
+  }
   .foot{display:grid;grid-template-columns:1.2fr 2fr;gap:56px}
   .foot-brand svg{height:56px;width:auto;display:block;margin-bottom:20px}
   .foot-brand p{font-size:15px;max-width:22rem}
@@ -693,15 +729,15 @@
           <span>To apply, no obligation</span>
         </div>
         <div class="band-stat">
-          <b>1-on-1</b>
-          <span>Dedicated funding advisor</span>
+          <b class="num">100+</b>
+          <span>Lenders in our network, plus funding we do in house</span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- PRODUCTS: bento, six items across six cells -->
-  <section id="products" class="s-tint">
+  <section id="products" class="s-1">
     <div class="wrap">
       <div class="sec-head reveal">
         <h2>Capital that fits how your business actually runs.</h2>
@@ -743,7 +779,7 @@
   </section>
 
   <!-- WHAT OWNERS USE IT FOR: checklist panel -->
-  <section id="uses">
+  <section id="uses" class="s-2">
     <div class="wrap">
       <div class="uses-grid">
         <div class="reveal">
@@ -767,7 +803,7 @@
   </section>
 
   <!-- WHO WE FUND: tag cluster -->
-  <section id="industries" class="s-white">
+  <section id="industries" class="s-3">
     <div class="wrap">
       <div class="sec-head reveal">
         <h2>Who we fund.</h2>
@@ -789,7 +825,7 @@
   </section>
 
   <!-- WHY: two column, hairline rows -->
-  <section id="why">
+  <section id="why" class="s-4">
     <div class="wrap">
       <div class="why-grid">
         <div class="why-head reveal">
@@ -797,6 +833,10 @@
           <p class="why-lead">Most owners do not need a hundred options. They need the right one, quickly, from someone who picks up the phone.</p>
         </div>
         <div class="why-list stagger">
+          <div class="why-item why-item-lead">
+            <h3>A network of 100+, and our own capital</h3>
+            <p>Your file goes out to more than a hundred funding partners, so you are not limited to one lender's appetite. When the deal is a fit for us, Velora funds it in house rather than passing it along. Most brokers can only do the first half of that.</p>
+          </div>
           <div class="why-item">
             <h3>Real people, real answers</h3>
             <p>You work with one advisor from application to funding, not a rotating queue. You get straight talk on what you qualify for and what you do not.</p>
@@ -815,7 +855,7 @@
   </section>
 
   <!-- HOW IT WORKS: connected track, no step numbering -->
-  <section id="how" class="s-white">
+  <section id="how" class="s-2">
     <div class="wrap">
       <div class="sec-head reveal">
         <h2>Funded in three steps.</h2>
@@ -846,7 +886,7 @@
        attributions are sample copy written to size the component. They
        must be replaced with real, substantiated customer statements
        (with permission on file) before this page goes to production. -->
-  <section id="testimonials" class="s-tint">
+  <section id="testimonials" class="s-1">
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="head-row">
@@ -878,7 +918,7 @@
   </section>
 
   <!-- FAQ -->
-  <section id="faq">
+  <section id="faq" class="s-3">
     <div class="wrap">
       <div class="sec-head reveal">
         <h2>The questions owners actually ask.</h2>
@@ -909,7 +949,7 @@
   </section>
 
   <!-- CLOSING CTA -->
-  <section id="apply-cta">
+  <section id="apply-cta" class="s-2">
     <div class="wrap">
       <div class="close-cta reveal">
         <div class="close-inner">
