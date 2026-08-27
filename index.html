@@ -60,6 +60,28 @@
   .wrap{max-width:var(--wrap);margin:0 auto;padding:0 28px;width:100%}
   .num{font-variant-numeric:tabular-nums}
 
+  /* ---------------------------------------------------------------
+     The Velora mark. The two slanted bars are lifted straight off the
+     wordmark (the logo path runs 14 across for 27 down, so skewX(-27deg)
+     matches its exact rake). Reused at three scales as the site's one
+     recurring graphic: section markers, accent rules, and a watermark.
+     Brand-derived, not invented decoration.
+  ----------------------------------------------------------------*/
+  .mark{display:inline-flex;gap:5px;flex-shrink:0}
+  .mark i{display:block;width:7px;height:22px;background:var(--accent);transform:skewX(-27deg)}
+  .mark-lg i{width:11px;height:36px}
+  .mark-sm{gap:4px}
+  .mark-sm i{width:5px;height:15px}
+  .mark-quiet i{background:var(--tint-deep)}
+  .mark-navy i{background:var(--navy)}
+  .mark-white i{background:rgba(255,255,255,.55)}
+  /* oversized, low-contrast watermark for navy surfaces */
+  .mark-ghost{
+    position:absolute;pointer-events:none;display:flex;gap:26px;
+    opacity:.07;
+  }
+  .mark-ghost i{display:block;width:58px;height:230px;background:#fff;transform:skewX(-27deg)}
+
   /* focus: never removed, only replaced */
   :where(a,button,summary,[tabindex]):focus-visible{
     outline:2px solid var(--accent);
@@ -251,16 +273,25 @@
   }
   .s-white{background:var(--white);border-bottom:1px solid var(--line)}
   .sec-head{max-width:44rem;margin-bottom:52px}
-  .sec-head h2{font-size:clamp(34px,4.6vw,52px);letter-spacing:-.028em;margin-bottom:16px}
-  .sec-head p{font-size:18.5px}
-  .eyebrow{
-    display:block;font-size:12px;font-weight:600;
-    letter-spacing:.14em;text-transform:uppercase;
-    color:var(--accent-ink);margin-bottom:14px;
-  }
+  .sec-head .mark{margin-bottom:22px}
+  .sec-head h2{font-size:clamp(34px,4.6vw,52px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px}
+  .sec-head p{font-size:18.5px;max-width:38rem}
+  /* one section is allowed to be much louder than the others, so the
+     page has a peak instead of a flat line */
+  .sec-head-xl h2{font-size:clamp(40px,6.4vw,78px);line-height:1.02;letter-spacing:-.035em}
+  .sec-head-xl p{font-size:21px;max-width:34rem;color:var(--body)}
 
   /* ---------------- products: bento, 6 items / 6 cells ---------------- */
-  .bento{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(0,auto);gap:18px}
+  /* 6 items, 3x3 grid, hero tile takes a 2x2 block. Nine cells, all
+     filled, and the composition is asymmetric instead of striped. */
+  .bento{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .tile-hero{grid-column:span 2;grid-row:span 2}
+  /* doubled class so these beat the base .tile type rules below */
+  .tile.tile-hero{padding:36px}
+  .tile.tile-hero h3{font-size:32px;letter-spacing:-.028em;margin-bottom:14px}
+  .tile.tile-hero p{font-size:17.5px;max-width:30rem}
+  .tile.tile-hero .tile-amount{font-size:23px;font-weight:700;letter-spacing:-.022em}
+  .tile.tile-hero .mark{margin-bottom:auto;padding-bottom:30px}
   .tile{
     position:relative;
     border:1px solid var(--line);border-radius:var(--r-surface);
@@ -313,7 +344,7 @@
     border-radius:var(--r-surface);padding:34px;
     box-shadow:var(--shadow-sm);
   }
-  .quote-rule{width:40px;height:3px;border-radius:2px;background:var(--accent);margin-bottom:24px}
+  .quote .mark{margin-bottom:24px}
   .quote blockquote p{
     font-size:19.5px;line-height:1.5;letter-spacing:-.012em;
     color:var(--navy);font-weight:500;
@@ -328,8 +359,10 @@
   /* ---------------- why: two column, hairline rows ---------------- */
   .why-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:start}
   .why-head{position:sticky;top:112px}
-  .why-grid h2{font-size:clamp(34px,4.6vw,52px);letter-spacing:-.028em}
-  .why-rule{width:64px;height:3px;background:var(--accent);margin-top:26px;border-radius:2px}
+  .why-head .mark{margin-bottom:26px}
+  /* the page's loudest headline: this is the argument the brand rests on */
+  .why-grid h2{font-size:clamp(38px,5.6vw,68px);font-weight:700;line-height:1.02;letter-spacing:-.036em}
+  .why-lead{font-size:18px;margin-top:24px;max-width:26rem}
   .why-list{display:grid}
   .why-item{padding:30px 0 30px 30px;border-top:1px solid var(--line);position:relative}
   .why-item:first-child{border-top:0;padding-top:0}
@@ -383,8 +416,12 @@
   .faq .answer{padding:0 26px 26px;font-size:16px;max-width:46rem}
 
   /* ---------------- closing cta ---------------- */
+  /* the CTA panel drops over the footer's top edge, so the page ends on
+     a layered composition instead of another stacked block */
+  #apply-cta{padding-bottom:0}
   .close-cta{
-    position:relative;overflow:hidden;
+    position:relative;overflow:hidden;z-index:2;
+    margin-bottom:-76px;
     border-radius:var(--r-surface);
     padding:96px 40px;text-align:center;color:var(--white);
     box-shadow:var(--shadow-lg);
@@ -396,11 +433,13 @@
     content:"";position:absolute;left:0;right:0;top:0;height:2px;
     background:linear-gradient(90deg,transparent,var(--accent),transparent);
   }
-  .close-cta h2{color:var(--white);font-size:clamp(34px,4.6vw,54px);letter-spacing:-.028em;margin-bottom:16px}
+  .close-cta .mark-ghost{left:6%;top:50%;transform:translateY(-50%) rotate(0deg)}
+  .close-inner{position:relative;z-index:1}
+  .close-cta h2{color:var(--white);font-size:clamp(36px,5.2vw,62px);font-weight:700;letter-spacing:-.034em;margin-bottom:16px}
   .close-cta p{color:var(--body-on-navy);font-size:18.5px;margin:0 auto 34px;max-width:34rem}
 
   /* ---------------- footer ---------------- */
-  footer{border-top:1px solid var(--line);padding:64px 0 44px;margin-top:8px}
+  footer{border-top:1px solid var(--line);padding:152px 0 44px;background:var(--white)}
   .foot{display:grid;grid-template-columns:1.2fr 2fr;gap:56px}
   .foot-brand svg{height:56px;width:auto;display:block;margin-bottom:20px}
   .foot-brand p{font-size:15px;max-width:22rem}
@@ -431,8 +470,11 @@
     .navlinks{display:none}
     .menu{display:block}
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
+    /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
     .bento{grid-template-columns:repeat(2,1fr)}
-    .bento > .tile-wide{grid-column:span 1}
+    .bento > .tile{grid-column:span 1;grid-row:span 1}
+    .tile-hero h3{font-size:24px}
+    .tile-hero p{font-size:16px}
     .quotes{grid-template-columns:1fr}
     .track{grid-template-columns:1fr;gap:0}
     .step{padding:30px 0 0 0}
@@ -455,7 +497,6 @@
     .band-grid{grid-template-columns:1fr;gap:24px;padding:44px 0}
     .band-stat{border-left:0;padding-left:0}
     .bento{grid-template-columns:1fr}
-    .bento > .tile-wide{grid-column:span 1}
     .foot-cols{grid-template-columns:1fr;gap:32px}
     .trust-row{gap:12px 26px}
   }
@@ -526,7 +567,6 @@
         <div class="summary">
           <div class="summary-top">
             <h2>Funding summary</h2>
-            <span class="chip">Example</span>
           </div>
           <div class="summary-amount num">$150,000</div>
           <p class="summary-amount-lbl">Working capital, 12 month term</p>
@@ -590,8 +630,8 @@
           <span>To a funding decision</span>
         </div>
         <div class="band-stat">
-          <b class="num">$5M</b>
-          <span>In available capital</span>
+          <b>$5K-$5M</b>
+          <span>Funding range</span>
         </div>
         <div class="band-stat">
           <b class="num">$0</b>
@@ -609,14 +649,15 @@
   <section id="products" class="s-tint">
     <div class="wrap">
       <div class="sec-head">
-        <span class="eyebrow">What we fund</span>
+        <span class="mark" aria-hidden="true"><i></i><i></i></span>
         <h2>Capital that fits how your business actually runs.</h2>
         <p>Six ways to fund growth, matched to your revenue, your timeline and your industry.</p>
       </div>
       <div class="bento">
-        <article class="tile tile-wide tile-navy">
+        <article class="tile tile-hero tile-navy">
+          <span class="mark mark-white" aria-hidden="true"><i></i><i></i></span>
           <h3>Working Capital</h3>
-          <p>Cover payroll, inventory or day-to-day operations with fast, flexible funding that follows your cash cycle rather than a fixed calendar.</p>
+          <p>The one most owners come for. Cover payroll, inventory or a slow month with funding that follows your cash cycle instead of a fixed calendar.</p>
           <p class="tile-amount num">$5,000 to $5 million</p>
         </article>
         <article class="tile tile-tint">
@@ -629,12 +670,12 @@
           <p>Fund the tools, machinery or vehicles your business needs to grow.</p>
           <p class="tile-amount">Equipment as collateral</p>
         </article>
-        <article class="tile tile-wide tile-tint">
+        <article class="tile tile-tint">
           <h3>Business Line of Credit</h3>
           <p>Draw what you need, when you need it, and only pay for what you use. The line stays open as you repay.</p>
           <p class="tile-amount">Revolving access</p>
         </article>
-        <article class="tile tile-wide">
+        <article class="tile">
           <h3>Term Loans</h3>
           <p>Lump-sum funding with predictable monthly payments, built for larger one-time investments.</p>
           <p class="tile-amount">Fixed monthly payment</p>
@@ -652,8 +693,9 @@
   <section id="industries" class="s-white">
     <div class="wrap">
       <div class="sec-head">
+        <span class="mark mark-quiet" aria-hidden="true"><i></i><i></i></span>
         <h2>Who we fund.</h2>
-        <p>Owner-operated businesses across the trades, services and retail. If your industry is not listed, your advisor can tell you where you stand.</p>
+        <p>Owner-operated businesses, mostly in the trades, services and retail. If you do not see yours here, ask anyway. Your advisor will tell you straight where you stand.</p>
       </div>
       <div class="inds">
         <span class="ind">Restaurants and food service</span>
@@ -675,8 +717,9 @@
     <div class="wrap">
       <div class="why-grid">
         <div class="why-head">
+          <span class="mark mark-lg" aria-hidden="true"><i></i><i></i></span>
           <h2>A funding partner, not a call center.</h2>
-          <div class="why-rule" aria-hidden="true"></div>
+          <p class="why-lead">Most owners do not need a hundred options. They need the right one, quickly, from someone who picks up the phone.</p>
         </div>
         <div class="why-list">
           <div class="why-item">
@@ -700,8 +743,9 @@
   <section id="how" class="s-white">
     <div class="wrap">
       <div class="sec-head">
+        <span class="mark mark-quiet" aria-hidden="true"><i></i><i></i></span>
         <h2>Funded in three steps.</h2>
-        <p>No stacks of paperwork, no waiting weeks for an answer.</p>
+        <p>No stacks of paperwork, no waiting weeks to hear back.</p>
       </div>
       <div class="track">
         <div class="step">
@@ -738,7 +782,7 @@
       </div>
       <div class="quotes">
         <figure class="quote">
-          <div class="quote-rule" aria-hidden="true"></div>
+          <span class="mark mark-sm" aria-hidden="true"><i></i><i></i></span>
           <blockquote>
             <p>“I sent bank statements on a Monday and the funds cleared Wednesday. I always knew who to call.”</p>
           </blockquote>
@@ -748,7 +792,7 @@
           </figcaption>
         </figure>
         <figure class="quote">
-          <div class="quote-rule" aria-hidden="true"></div>
+          <span class="mark mark-sm" aria-hidden="true"><i></i><i></i></span>
           <blockquote>
             <p>“They talked me out of an option that did not fit my margins. That is the call I needed.”</p>
           </blockquote>
@@ -765,7 +809,8 @@
   <section id="faq">
     <div class="wrap">
       <div class="sec-head">
-        <h2>Questions, answered.</h2>
+        <span class="mark mark-quiet" aria-hidden="true"><i></i><i></i></span>
+        <h2>The questions owners actually ask.</h2>
       </div>
       <div class="faq">
         <details>
@@ -796,9 +841,12 @@
   <section id="apply-cta">
     <div class="wrap">
       <div class="close-cta">
-        <h2>Ready when you are.</h2>
-        <p>See what your business qualifies for. It only takes a minute.</p>
-        <a href="/apply" class="btn btn-onnavy btn-lg">Apply now</a>
+        <span class="mark-ghost" aria-hidden="true"><i></i><i></i></span>
+        <div class="close-inner">
+          <h2>Ready when you are.</h2>
+          <p>See what your business qualifies for. It takes about a minute, and it costs nothing to find out.</p>
+          <a href="/apply" class="btn btn-onnavy btn-lg">Apply now</a>
+        </div>
       </div>
     </div>
   </section>
