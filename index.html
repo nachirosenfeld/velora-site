@@ -84,15 +84,26 @@
   }
   nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:80px}
   .logo svg{height:60px;width:auto;display:block}
-  .navlinks{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;white-space:nowrap}
+  .navlinks{position:relative;display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;white-space:nowrap}
   /* inactive items sit back at body ink so the current page can hold
      full navy and read as selected rather than merely present */
   .navlinks a{position:relative;color:var(--body);transition:color .15s ease}
   .navlinks a:hover{color:var(--accent)}
   .navlinks a[aria-current="page"]{color:var(--navy);font-weight:600}
+  /* static rule under the current item. It is the no-script state, and
+     is handed over to the sliding indicator once script positions it. */
   .navlinks a[aria-current="page"]::after{
     content:"";position:absolute;left:0;right:0;bottom:-9px;height:2px;
     border-radius:2px;background:var(--accent);
+  }
+  .navlinks.has-ink a[aria-current="page"]::after{display:none}
+  /* one bar that travels to whichever item is hovered and returns to the
+     current one. Driven by transform alone, so it stays on the compositor. */
+  .navink{
+    position:absolute;left:0;bottom:-9px;height:2px;width:1px;
+    background:var(--accent);transform-origin:left center;
+    transform:translateX(0) scaleX(0);
+    transition:transform .3s cubic-bezier(.16,1,.3,1);
   }
   .menu-panel a[aria-current="page"]{color:var(--navy);font-weight:600;background:var(--tint)}
   .nav-right{display:flex;align-items:center;gap:18px}
@@ -187,14 +198,6 @@
   .summary-top h2{
     font-size:11.5px;font-weight:600;letter-spacing:.11em;
     text-transform:uppercase;color:var(--body);
-  }
-  /* quiet outline rather than a filled pill, so the marker sits with
-     the label instead of floating on top of the card */
-  .chip{
-    font-size:10.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
-    color:var(--accent-ink);background:transparent;
-    border:1px solid rgba(47,107,255,.30);
-    padding:3px 9px;border-radius:var(--r-pill);
   }
   .summary-amount{font-size:48px;font-weight:700;color:var(--navy);letter-spacing:-.038em;line-height:1}
   .summary-amount-lbl{font-size:14px;margin-top:8px;margin-bottom:22px;color:var(--body)}
@@ -413,8 +416,6 @@
     margin-top:auto;padding-top:28px;font-size:14px;color:var(--body);
   }
   .quote-name{display:block;color:var(--navy);font-weight:600;margin-bottom:2px}
-  .head-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
-  .head-row h2{margin-bottom:0}
 
   /* ---------------- faq ---------------- */
   .faq{max-width:56rem}
@@ -859,35 +860,31 @@
   </section>
 
   <!-- TESTIMONIALS -->
-  <!-- PLACEHOLDER CONTENT. Both the quote bodies and the bracketed
-       attributions are sample copy written to size the component. They
-       must be replaced with real, substantiated customer statements
-       (with permission on file) before this page goes to production. -->
+  <!-- Real, permissioned client quotes. Wording is the clients' own, with
+       typo cleanup only. Attribution is first name plus last initial,
+       business type and city/state, as supplied. -->
   <section id="testimonials" class="s-1">
     <div class="wrap">
       <div class="sec-head reveal">
-        <div class="head-row">
-          <h2>What owners say.</h2>
-          <span class="chip">Placeholder copy</span>
-        </div>
+        <h2>What owners say.</h2>
       </div>
       <div class="quotes stagger">
         <figure class="quote">
           <blockquote>
-            <p>“I sent bank statements on a Monday and the funds cleared Wednesday. I always knew who to call.”</p>
+            <p>“I have used Velora Capital multiple times when we were in a cash crunch, and every time they take care of me in the most professional way possible.”</p>
           </blockquote>
           <figcaption>
-            <span class="quote-name">[Client name]</span>
-            [Business type], [City, State]
+            <span class="quote-name">Maurice J.</span>
+            Roofing company, Compton, CA
           </figcaption>
         </figure>
         <figure class="quote">
           <blockquote>
-            <p>“They talked me out of an option that did not fit my margins. That is the call I needed.”</p>
+            <p>“The process was simple and quick, and everything was explained in detail. Mike was an amazing person to work with and I would highly recommend him.”</p>
           </blockquote>
           <figcaption>
-            <span class="quote-name">[Client name]</span>
-            [Business type], [City, State]
+            <span class="quote-name">Spencer C.</span>
+            Logistics, Fair Lawn, NJ
           </figcaption>
         </figure>
       </div>
@@ -983,6 +980,45 @@
 </footer>
 
 <script>
+// Sliding nav indicator. Progressive enhancement: without script the
+// current item keeps its static rule, and has-ink only swaps to the
+// travelling bar once it has been measured and placed.
+(function () {
+  var wrap = document.querySelector('.navlinks');
+  if (!wrap) return;
+  var links = wrap.querySelectorAll('a');
+  var active = wrap.querySelector('a[aria-current="page"]') || links[0];
+  if (!active) return;
+
+  var ink = document.createElement('span');
+  ink.className = 'navink';
+  ink.setAttribute('aria-hidden', 'true');
+  wrap.appendChild(ink);
+
+  function moveTo(el) {
+    if (!el) return;
+    var w = wrap.getBoundingClientRect();
+    var r = el.getBoundingClientRect();
+    ink.style.transform = 'translateX(' + (r.left - w.left) + 'px) scaleX(' + r.width + ')';
+  }
+  function reset() { moveTo(active); }
+
+  reset();
+  wrap.classList.add('has-ink');
+
+  for (var i = 0; i < links.length; i++) {
+    links[i].addEventListener('mouseenter', function () { moveTo(this); });
+    links[i].addEventListener('focus', function () { moveTo(this); });
+  }
+  wrap.addEventListener('mouseleave', reset);
+  wrap.addEventListener('focusout', function (e) {
+    if (!wrap.contains(e.relatedTarget)) reset();
+  });
+  window.addEventListener('resize', reset);
+  // webfont swap changes label widths, so measure again once it lands
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reset);
+})();
+
 (function () {
   // Reduced motion, or a browser without IntersectionObserver, gets the
   // finished page. Nothing is hidden in either case: the CSS that hides
