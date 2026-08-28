@@ -171,34 +171,26 @@
     position:relative;
     padding:96px 0 104px;
     text-align:center;
+    /* One wash, no shapes. Three broad radials give it corner to corner
+       movement, and the linear base carries the top-to-bottom fall into
+       the trust strip. The base is stepped in small increments rather
+       than run as one long ramp, which is what keeps a gradient this
+       wide from banding on 8 bit displays. */
     background:
-      radial-gradient(1050px 620px at 50% -10%, rgba(47,107,255,.30) 0%, rgba(47,107,255,0) 60%),
-      radial-gradient(620px 420px at 10% 14%, rgba(47,107,255,.20) 0%, rgba(47,107,255,0) 66%),
-      radial-gradient(680px 460px at 88% 16%, rgba(28,43,71,.13) 0%, rgba(28,43,71,0) 64%),
-      radial-gradient(820px 520px at 4% 104%, rgba(47,107,255,.20) 0%, rgba(47,107,255,0) 68%),
-      radial-gradient(820px 520px at 96% 100%, rgba(47,107,255,.17) 0%, rgba(47,107,255,0) 68%),
-      linear-gradient(174deg, #E6EDFD 0%, #EDF2FE 34%, #F5F8FE 66%, var(--cream) 96%);
-  }
-  /* Concentric arcs anchoring the right side. Large, soft and mostly off
-     canvas, so they give the composition a direction without becoming a
-     shape sitting in the middle of the page. */
-  .hero-art{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-  .hero-art span{
-    position:absolute;border-radius:50%;
-    border:1px solid rgba(47,107,255,.26);
-  }
-  .hero-art span:nth-child(1){
-    width:1240px;height:1240px;right:-430px;top:-430px;
-    background:radial-gradient(circle at 34% 66%, rgba(47,107,255,.12) 0%, rgba(47,107,255,0) 62%);
-  }
-  .hero-art span:nth-child(2){
-    width:900px;height:900px;right:-300px;top:-280px;
-    border-color:rgba(47,107,255,.20);
-  }
-  .hero-art span:nth-child(3){
-    width:1180px;height:1180px;left:-660px;bottom:-720px;
-    border-color:rgba(47,107,255,.20);
-    background:radial-gradient(circle at 70% 30%, rgba(47,107,255,.14) 0%, rgba(47,107,255,0) 60%);
+      radial-gradient(1240px 800px at 16% -14%, rgba(47,107,255,.26) 0%, rgba(47,107,255,0) 64%),
+      radial-gradient(1140px 740px at 88% -8%, rgba(47,107,255,.23) 0%, rgba(47,107,255,0) 62%),
+      radial-gradient(1000px 660px at 50% 116%, rgba(47,107,255,.11) 0%, rgba(47,107,255,0) 70%),
+      linear-gradient(180deg,
+        #DBE6FC 0%,
+        #DFE9FC 10%,
+        #E4ECFD 22%,
+        #E9F0FE 34%,
+        #EEF3FE 46%,
+        #F2F6FE 58%,
+        #F6F9FE 70%,
+        #F9FBFE 82%,
+        #FCFCFB 92%,
+        var(--cream) 100%);
   }
   .hero .wrap{position:relative;z-index:1}
   .hero::after{
@@ -683,7 +675,6 @@
        GET form, so choosing a range and submitting lands on
        /apply?amount=... with no script involved. -->
   <section class="hero">
-    <div class="hero-art" aria-hidden="true"><span></span><span></span><span></span></div>
     <div class="wrap">
       <h1 class="hero-in">Business funding<br>without the wait.</h1>
       <p class="sub hero-in hero-in-2">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
