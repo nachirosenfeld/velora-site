@@ -33,8 +33,12 @@
   .logo svg{height:60px;width:auto;display:block}
   .btn{display:inline-block;background:#1C2B47;color:#fff;font-weight:600;font-size:15px;padding:13px 26px;border-radius:999px;transition:.15s;border:none;cursor:pointer}
   .btn:hover{background:#2C3E60}
+  /* Light-fill variant. Only legible on a dark surface: its fill is
+     within one step of the cream page background, so on this page it
+     renders as bare text. Use plain .btn on light backgrounds. */
   .btn-lime{background:#FAF9F6;color:#1C2B47}
   .btn-lime:hover{background:#efe9e3}
+  /* disabled still reads as a button, only dimmed */
   .btn:disabled{opacity:.5;cursor:not-allowed}
 
   .head{text-align:center;padding:56px 0 10px}
@@ -284,7 +288,7 @@
 
     <div class="submit-row">
       <div id="turnstileBox" class="turnstile-box"></div>
-      <button type="submit" class="btn btn-lime" id="submitBtn" style="font-size:16px;padding:15px 40px">Submit application</button>
+      <button type="submit" class="btn" id="submitBtn" style="font-size:16px;padding:15px 40px">Submit application</button>
       <div class="note">Your data is encrypted in transit and at rest. Velora Capital never sells your information.</div>
     </div>
   </form>
