@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Apply for Funding — Velora Capital</title>
+<title>Apply for Funding | Velora Capital</title>
+<meta name="theme-color" content="#FAF9F6">
 <link rel="icon" type="image/svg+xml" href="velora-icon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- Turnstile is rendered explicitly so we can hold the widget id and reset it
      between attempts. This promise must exist before api.js runs, hence the
      inline script ahead of it. -->
@@ -16,110 +19,245 @@
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit" async defer></script>
 <style>
+  /* ---------------------------------------------------------------
+     Velora Capital - application form.
+     Same tokens as the rest of the site, deliberately the plainest
+     surface in it: one flat background, no washes, no gradients. The
+     form is the only thing on the page, so nothing competes with it.
+     Presentation only. No field, name, label or legal string below is
+     touched by this file.
+  ----------------------------------------------------------------*/
   :root{
-    --cream:#fbf8f7; --ink:#181818; --lime:#1C2B47; --forest:#1C2B47;
-    --forest-deep:#2C3E60; --muted:#5f6b64; --line:#e7e2dd;
+    --navy:#1C2B47;
+    --navy-soft:#2C3E60;
+    --cream:#FAF9F6;
+    --white:#FFFFFF;
+    --accent:#2F6BFF;
+    --accent-ink:#2558D6;
+    --tint:#EEF3FF;
+    --tint-deep:#DDE7FF;
+    --body:#4C5A75;
+    --body-on-navy:#A9B6CE;
+    --line:#E4E8F0;
+    --err:#B4321F;
+    --r-surface:16px;
+    --r-input:10px;
+    --r-pill:999px;
+    --shadow-sm:0 1px 2px rgba(28,43,71,.05), 0 2px 6px rgba(28,43,71,.05);
   }
   *{margin:0;padding:0;box-sizing:border-box}
-  html{scroll-behavior:smooth}
-  body{font-family:'Inter',system-ui,sans-serif;background:var(--cream);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
-  .wrap{max-width:820px;margin:0 auto;padding:0 28px}
-  a{text-decoration:none;color:inherit}
-  .serif{font-family:'Fraunces',Georgia,serif}
-  .italic{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:500}
-
-  header{position:sticky;top:0;z-index:50;background:rgba(251,248,247,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  nav{display:flex;align-items:center;justify-content:space-between;height:96px;max-width:1200px;margin:0 auto;padding:0 28px}
-  .logo svg{height:60px;width:auto;display:block}
-  .btn{display:inline-block;background:#1C2B47;color:#fff;font-weight:600;font-size:15px;padding:13px 26px;border-radius:999px;transition:.15s;border:none;cursor:pointer}
-  .btn:hover{background:#2C3E60}
-  .btn-lime{background:#FAF9F6;color:#1C2B47}
-  .btn-lime:hover{background:#efe9e3}
-  .btn:disabled{opacity:.5;cursor:not-allowed}
-
-  .head{text-align:center;padding:56px 0 10px}
-  .head h1{font-size:clamp(34px,5vw,54px);font-weight:600;letter-spacing:-.02em;margin-bottom:14px}
-  .head p{font-size:17px;color:var(--muted);max-width:520px;margin:0 auto}
-
-  form{padding:30px 0 60px}
-  .section{background:#fff;border:1px solid var(--line);border-radius:18px;padding:30px;margin-bottom:22px}
-  .section h2{font-size:22px;font-weight:600;letter-spacing:-.01em;margin-bottom:4px}
-  .section .sub{font-size:14px;color:var(--muted);margin-bottom:22px}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .grid .full{grid-column:1 / -1}
-  @media(max-width:620px){.grid{grid-template-columns:1fr}}
-
-  label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px}
-  label .req{color:#c0392b}
-  input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
-    width:100%;font-family:inherit;font-size:15px;padding:12px 14px;border:1px solid #d8d2cc;border-radius:10px;background:#fff;color:var(--ink);transition:.12s;
+  html{scroll-behavior:smooth;color-scheme:light;-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--cream);color:var(--body);line-height:1.55;
+    -webkit-font-smoothing:antialiased;touch-action:manipulation;overflow-x:hidden;
   }
-  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--forest);box-shadow:0 0 0 3px rgba(216,244,119,.5)}
-  textarea{resize:vertical;min-height:80px}
-  select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23555' stroke-width='1.6' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+  h1,h2{color:var(--navy);letter-spacing:-.024em;text-wrap:balance}
+  a{text-decoration:none;color:inherit}
+  /* the form column; header and footer use the wider shell */
+  .wrap{max-width:820px;margin:0 auto;padding:0 28px;width:100%}
+  .shell{max-width:1200px;margin:0 auto;padding:0 28px;width:100%}
+  :where(a,button,summary,select,input,textarea,[tabindex]):focus-visible{
+    outline:2px solid var(--accent);outline-offset:3px;border-radius:4px;
+  }
+  /* the wordmark's emphasis span: same family, no second typeface */
+  .italic{font-style:normal;font-weight:inherit}
+  [hidden]{display:none!important}
+  .hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
 
-  .filezone{border:1.5px dashed #c9c2ba;border-radius:12px;padding:22px;text-align:center;cursor:pointer;transition:.12s;background:#fdfcfb}
-  .filezone:hover{border-color:var(--forest);background:#faf9f6}
-  .filezone.drag{border-color:var(--forest);background:#f4f7ec}
-  .filezone p{font-size:14px;color:var(--muted);margin:0}
-  .filezone .hint{font-size:12px;margin-top:4px}
+  /* ---------------- header: logo and a way back, nothing else ------------- */
+  header{background:var(--white);border-bottom:1px solid var(--line)}
+  header nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:80px}
+  .logo svg{height:56px;width:auto;display:block}
+  .backlink{
+    font-size:15px;font-weight:600;color:var(--navy);
+    padding:10px 18px;border:1px solid var(--line);border-radius:var(--r-pill);
+    background:var(--white);transition:border-color .15s ease,color .15s ease;
+  }
+  .backlink:hover{border-color:var(--navy);color:var(--accent)}
+
+  /* ---------------- page head ---------------- */
+  .head{text-align:center;padding:64px 0 8px}
+  .head h1{font-size:clamp(34px,5vw,52px);font-weight:700;line-height:1.05;margin-bottom:14px}
+  .head p{font-size:17px;color:var(--body);max-width:34rem;margin:0 auto}
+
+  /* ---------------- form shell ---------------- */
+  form{padding:36px 0 72px}
+  .section{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:var(--r-surface);padding:32px;margin-bottom:20px;
+    box-shadow:var(--shadow-sm);
+  }
+  .section h2{font-size:21px;font-weight:600;margin-bottom:4px}
+  .section .sub{font-size:14px;color:var(--body);margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .grid .full{grid-column:1 / -1}
+
+  /* ---------------- controls ---------------- */
+  label{display:block;font-size:13.5px;font-weight:600;color:var(--navy);margin-bottom:7px}
+  label .req{color:var(--err);font-weight:600}
+  input[type=text],input[type=email],input[type=tel],input[type=date],
+  input[type=number],select,textarea{
+    width:100%;font-family:inherit;font-size:15.5px;color:var(--navy);
+    padding:13px 15px;background-color:var(--white);
+    border:1px solid #D5DCE8;border-radius:var(--r-input);
+    transition:border-color .15s ease,box-shadow .15s ease;
+  }
+  input::placeholder,textarea::placeholder{color:#93A0B5}
+  input:hover,select:hover,textarea:hover{border-color:#BCC7D8}
+  input:focus,select:focus,textarea:focus{
+    outline:none;border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(47,107,255,.16);
+  }
+  textarea{resize:vertical;min-height:88px;line-height:1.55}
+  select{
+    appearance:none;-webkit-appearance:none;cursor:pointer;padding-right:42px;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='8' viewBox='0 0 13 8'%3E%3Cpath d='M1.5 1.5l5 5 5-5' stroke='%231C2B47' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 15px center;
+  }
+  .helper{font-size:12.5px;color:var(--body);margin-top:7px;display:flex;justify-content:space-between;gap:12px}
+  .helper .count{flex-shrink:0;font-variant-numeric:tabular-nums}
+
+  /* ---------------- buttons ----------------
+     .btn-lime is deliberately not defined. The submit button carries it
+     alongside .btn, and as a light fill on a light page it rendered as
+     bare text. With no modifier to apply, it falls back to the primary. */
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;
+    font-family:inherit;font-weight:600;font-size:15px;
+    padding:13px 26px;border-radius:var(--r-pill);
+    border:1px solid transparent;cursor:pointer;
+    background:var(--accent);color:var(--white);
+    transition:background-color .15s ease,transform .12s ease;
+  }
+  .btn:hover{background:var(--accent-ink)}
+  .btn:active{transform:translateY(1px)}
+  /* still unmistakably a button while the request is in flight */
+  .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+
+  /* ---------------- uploads ---------------- */
+  .filezone{
+    border:1.5px dashed #C3CEDE;border-radius:var(--r-input);
+    padding:26px;text-align:center;cursor:pointer;background:#FBFCFE;
+    transition:border-color .15s ease,background-color .15s ease;
+  }
+  .filezone:hover{border-color:var(--accent);background:var(--tint)}
+  .filezone.drag{border-color:var(--accent);background:var(--tint-deep)}
+  .filezone p{font-size:14.5px;color:var(--navy);margin:0}
+  .filezone .hint{font-size:12.5px;color:var(--body);margin-top:5px}
   .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-  .chip{display:flex;align-items:center;gap:8px;background:#f0ede8;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:13px}
-  .chip button{border:none;background:none;cursor:pointer;font-size:15px;line-height:1;color:var(--muted)}
+  .chip{
+    display:flex;align-items:center;gap:8px;
+    background:var(--tint);border:1px solid var(--tint-deep);
+    border-radius:8px;padding:6px 10px;font-size:13px;color:var(--navy);
+  }
+  .chip button{
+    border:none;background:none;cursor:pointer;font-size:15px;line-height:1;
+    color:var(--body);padding:0;
+  }
+  .chip button:hover{color:var(--navy)}
 
+  /* ---------------- choices ---------------- */
   .radio-row{display:flex;gap:10px}
   .radio-opt{flex:1}
-  .radio-opt input{position:absolute;opacity:0}
-  .radio-opt label{display:block;text-align:center;padding:11px;border:1px solid #d8d2cc;border-radius:10px;cursor:pointer;font-weight:500;margin:0}
-  .radio-opt input:checked+label{border-color:var(--forest);background:var(--forest);color:#fff}
+  .radio-opt input{position:absolute;opacity:0;width:0;height:0}
+  .radio-opt label{
+    display:block;text-align:center;padding:12px;margin:0;cursor:pointer;
+    font-size:15px;font-weight:500;color:var(--navy);
+    border:1px solid #D5DCE8;border-radius:var(--r-input);background:var(--white);
+    transition:border-color .15s ease,background-color .15s ease,color .15s ease;
+  }
+  .radio-opt label:hover{border-color:#BCC7D8}
+  .radio-opt input:checked+label{border-color:var(--accent);background:var(--accent);color:var(--white)}
+  .radio-opt input:focus-visible+label{outline:2px solid var(--accent);outline-offset:3px}
 
-  .consent{font-size:12.5px;color:#444;line-height:1.6;background:var(--forest);color:#e8efe6;padding:20px;border-radius:12px;margin-bottom:18px}
-  .check-row{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px;font-size:13.5px;line-height:1.5}
-  .check-row input{margin-top:3px;width:17px;height:17px;flex-shrink:0;accent-color:var(--forest)}
-  .check-row a{text-decoration:underline}
+  .consent{
+    font-size:12.5px;line-height:1.65;color:var(--body-on-navy);
+    background:var(--navy);padding:24px;border-radius:var(--r-input);margin-bottom:20px;
+  }
+  .check-row{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--body)}
+  .check-row input{margin-top:2px;width:18px;height:18px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+  .check-row label{font-size:13.5px;line-height:1.55;color:var(--body)}
+  .check-row a{text-decoration:underline;text-underline-offset:2px;color:var(--navy)}
 
-  .sigpad{border:1px solid #d8d2cc;border-radius:10px;background:#fff;touch-action:none;width:100%;height:150px;display:block}
-  .sig-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-  .sig-clear{font-size:13px;color:var(--muted);background:none;border:none;cursor:pointer;text-decoration:underline}
+  /* ---------------- signature ---------------- */
+  .sigpad{
+    border:1px solid #D5DCE8;border-radius:var(--r-input);background:var(--white);
+    touch-action:none;width:100%;height:150px;display:block;cursor:crosshair;
+  }
+  .sig-actions{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .sig-clear{
+    font-size:13px;color:var(--body);background:none;border:none;cursor:pointer;
+    text-decoration:underline;text-underline-offset:2px;padding:0;
+  }
+  .sig-clear:hover{color:var(--navy)}
 
-  .err{color:#c0392b;font-size:13px;margin-top:10px}
-  .errlist{background:#fdecea;border:1px solid #f5c6c0;border-radius:10px;padding:14px 16px;margin-bottom:18px;font-size:13.5px;color:#a5281b}
+  /* ---------------- messages ---------------- */
+  .err{color:var(--err);font-size:13px;margin-top:10px}
+  .errlist{
+    background:#FDF1EF;border:1px solid #F2C8C0;border-radius:var(--r-input);
+    padding:16px 18px;margin-bottom:20px;font-size:13.5px;color:var(--err);
+  }
   .errlist ul{margin:6px 0 0 18px}
-  .submit-row{text-align:center;padding-top:8px}
-  .turnstile-box{display:flex;justify-content:center;margin-bottom:18px;min-height:65px}
-  .note{font-size:12.5px;color:var(--muted);text-align:center;margin-top:14px}
+  .submit-row{text-align:center;padding-top:10px}
+  .turnstile-box{display:flex;justify-content:center;margin-bottom:20px;min-height:65px}
+  .note{font-size:12.5px;color:var(--body);text-align:center;margin-top:16px}
 
-  .success{text-align:center;padding:80px 20px}
-  .success h2{font-size:34px;font-weight:600;margin-bottom:14px}
-  .success p{font-size:17px;color:var(--muted);max-width:460px;margin:0 auto 26px}
+  .success{text-align:center;padding:96px 20px}
+  .success h2{font-size:clamp(28px,4vw,38px);font-weight:700;margin-bottom:14px}
+  .success p{font-size:17px;color:var(--body);max-width:30rem;margin:0 auto 28px}
 
-  footer{padding:44px 0 40px;border-top:1px solid var(--line);margin-top:40px}
-  .foot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px}
-  .foot .logo svg{height:26px}
-  .foot p{font-size:13.5px;color:var(--muted);margin-top:12px;max-width:300px;line-height:1.55}
-  .foot-col h5{font-size:12px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:#999;margin-bottom:12px}
-  .foot-col a{display:block;font-size:14px;color:#3a3a3a;margin-bottom:9px}
+  /* ---------------- footer ---------------- */
+  footer{
+    border-top:1px solid var(--line);padding:64px 0 44px;background:var(--white);
+  }
+  .foot{display:grid;grid-template-columns:1.2fr 2fr;gap:56px}
+  .foot-brand svg{height:56px;width:auto;display:block;margin-bottom:20px}
+  .foot-brand p{font-size:15px;color:var(--body);max-width:22rem;line-height:1.6}
+  .foot-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:36px}
+  .foot-col h3{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--body);margin-bottom:16px}
+  .foot-col a{display:block;font-size:15px;color:var(--navy);margin-bottom:11px}
+  .foot-col a:hover{color:var(--accent)}
   .foot-col address{font-style:normal}
-  .foot-col address span{display:block;font-size:14px;color:#3a3a3a;margin-bottom:9px}
-  .foot-col .foot-org{font-weight:600;color:#181818}
-  .foot-links{display:flex;gap:44px;flex-wrap:wrap}
-  .legal{margin-top:34px;font-size:12px;color:#9a948e;line-height:1.55;max-width:760px}
-  .copyright{margin-top:18px;font-size:12.5px;color:var(--muted)}
-  .hp{position:absolute;left:-9999px;opacity:0;height:0;overflow:hidden}
-  [hidden]{display:none!important}
-  .helper{font-size:12.5px;color:var(--muted);margin-top:6px;display:flex;justify-content:space-between;gap:12px}
-  .helper .count{flex-shrink:0;font-variant-numeric:tabular-nums}
+  .foot-col address span{display:block;font-size:15px;color:var(--navy);margin-bottom:11px}
+  .foot-org{font-weight:600}
+  .legal{margin-top:52px;padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--body);max-width:60rem;line-height:1.65}
+  .copyright{margin-top:18px;font-size:13px;color:var(--body)}
+
+  /* ---------------- responsive ---------------- */
+  @media(max-width:900px){
+    .foot{grid-template-columns:1fr;gap:40px}
+  }
+  @media(max-width:640px){
+    .wrap,.shell{padding:0 20px}
+    header nav{height:68px}
+    .logo svg{height:42px}
+    .backlink{padding:9px 14px;font-size:14px}
+    .head{padding:44px 0 4px}
+    form{padding:26px 0 56px}
+    .section{padding:22px 18px}
+    .grid{grid-template-columns:1fr;gap:16px}
+    .consent{padding:18px}
+    .foot-brand svg{height:46px}
+    .foot-cols{grid-template-columns:1fr;gap:32px}
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <nav>
-    <a class="logo" href="/" aria-label="Velora Capital">
-      <svg height="60" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1C2B47"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1C2B47"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1C2B47">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
-    </a>
-    <a href="/" class="btn" style="background:none;color:var(--ink);border:1px solid var(--line)">← Home</a>
-  </nav>
+  <div class="shell">
+    <nav aria-label="Primary">
+      <a class="logo" href="/" aria-label="Velora Capital home">
+        <svg height="60" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1C2B47"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1C2B47"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1C2B47">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
+      </a>
+      <a class="backlink" href="/">Home</a>
+    </nav>
+  </div>
 </header>
 
 <div class="wrap">
@@ -298,35 +436,41 @@
 </div>
 
 <footer>
-  <div class="wrap" style="max-width:1200px">
+  <div class="shell">
     <div class="foot">
-      <div>
-        <div class="logo">
-          <svg height="26" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1C2B47"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1C2B47"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1C2B47">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
-        </div>
-        <p>Fast, flexible funding for small businesses — backed by advisors who actually answer.</p>
+      <div class="foot-brand">
+        <svg height="30" viewBox="0 0 300 60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Velora Capital"><path d="M6 43 L20 16 L29 16 L15 43 Z" fill="#1C2B47"/><path d="M22 43 L36 16 L45 16 L31 43 Z" fill="#1C2B47"/><text x="56" y="34" font-family="Inter" font-weight="600" font-size="29" fill="#1C2B47">velora</text><text x="57" y="51" font-family="Inter" font-weight="500" font-size="12.75" letter-spacing="3.3" fill="#5a6270">CAPITAL</text></svg>
+        <p>Fast, flexible funding for small businesses, backed by advisors who actually answer.</p>
       </div>
-      <div class="foot-links">
+      <div class="foot-cols">
         <div class="foot-col">
-          <h5>Get in touch</h5>
-          <address class="foot-contact">
+          <h3>Funding</h3>
+          <a href="/#products">Working Capital</a>
+          <a href="/#products">SBA Loans</a>
+          <a href="/#products">Equipment Financing</a>
+          <a href="/#products">Line of Credit</a>
+        </div>
+        <div class="foot-col">
+          <h3>Company</h3>
+          <a href="/#faq">FAQ</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms of Service</a>
+        </div>
+        <div class="foot-col">
+          <h3>Get in touch</h3>
+          <address>
             <span class="foot-org">Velora Capital LLC</span>
             <span>19401 W Dixie Hwy, Miami, FL 33180</span>
             <a href="mailto:support@veloracapitalgrp.com">support@veloracapitalgrp.com</a>
             <a href="tel:+18455524810">845-552-4810</a>
           </address>
         </div>
-        <div class="foot-col">
-          <h5>Legal</h5>
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
-        </div>
       </div>
     </div>
-    <div class="legal">
+    <p class="legal">
       Velora Capital LLC is a business financing brokerage and does not make credit decisions or guarantee funding. Approval, rates, and terms vary based on the business profile and the funding partner, and are not guaranteed.
-    </div>
-    <div class="copyright">© 2026 Velora Capital LLC. All rights reserved.</div>
+    </p>
+    <p class="copyright">© 2026 Velora Capital LLC. All rights reserved.</p>
   </div>
 </footer>
 
