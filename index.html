@@ -101,7 +101,9 @@
      full navy and read as selected rather than merely present */
   .navlinks a{position:relative;color:var(--body);transition:color .15s ease}
   .navlinks a:hover{color:var(--accent)}
-  .navlinks a[aria-current="page"]{color:var(--navy);font-weight:600}
+  /* colour only: a weight change here would reflow the row every time
+     the spy moves the active item */
+  .navlinks a[aria-current="page"]{color:var(--navy)}
   /* static rule under the current item. It is the no-script state, and
      is handed over to the sliding indicator once script positions it. */
   .navlinks a[aria-current="page"]::after{
@@ -992,43 +994,102 @@
 </footer>
 
 <script>
-// Sliding nav indicator. Progressive enhancement: without script the
-// current item keeps its static rule, and has-ink only swaps to the
-// travelling bar once it has been measured and placed.
+// Nav underline as a scroll spy. The bar marks the section currently in
+// view, not the pointer. An observation band sits just under the sticky
+// header; whichever watched block is lowest in that band owns the bar,
+// so a section claims it as its top scrolls up into the band. Hover
+// previews another item, and releasing returns to the section in view
+// rather than to a fixed default.
 (function () {
   var wrap = document.querySelector('.navlinks');
   if (!wrap) return;
-  var links = wrap.querySelectorAll('a');
-  var active = wrap.querySelector('a[aria-current="page"]') || links[0];
-  if (!active) return;
+  var links = Array.prototype.slice.call(wrap.querySelectorAll('a'));
+  if (!links.length) return;
+
+  function linkFor(href) {
+    for (var i = 0; i < links.length; i++) {
+      if (links[i].getAttribute('href') === href) return links[i];
+    }
+    return null;
+  }
+
+  // Each nav item owns a run of blocks. Sections with no nav item of their
+  // own (uses, industries, testimonials, the closing CTA) belong to the
+  // nearest item above them, so the bar never blanks mid-page.
+  var RANGES = [
+    { href: '#main',     blocks: ['.hero', '.trust', '.band'] },
+    { href: '#products', blocks: ['#products', '#uses', '#industries', '#testimonials'] },
+    { href: '#faq',      blocks: ['#faq'] },
+    // the closing CTA joins the contact run: the page ends before the
+    // footer's top can reach the band, so without it the bar would never
+    // reach Contact at the bottom of the document
+    { href: '#contact',  blocks: ['#apply-cta', 'footer'] }
+  ];
+
+  var watched = [];
+  for (var r = 0; r < RANGES.length; r++) {
+    if (!linkFor(RANGES[r].href)) continue;
+    for (var b = 0; b < RANGES[r].blocks.length; b++) {
+      var el = document.querySelector(RANGES[r].blocks[b]);
+      if (!el) continue;
+      el.setAttribute('data-nav', RANGES[r].href);
+      watched.push(el);
+    }
+  }
+  if (!watched.length) return;
 
   var ink = document.createElement('span');
   ink.className = 'navink';
   ink.setAttribute('aria-hidden', 'true');
   wrap.appendChild(ink);
 
+  var active = wrap.querySelector('a[aria-current="page"]') || links[0];
+
   function moveTo(el) {
     if (!el) return;
     var w = wrap.getBoundingClientRect();
-    var r = el.getBoundingClientRect();
-    ink.style.transform = 'translateX(' + (r.left - w.left) + 'px) scaleX(' + r.width + ')';
+    var rect = el.getBoundingClientRect();
+    ink.style.transform = 'translateX(' + (rect.left - w.left) + 'px) scaleX(' + rect.width + ')';
   }
-  function reset() { moveTo(active); }
+  function setActive(link) {
+    if (link && link !== active) {
+      active.removeAttribute('aria-current');
+      link.setAttribute('aria-current', 'page');
+      active = link;
+    }
+    moveTo(active);
+  }
 
-  reset();
+  moveTo(active);
   wrap.classList.add('has-ink');
 
-  for (var i = 0; i < links.length; i++) {
-    links[i].addEventListener('mouseenter', function () { moveTo(this); });
-    links[i].addEventListener('focus', function () { moveTo(this); });
+  var inBand = [];
+  var io = new IntersectionObserver(function (entries) {
+    for (var i = 0; i < entries.length; i++) {
+      var at = inBand.indexOf(entries[i].target);
+      if (entries[i].isIntersecting) { if (at === -1) inBand.push(entries[i].target); }
+      else if (at !== -1) { inBand.splice(at, 1); }
+    }
+    if (!inBand.length) return;
+    inBand.sort(function (a, b) { return watched.indexOf(a) - watched.indexOf(b); });
+    setActive(linkFor(inBand[inBand.length - 1].getAttribute('data-nav')));
+  }, { rootMargin: '-88px 0px -68% 0px', threshold: 0 });
+
+  for (var w2 = 0; w2 < watched.length; w2++) io.observe(watched[w2]);
+
+  for (var k = 0; k < links.length; k++) {
+    links[k].addEventListener('mouseenter', function () { moveTo(this); });
+    links[k].addEventListener('focus', function () { moveTo(this); });
+    // click marks it at once; the observer confirms once the scroll lands
+    links[k].addEventListener('click', function () { setActive(this); });
   }
-  wrap.addEventListener('mouseleave', reset);
+  wrap.addEventListener('mouseleave', function () { moveTo(active); });
   wrap.addEventListener('focusout', function (e) {
-    if (!wrap.contains(e.relatedTarget)) reset();
+    if (!wrap.contains(e.relatedTarget)) moveTo(active);
   });
-  window.addEventListener('resize', reset);
+  window.addEventListener('resize', function () { moveTo(active); });
   // webfont swap changes label widths, so measure again once it lands
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(reset);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { moveTo(active); });
 })();
 
 (function () {
