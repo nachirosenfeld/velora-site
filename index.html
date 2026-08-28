@@ -348,6 +348,43 @@
     width:19px;height:19px;flex-shrink:0;margin-top:2px;color:var(--accent);
   }
 
+  /* ---------------------------------------------------------------
+     Photography. Generic industry scenes, never presented as clients,
+     so they carry no caption and no attribution. A soft navy scrim ties
+     the warm source images into a cool palette; it lifts on hover so
+     the full colour is one interaction away rather than lost.
+  ----------------------------------------------------------------*/
+  .shot{
+    position:relative;overflow:hidden;
+    border-radius:var(--r-surface);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-sm);
+    background:var(--tint);
+    margin:0;
+  }
+  .shot img{
+    width:100%;height:100%;object-fit:cover;display:block;
+    transition:transform .55s cubic-bezier(.16,1,.3,1);
+  }
+  .shot::after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(178deg, rgba(28,43,71,.05) 0%, rgba(28,43,71,.30) 100%);
+    transition:opacity .35s ease;
+  }
+  .shot:hover::after{opacity:.4}
+  .shot:hover img{transform:scale(1.04)}
+
+  /* asymmetric mosaic: two wide over one narrow plus one extra wide */
+  .mosaic{
+    display:grid;grid-template-columns:repeat(6,1fr);
+    grid-auto-rows:288px;gap:14px;margin-top:44px;
+  }
+  .shot-3{grid-column:span 3}
+  .shot-2{grid-column:span 2}
+  .shot-4{grid-column:span 4}
+  /* single image filling the empty half of the uses column */
+  .shot-inline{margin-top:34px;aspect-ratio:4/3}
+
   /* ---------------- industries: tag cluster ---------------- */
   .inds{display:flex;flex-wrap:wrap;gap:11px}
   .ind{
@@ -519,6 +556,17 @@
     .js .stagger.is-in > *:nth-child(6){transition-delay:305ms}
     .js .stagger.is-in > *:nth-child(n+7){transition-delay:350ms}
 
+    /* photographs arrive a beat slower than text, so the mosaic reads
+       as a moment rather than a flicker */
+    .js .stagger-slow > *{
+      transform:translateY(22px);
+      transition:opacity .68s cubic-bezier(.16,1,.3,1),
+                 transform .68s cubic-bezier(.16,1,.3,1);
+    }
+    .js .stagger-slow.is-in > *:nth-child(2){transition-delay:110ms}
+    .js .stagger-slow.is-in > *:nth-child(3){transition-delay:220ms}
+    .js .stagger-slow.is-in > *:nth-child(4){transition-delay:330ms}
+
     /* hero runs on load, in reading order, ending on the card */
     .js .hero-in{
       opacity:0;transform:translateY(18px);
@@ -538,6 +586,7 @@
     .why-grid{grid-template-columns:1fr;gap:32px}
     .why-head{position:static}
     .uses-grid{grid-template-columns:1fr;gap:34px}
+    .mosaic{grid-auto-rows:236px}
     .band-grid{grid-template-columns:repeat(2,1fr);gap:28px}
     .band-stat:nth-child(3){border-left:0;padding-left:0}
   }
@@ -577,6 +626,9 @@
     .bento{grid-template-columns:1fr}
     .uses-list{grid-template-columns:1fr;gap:16px}
     .uses-panel{padding:26px 22px}
+    /* mosaic stacks to one column so nothing crops to a letterbox */
+    .mosaic{grid-template-columns:1fr;grid-auto-rows:210px;gap:12px}
+    .shot-2,.shot-3,.shot-4{grid-column:span 1}
     .foot-cols{grid-template-columns:1fr;gap:32px}
     .trust-row{gap:12px 26px}
   }
@@ -777,6 +829,12 @@
         <div class="reveal">
           <h2>What owners actually use it for.</h2>
           <p class="lead">Funding is rarely abstract. It is a payroll run, a truck, a slow February. These are the reasons owners call us.</p>
+          <figure class="shot shot-inline">
+            <picture>
+              <source srcset="/assets/industries/kitchen-900.webp" type="image/webp">
+              <img src="/assets/industries/kitchen-900.jpg" width="900" height="672" loading="lazy" decoding="async" alt="Cooks plating dishes on the line in a restaurant kitchen">
+            </picture>
+          </figure>
         </div>
         <div class="uses-panel reveal">
           <div class="uses-list stagger">
@@ -812,6 +870,35 @@
         <span class="ind">Professional services</span>
         <span class="ind">Landscaping</span>
         <span class="ind">Light manufacturing</span>
+      </div>
+
+      <!-- Generic industry photography. These are not clients and carry
+           no caption, business name or attribution of any kind. -->
+      <div class="mosaic stagger stagger-slow">
+        <figure class="shot shot-3">
+          <picture>
+            <source srcset="/assets/industries/construction-900.webp" type="image/webp">
+            <img src="/assets/industries/construction-900.jpg" width="900" height="672" loading="lazy" decoding="async" alt="A builder reading plans on a timber-framed construction site">
+          </picture>
+        </figure>
+        <figure class="shot shot-3">
+          <picture>
+            <source srcset="/assets/industries/trucking-900.webp" type="image/webp">
+            <img src="/assets/industries/trucking-900.jpg" width="900" height="672" loading="lazy" decoding="async" alt="A driver checking a loaded trailer at a freight dock">
+          </picture>
+        </figure>
+        <figure class="shot shot-2">
+          <picture>
+            <source srcset="/assets/industries/salon-900.webp" type="image/webp">
+            <img src="/assets/industries/salon-900.jpg" width="900" height="672" loading="lazy" decoding="async" alt="A stylist cutting hair in a salon">
+          </picture>
+        </figure>
+        <figure class="shot shot-4">
+          <picture>
+            <source srcset="/assets/industries/autoshop-900.webp" type="image/webp">
+            <img src="/assets/industries/autoshop-900.jpg" width="900" height="672" loading="lazy" decoding="async" alt="A mechanic working under a truck raised on a lift in an auto shop">
+          </picture>
+        </figure>
       </div>
     </div>
   </section>

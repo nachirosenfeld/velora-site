@@ -1,2 +1,7 @@
 .DS_Store
 node_modules/
+
+# Industry photo masters: large source PNGs, re-downloadable from the
+# CloudFront URLs recorded in the commit that added the derivatives.
+# Only the 900px webp/jpg derivatives are served and tracked.
+assets/industries/*.png
