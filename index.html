@@ -85,16 +85,17 @@
   nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:80px}
   .logo svg{height:60px;width:auto;display:block}
   .navlinks{display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;white-space:nowrap}
-  .navlinks a{color:var(--navy);transition:color .15s ease}
+  /* inactive items sit back at body ink so the current page can hold
+     full navy and read as selected rather than merely present */
+  .navlinks a{position:relative;color:var(--body);transition:color .15s ease}
   .navlinks a:hover{color:var(--accent)}
-  .nav-right{display:flex;align-items:center;gap:18px}
-  /* the number is the most on-message trust signal this brand has:
-     the page promises an advisor who picks up, so show the line */
-  .navphone{
-    font-size:15px;font-weight:600;color:var(--navy);white-space:nowrap;
-    transition:color .15s ease;
+  .navlinks a[aria-current="page"]{color:var(--navy);font-weight:600}
+  .navlinks a[aria-current="page"]::after{
+    content:"";position:absolute;left:0;right:0;bottom:-9px;height:2px;
+    border-radius:2px;background:var(--accent);
   }
-  .navphone:hover{color:var(--accent)}
+  .menu-panel a[aria-current="page"]{color:var(--navy);font-weight:600;background:var(--tint)}
+  .nav-right{display:flex;align-items:center;gap:18px}
 
   .btn{
     display:inline-flex;align-items:center;justify-content:center;
@@ -557,7 +558,6 @@
     /* links collapse into the disclosure, but the primary CTA stays
        visible: it is the page's conversion path. */
     .navlinks{display:none}
-    .navphone{display:none}
     .menu{display:block}
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
@@ -615,21 +615,21 @@
       </a>
 
       <div class="navlinks">
+        <a href="#main" aria-current="page">Home</a>
         <a href="#products">What we fund</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </div>
 
       <div class="nav-right">
-        <a class="navphone" href="tel:+19146062010">914-606-2010</a>
         <a href="/apply" class="btn btn-primary">Apply now</a>
         <details class="menu">
           <summary aria-label="Open navigation menu">Menu</summary>
           <div class="menu-panel">
+            <a href="#main" aria-current="page">Home</a>
             <a href="#products">What we fund</a>
             <a href="#faq">FAQ</a>
             <a href="#contact">Contact</a>
-            <a href="tel:+19146062010">Call 914-606-2010</a>
             <a href="/apply">Apply now</a>
           </div>
         </details>
