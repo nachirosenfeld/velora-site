@@ -252,7 +252,7 @@
 
   /* ---------------- shared section furniture ---------------- */
   section{padding:104px 0}
-  #products,#uses,#industries,#why,#how,#testimonials,#faq,#contact{scroll-margin-top:96px}
+  #products,#uses,#industries,#testimonials,#faq,#contact{scroll-margin-top:96px}
 
   /* ---------------------------------------------------------------
      Surface system. Nothing on this page sits on flat white. Four
@@ -286,7 +286,6 @@
   .sec-head{max-width:44rem;margin-bottom:52px}
   .sec-head h2{font-size:clamp(34px,4.6vw,52px);font-weight:700;letter-spacing:-.03em;margin-bottom:16px}
   .sec-head p{font-size:18.5px;max-width:38rem}
-  /* Why Velora carries the page's peak scale; see .why-grid h2 */
 
   /* ---------------- products: bento, 6 items / 6 cells ---------------- */
   /* 6 items, 3x3 grid, hero tile takes a 2x2 block. Nine cells, all
@@ -415,40 +414,6 @@
   .quote-name{display:block;color:var(--navy);font-weight:600;margin-bottom:2px}
   .head-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px}
   .head-row h2{margin-bottom:0}
-
-  /* ---------------- why: two column, hairline rows ---------------- */
-  .why-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:72px;align-items:start}
-  .why-head{position:sticky;top:112px}
-  /* the page's loudest headline: this is the argument the brand rests on */
-  .why-grid h2{font-size:clamp(38px,5.6vw,68px);font-weight:700;line-height:1.02;letter-spacing:-.036em}
-  .why-lead{font-size:18px;margin-top:24px;max-width:26rem}
-  .why-list{display:grid}
-  .why-item{padding:30px 0 30px 30px;border-top:1px solid var(--line);position:relative}
-  .why-item:first-child{border-top:0;padding-top:0}
-  /* marker doubles as the row's left rule, so it organises rather than decorates */
-  .why-item::before{
-    content:"";position:absolute;left:0;top:32px;bottom:6px;width:2px;
-    background:var(--tint-deep);border-radius:2px;
-  }
-  .why-item:first-child::before{top:6px}
-  .why-item:hover::before{background:var(--accent)}
-  .why-item h3{font-size:21px;margin-bottom:9px}
-  .why-item p{font-size:16px;max-width:36rem}
-  /* the lead differentiator gets more room than the rows under it */
-  .why-item-lead{padding-bottom:34px}
-  .why-item-lead h3{font-size:26px;letter-spacing:-.022em;margin-bottom:12px}
-  .why-item-lead p{font-size:17.5px}
-  .why-item-lead::before{background:var(--accent)}
-
-  /* ---------------- how it works: connected track ---------------- */
-  .track{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
-  .step{position:relative;padding:30px 34px 0 0}
-  .step + .step{padding-left:34px;border-left:1px solid var(--line)}
-  .step h3{font-size:21px;margin-bottom:10px}
-  .step p{font-size:16px;max-width:24rem}
-  .step-rule{height:3px;border-radius:2px;background:var(--tint-deep);margin-bottom:26px}
-  .step:first-child .step-rule{background:var(--accent)}
-  .step:nth-child(2) .step-rule{background:linear-gradient(90deg,rgba(47,107,255,.55),var(--tint-deep))}
 
   /* ---------------- faq ---------------- */
   .faq{max-width:56rem}
@@ -583,8 +548,6 @@
     .hero-grid{grid-template-columns:1fr;gap:52px}
     .summary-wrap{margin-left:0;max-width:none}
     .summary-wrap::before{inset:18px -12px -12px 18px}
-    .why-grid{grid-template-columns:1fr;gap:32px}
-    .why-head{position:static}
     .uses-grid{grid-template-columns:1fr;gap:34px}
     .mosaic{grid-auto-rows:236px}
     .band-grid{grid-template-columns:repeat(2,1fr);gap:28px}
@@ -603,10 +566,6 @@
     .tile-hero h3{font-size:24px}
     .tile-hero p{font-size:16px}
     .quotes{grid-template-columns:1fr}
-    .track{grid-template-columns:1fr;gap:0}
-    .step{padding:30px 0 0 0}
-    .step + .step{padding-left:0;border-left:0}
-    .step-rule{margin-bottom:20px}
     .foot{grid-template-columns:1fr;gap:40px}
   }
   @media(max-width:640px){
@@ -657,8 +616,6 @@
 
       <div class="navlinks">
         <a href="#products">What we fund</a>
-        <a href="#how">How it works</a>
-        <a href="#why">Why Velora</a>
         <a href="#faq">FAQ</a>
         <a href="#contact">Contact</a>
       </div>
@@ -670,8 +627,6 @@
           <summary aria-label="Open navigation menu">Menu</summary>
           <div class="menu-panel">
             <a href="#products">What we fund</a>
-            <a href="#how">How it works</a>
-            <a href="#why">Why Velora</a>
             <a href="#faq">FAQ</a>
             <a href="#contact">Contact</a>
             <a href="tel:+19146062010">Call 914-606-2010</a>
@@ -903,63 +858,6 @@
     </div>
   </section>
 
-  <!-- WHY: two column, hairline rows -->
-  <section id="why" class="s-4">
-    <div class="wrap">
-      <div class="why-grid">
-        <div class="why-head reveal">
-          <h2>A funding partner, not a call center.</h2>
-          <p class="why-lead">Most owners do not need a hundred options. They need the right one, quickly, from someone who picks up the phone.</p>
-        </div>
-        <div class="why-list stagger">
-          <div class="why-item why-item-lead">
-            <h3>Our own capital, and a network of 100+</h3>
-            <p>Some deals we fund ourselves. For the rest we draw on more than a hundred funding sources we work with. More places for your file to land means more ways to get you funded.</p>
-          </div>
-          <div class="why-item">
-            <h3>Real people, real answers</h3>
-            <p>You work with one advisor from application to funding, not a rotating queue. You get straight talk on what you qualify for and what you do not.</p>
-          </div>
-          <div class="why-item">
-            <h3>Fast, honest decisions</h3>
-            <p>We move quickly and we do not waste your time. If it is a fit, you will know in hours. If it is not, we will tell you why.</p>
-          </div>
-          <div class="why-item">
-            <h3>Options that fit</h3>
-            <p>Working capital, SBA loans, equipment financing and more, matched to your revenue and your goals rather than a one-size template.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS: connected track, no step numbering -->
-  <section id="how" class="s-2">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <h2>Funded in three steps.</h2>
-        <p>No stacks of paperwork, no waiting weeks to hear back.</p>
-      </div>
-      <div class="track stagger">
-        <div class="step">
-          <div class="step-rule"></div>
-          <h3>Apply in minutes</h3>
-          <p>Tell us about your business and how much you need. A short form is all it takes, and checking will not affect your credit.</p>
-        </div>
-        <div class="step">
-          <div class="step-rule"></div>
-          <h3>Get matched</h3>
-          <p>Your advisor reviews your file and brings back the funding options that actually fit your business.</p>
-        </div>
-        <div class="step">
-          <div class="step-rule"></div>
-          <h3>Get funded</h3>
-          <p>Pick your offer and get capital in your account, often within 24 hours of approval.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- TESTIMONIALS -->
   <!-- PLACEHOLDER CONTENT. Both the quote bodies and the bracketed
        attributions are sample copy written to size the component. They
@@ -1059,8 +957,6 @@
         </div>
         <div class="foot-col">
           <h3>Company</h3>
-          <a href="#why">Why Velora</a>
-          <a href="#how">How it works</a>
           <a href="#faq">FAQ</a>
           <a href="/privacy">Privacy Policy</a>
           <a href="/terms">Terms of Service</a>
