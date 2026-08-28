@@ -172,11 +172,25 @@
     padding:96px 0 104px;
     text-align:center;
     background:
-      radial-gradient(900px 560px at 50% -6%, rgba(47,107,255,.17) 0%, rgba(47,107,255,0) 64%),
-      radial-gradient(680px 420px at 8% 98%, rgba(47,107,255,.08) 0%, rgba(47,107,255,0) 70%),
-      radial-gradient(680px 420px at 92% 96%, rgba(47,107,255,.08) 0%, rgba(47,107,255,0) 70%),
-      linear-gradient(176deg, var(--tint) 0%, #F3F6FE 42%, var(--cream) 86%);
+      radial-gradient(1000px 600px at 50% -8%, rgba(47,107,255,.19) 0%, rgba(47,107,255,0) 62%),
+      radial-gradient(520px 340px at 12% 12%, rgba(47,107,255,.10) 0%, rgba(47,107,255,0) 68%),
+      radial-gradient(560px 380px at 90% 20%, rgba(28,43,71,.07) 0%, rgba(28,43,71,0) 66%),
+      radial-gradient(720px 440px at 8% 100%, rgba(47,107,255,.09) 0%, rgba(47,107,255,0) 70%),
+      radial-gradient(720px 440px at 92% 98%, rgba(47,107,255,.09) 0%, rgba(47,107,255,0) 70%),
+      linear-gradient(176deg, var(--tint) 0%, #F1F5FE 38%, #F7F9FE 66%, var(--cream) 92%);
   }
+  /* A fine dot field, masked away from the middle so it never sits behind
+     the headline. It gives the canvas a surface at the edges without
+     adding imagery or anything that reads as decoration. */
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(circle at 1px 1px, rgba(28,43,71,.13) 1px, transparent 0);
+    background-size:26px 26px;
+    -webkit-mask-image:radial-gradient(ellipse 62% 56% at 50% 42%, transparent 38%, #000 86%);
+    mask-image:radial-gradient(ellipse 62% 56% at 50% 42%, transparent 38%, #000 86%);
+    opacity:.6;
+  }
+  .hero .wrap{position:relative;z-index:1}
   .hero::after{
     content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
     background:linear-gradient(90deg,transparent,var(--tint-deep) 22%,var(--tint-deep) 78%,transparent);
@@ -416,6 +430,11 @@
   }
   .quote-name{display:block;color:var(--navy);font-weight:600;margin-bottom:2px}
 
+  /* the FAQ now lives in the lower half of the testimonials section,
+     separated by space rather than by a section break */
+  .faq-block{margin-top:104px;scroll-margin-top:96px}
+  .faq-head h2{font-size:clamp(30px,3.8vw,44px)}
+
   /* ---------------- faq ---------------- */
   .faq{max-width:56rem}
   .faq details{
@@ -485,10 +504,8 @@
   .foot-col address span{display:block;font-size:15px;color:var(--navy);margin-bottom:11px}
   .foot-col address a{margin-bottom:11px}
   .foot-org{font-weight:600}
-  .legal{margin-top:52px;padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--body);max-width:60rem;line-height:1.65;scroll-margin-top:110px}
+  .legal{margin-top:52px;padding-top:26px;border-top:1px solid var(--line);font-size:12.5px;color:var(--body);max-width:60rem;line-height:1.65}
   .legal-tight{margin-top:14px;padding-top:0;border-top:0}
-  .fn{font-size:.5em;vertical-align:super;font-weight:600;margin-left:2px;color:var(--body-on-navy)}
-  .fn:hover{color:var(--white)}
   .copyright{margin-top:18px;font-size:13px;color:var(--body)}
 
   /* ---------------------------------------------------------------
@@ -659,7 +676,7 @@
        /apply?amount=... with no script involved. -->
   <section class="hero">
     <div class="wrap">
-      <h1 class="hero-in">Business funding,<br>without the wait.</h1>
+      <h1 class="hero-in">Business funding<br>without the wait.</h1>
       <p class="sub hero-in hero-in-2">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
 
       <form class="picker hero-in hero-in-3" action="/apply" method="get">
@@ -709,7 +726,7 @@
     <div class="wrap">
       <div class="band-grid stagger">
         <div class="band-stat">
-          <b class="num">24 hours<a class="fn" href="#footnotes" aria-label="See footnote on funding decision timing">&#8224;</a></b>
+          <b class="num">24 hours</b>
           <span>To a funding decision</span>
         </div>
         <div class="band-stat">
@@ -858,7 +875,7 @@
   <section id="testimonials" class="s-1">
     <div class="wrap">
       <div class="sec-head reveal">
-        <h2>What owners say.</h2>
+        <h2>What business owners are saying</h2>
       </div>
       <div class="quotes stagger">
         <figure class="quote">
@@ -880,13 +897,9 @@
           </figcaption>
         </figure>
       </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
-  <section id="faq" class="s-3">
-    <div class="wrap">
-      <div class="sec-head reveal">
+    
+      <div class="faq-block" id="faq">
+      <div class="sec-head faq-head reveal">
         <h2>The questions owners actually ask.</h2>
       </div>
       <div class="faq stagger">
@@ -911,8 +924,11 @@
           <p class="answer">Two ways. Some deals we fund directly with our own capital. For others we draw on the hundred-plus funding sources we work with, so your business is matched to the structure that fits it. Approval and terms depend on your business profile and are not guaranteed.</p>
         </details>
       </div>
+      </div>
+
     </div>
   </section>
+
 
   <!-- CLOSING CTA -->
   <section id="apply-cta" class="s-2">
@@ -955,14 +971,14 @@
           <address id="contact">
             <span class="foot-org">Velora Capital LLC</span>
             <span>19401 W Dixie Hwy, Miami, FL 33180</span>
-            <a href="mailto:admin@veloracapitalgrp.com">admin@veloracapitalgrp.com</a>
+            <a href="mailto:support@veloracapitalgrp.com">support@veloracapitalgrp.com</a>
             <a href="tel:+18455524810">845-552-4810</a>
           </address>
         </div>
       </div>
     </div>
-    <p class="legal" id="footnotes">
-      &#8224; Funding decisions are typically returned within 24 hours of a completed application. Timing depends on the funding partner and on how quickly documents are provided, and is not guaranteed.
+    <p class="legal">
+      Funding decisions are typically returned within 24 hours of a completed application. Timing depends on the funding partner and on how quickly documents are provided, and is not guaranteed.
     </p>
     <p class="legal legal-tight">
       Velora Capital LLC is a business financing brokerage and does not make credit decisions or guarantee funding. Approval, rates, and terms vary based on the business profile and the funding partner, and are not guaranteed. All product names and amounts shown are illustrative.
@@ -996,8 +1012,10 @@
   // nearest item above them, so the bar never blanks mid-page.
   var RANGES = [
     { href: '#main',     blocks: ['.hero', '.trust', '.band'] },
-    { href: '#products', blocks: ['#products', '#uses', '#industries', '#testimonials'] },
-    { href: '#faq',      blocks: ['#faq'] },
+    { href: '#products', blocks: ['#products', '#uses', '#industries'] },
+    // the whole combined block, so the bar does not flip halfway down a
+    // single section as the reader crosses from quotes into questions
+    { href: '#faq',      blocks: ['#testimonials'] },
     // the closing CTA joins the contact run: the page ends before the
     // footer's top can reach the band, so without it the bar would never
     // reach Contact at the bottom of the document
