@@ -61,7 +61,7 @@
   .num{font-variant-numeric:tabular-nums}
 
   /* focus: never removed, only replaced */
-  :where(a,button,summary,[tabindex]):focus-visible{
+  :where(a,button,summary,select,[tabindex]):focus-visible{
     outline:2px solid var(--accent);
     outline-offset:3px;
     border-radius:4px;
@@ -164,72 +164,57 @@
   .menu-panel a:hover{background:var(--tint)}
 
   /* ---------------- hero ---------------- */
+  /* Centred rather than split. The composition is anchored by the picker,
+     a working control, so the middle of the canvas carries an action
+     instead of a decorative panel. Wash is re-centred to match. */
   .hero{
     position:relative;
-    padding:88px 0 96px;
+    padding:96px 0 104px;
+    text-align:center;
     background:
-      radial-gradient(760px 520px at 84% 8%, rgba(47,107,255,.16) 0%, rgba(47,107,255,0) 62%),
-      radial-gradient(680px 420px at 6% 96%, rgba(47,107,255,.07) 0%, rgba(47,107,255,0) 70%),
-      linear-gradient(172deg, var(--tint) 0%, #F3F6FE 38%, var(--cream) 82%);
+      radial-gradient(900px 560px at 50% -6%, rgba(47,107,255,.17) 0%, rgba(47,107,255,0) 64%),
+      radial-gradient(680px 420px at 8% 98%, rgba(47,107,255,.08) 0%, rgba(47,107,255,0) 70%),
+      radial-gradient(680px 420px at 92% 96%, rgba(47,107,255,.08) 0%, rgba(47,107,255,0) 70%),
+      linear-gradient(176deg, var(--tint) 0%, #F3F6FE 42%, var(--cream) 86%);
   }
-  /* hairline that closes the hero against the strip below */
   .hero::after{
     content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
     background:linear-gradient(90deg,transparent,var(--tint-deep) 22%,var(--tint-deep) 78%,transparent);
   }
-  .hero-grid{
-    display:grid;grid-template-columns:1.18fr .82fr;
-    gap:60px;align-items:center;
+  .hero h1{
+    font-size:clamp(44px,7vw,92px);letter-spacing:-.036em;line-height:1.01;
+    margin:0 auto 26px;max-width:16ch;
   }
-  /* capped so "Business funding," holds one line and the headline
-     stays at two lines on desktop */
-  .hero h1{font-size:clamp(42px,5.2vw,66px);letter-spacing:-.032em;line-height:1.04;margin-bottom:24px}
-  .hero .sub{font-size:19.5px;max-width:31rem;margin-bottom:36px}
-  .hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+  .hero .sub{font-size:20px;max-width:40rem;margin:0 auto 44px}
 
-  /* funding summary: a real component, rendered live, not a screenshot */
-  .summary-wrap{position:relative;max-width:430px;margin-left:auto;width:100%}
-  /* offset panel behind the card: gives the hero asset real depth
-     without a drop shadow doing all the work */
-  .summary-wrap::before{
-    content:"";position:absolute;inset:22px -18px -18px 22px;
-    border-radius:var(--r-surface);
-    background:linear-gradient(150deg,var(--tint-deep),rgba(47,107,255,.10));
-    border:1px solid rgba(47,107,255,.16);
-  }
-  .summary{
-    position:relative;
-    background:var(--white);
-    border:1px solid var(--line);
-    border-radius:var(--r-surface);
-    /* no bottom padding: the note below bleeds to the card edge */
-    padding:26px 26px 0;
+  /* the picker: a console rather than a bare control, so it reads as the
+     thing to use rather than a form field that drifted onto the page */
+  .picker{
+    display:flex;align-items:flex-end;gap:14px;
+    max-width:640px;margin:0 auto;text-align:left;
+    background:var(--white);border:1px solid var(--line);
+    border-radius:var(--r-surface);padding:18px;
     box-shadow:var(--shadow-lg);
-    width:100%;
-    overflow:hidden;
   }
-  .summary-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:20px}
-  .summary-top h2{
-    font-size:11.5px;font-weight:600;letter-spacing:.11em;
-    text-transform:uppercase;color:var(--body);
+  .picker-field{flex:1;min-width:0}
+  .picker label{
+    display:block;font-size:11.5px;font-weight:600;letter-spacing:.11em;
+    text-transform:uppercase;color:var(--body);margin-bottom:9px;
   }
-  .summary-amount{font-size:48px;font-weight:700;color:var(--navy);letter-spacing:-.038em;line-height:1}
-  .summary-amount-lbl{font-size:14px;margin-top:8px;margin-bottom:22px;color:var(--body)}
-  .summary-rows{border-top:1px solid var(--line)}
-  .summary-row{
-    display:flex;align-items:baseline;justify-content:space-between;gap:16px;
-    padding:13px 0;font-size:14px;
+  /* explicit background and colour: a native select left to the platform
+     renders with system chrome under a dark OS theme */
+  .picker select{
+    width:100%;font-family:inherit;font-size:16.5px;font-weight:500;
+    color:var(--navy);background-color:var(--white);
+    padding:14px 44px 14px 16px;
+    border:1px solid var(--line);border-radius:10px;
+    cursor:pointer;appearance:none;-webkit-appearance:none;
+    transition:border-color .15s ease,box-shadow .15s ease;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='13' height='8' viewBox='0 0 13 8'%3E%3Cpath d='M1.5 1.5l5 5 5-5' stroke='%231C2B47' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 16px center;
   }
-  .summary-row + .summary-row{box-shadow:inset 0 1px 0 rgba(228,232,240,.75)}
-  .summary-row dt{color:var(--body)}
-  .summary-row dd{color:var(--navy);font-weight:600;text-align:right}
-  /* footer of the card, bled to the edges so it reads as card
-     structure rather than a box dropped inside it */
-  .summary-note{
-    margin:20px -26px 0;padding:15px 26px;
-    background:var(--tint);border-top:1px solid var(--line);
-    font-size:12.5px;line-height:1.5;color:var(--body);
-  }
+  .picker select:hover{border-color:var(--tint-deep)}
+  .picker .btn{flex-shrink:0}
 
   /* ---------------- trust strip ---------------- */
   .trust{
@@ -555,15 +540,11 @@
     }
     .js .hero-in-2{animation-delay:.08s}
     .js .hero-in-3{animation-delay:.16s}
-    .js .hero-in-4{animation-delay:.20s}
     @keyframes heroIn{to{opacity:1;transform:none}}
   }
 
   /* ---------------- responsive ---------------- */
   @media(max-width:1000px){
-    .hero-grid{grid-template-columns:1fr;gap:52px}
-    .summary-wrap{margin-left:0;max-width:none}
-    .summary-wrap::before{inset:18px -12px -12px 18px}
     .uses-grid{grid-template-columns:1fr;gap:34px}
     .mosaic{grid-auto-rows:236px}
     .band-grid{grid-template-columns:repeat(2,1fr);gap:28px}
@@ -571,7 +552,10 @@
   }
   @media(max-width:900px){
     /* links collapse into the disclosure, but the primary CTA stays
-       visible: it is the page's conversion path. */
+       visible: it is the page's conversion path. With the middle track
+       empty the grid would still reserve it and push the CTA off screen,
+       so the bar falls back to two spaced items. */
+    nav{display:flex;justify-content:space-between}
     .navlinks{display:none}
     .menu{display:block}
     /* 6 items into 3 rows of 2, no spans, so no cell is left empty */
@@ -591,10 +575,17 @@
     .btn-lg{padding:15px 26px;font-size:15.5px}
     .menu summary{padding:9px 14px;font-size:14.5px}
     .logo svg{height:44px}
+    /* the wordmark's viewBox is roughly half empty on the right;
+       reclaiming that space is what lets the logo, the CTA and the menu
+       share one row on a phone instead of pushing the CTA off screen */
+    .logo{margin-right:-104px}
+    .nav-right{gap:8px}
     .foot-brand svg{height:46px}
     section{padding:72px 0}
     .close-cta{padding:64px 24px}
-    .hero{padding:52px 0 60px}
+    .hero{padding:56px 0 64px}
+    .picker{flex-direction:column;align-items:stretch;gap:12px;padding:16px}
+    .picker .btn{width:100%}
     .band-grid{grid-template-columns:1fr;gap:24px;padding:44px 0}
     .band-stat{border-left:0;padding-left:0}
     .bento{grid-template-columns:1fr}
@@ -605,6 +596,14 @@
     .shot-2,.shot-3,.shot-4{grid-column:span 1}
     .foot-cols{grid-template-columns:1fr;gap:32px}
     .trust-row{gap:12px 26px}
+  }
+
+  @media(max-width:400px){
+    .logo svg{height:36px}
+    .logo{margin-right:-86px}
+    .btn{padding:10px 15px;font-size:14px}
+    .menu summary{padding:8px 12px;font-size:14px}
+    .nav-right{gap:6px}
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -655,48 +654,27 @@
 
 <main id="main">
 
-  <!-- HERO: asymmetric split, copy left, live summary component right -->
+  <!-- HERO: centred, anchored by the amount picker. The picker is a real
+       GET form, so choosing a range and submitting lands on
+       /apply?amount=... with no script involved. -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-grid">
-        <div>
-          <h1 class="hero-in">Business funding,<br>without the wait.</h1>
-          <p class="sub hero-in hero-in-2">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
-          <div class="hero-cta hero-in hero-in-3">
-            <a href="/apply" class="btn btn-primary btn-lg">Apply now</a>
-            <a href="#products" class="btn btn-quiet btn-lg">What we fund</a>
-          </div>
-        </div>
+      <h1 class="hero-in">Business funding,<br>without the wait.</h1>
+      <p class="sub hero-in hero-in-2">Working capital from $5,000 to $5 million, matched to your revenue by an advisor who picks up the phone.</p>
 
-        <div class="summary-wrap hero-in hero-in-4">
-        <div class="summary">
-          <div class="summary-top">
-            <h2>Funding summary</h2>
-          </div>
-          <div class="summary-amount num">$150,000</div>
-          <p class="summary-amount-lbl">Working capital, 12 month term</p>
-          <dl class="summary-rows">
-            <div class="summary-row">
-              <dt>Decision</dt>
-              <dd class="num">Within 24&nbsp;hours</dd>
-            </div>
-            <div class="summary-row">
-              <dt>Cost to apply</dt>
-              <dd class="num">$0</dd>
-            </div>
-            <div class="summary-row">
-              <dt>Credit check</dt>
-              <dd>Soft pull</dd>
-            </div>
-            <div class="summary-row">
-              <dt>Advisor</dt>
-              <dd>Assigned at review</dd>
-            </div>
-          </dl>
-          <p class="summary-note">Figures are an illustration of a typical request, not an offer of credit.</p>
+      <form class="picker hero-in hero-in-3" action="/apply" method="get">
+        <div class="picker-field">
+          <label for="amount">How much do you need?</label>
+          <select id="amount" name="amount">
+            <option value="">Choose an amount</option>
+            <option value="5k-25k">$5K to $25K</option>
+            <option value="25k-100k">$25K to $100K</option>
+            <option value="100k-500k">$100K to $500K</option>
+            <option value="500k-5m">$500K to $5M</option>
+          </select>
         </div>
-        </div>
-      </div>
+        <button type="submit" class="btn btn-primary btn-lg">Apply now</button>
+      </form>
     </div>
   </section>
 
