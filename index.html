@@ -82,7 +82,19 @@
     -webkit-backdrop-filter:blur(12px);
     border-bottom:1px solid var(--line);
   }
-  nav{display:flex;align-items:center;justify-content:space-between;gap:24px;height:80px}
+  /* Three explicit columns rather than space-between. The logo's viewBox
+     carries ~157px of empty space to the right of the wordmark, and
+     space-between centres on the box, which pushed the links that far
+     right and crowded the CTA. Equal side columns centre the links on
+     the bar instead. Columns are assigned by name so the row still holds
+     when .navlinks is hidden on small screens. */
+  nav{
+    display:grid;grid-template-columns:1fr auto 1fr;
+    align-items:center;gap:24px;height:80px;
+  }
+  .logo{grid-column:1;justify-self:start}
+  .navlinks{grid-column:2;justify-self:center}
+  .nav-right{grid-column:3;justify-self:end}
   .logo svg{height:60px;width:auto;display:block}
   .navlinks{position:relative;display:flex;align-items:center;gap:30px;font-size:15px;font-weight:500;white-space:nowrap}
   /* inactive items sit back at body ink so the current page can hold
