@@ -179,16 +179,6 @@
       radial-gradient(820px 520px at 96% 100%, rgba(47,107,255,.17) 0%, rgba(47,107,255,0) 68%),
       linear-gradient(174deg, #E6EDFD 0%, #EDF2FE 34%, #F5F8FE 66%, var(--cream) 96%);
   }
-  /* Dot field over the whole hero, masked out of the middle so it reads as
-     surface at the edges and never sits behind the type. */
-  .hero::before{
-    content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
-    background-image:radial-gradient(circle at 1px 1px, rgba(28,43,71,.26) 1.4px, transparent 0);
-    background-size:24px 24px;
-    -webkit-mask-image:radial-gradient(ellipse 58% 50% at 50% 42%, transparent 24%, #000 78%);
-    mask-image:radial-gradient(ellipse 58% 50% at 50% 42%, transparent 24%, #000 78%);
-    opacity:1;
-  }
   /* Concentric arcs anchoring the right side. Large, soft and mostly off
      canvas, so they give the composition a direction without becoming a
      shape sitting in the middle of the page. */
