@@ -409,7 +409,7 @@ export async function buildApplicationPdf(app = {}) {
   // -- Footers (every page; drawn last so the page total is known) -------------
   const pages = pdf.getPages();
   const total = pages.length;
-  const contact = 'admin@veloracapitalgrp.com · 914-606-2010 · veloracapitalgrp.com';
+  const contact = 'admin@veloracapitalgrp.com · 845-552-4810 · veloracapitalgrp.com';
   pages.forEach((p, i) => {
     p.drawRectangle({ x: M, y: FOOTER_TOP - 12, width: CONTENT_W, height: 0.5, color: HAIRLINE });
     // 6.5pt keeps the contact line clear of the centered CONFIDENTIAL mark.
