@@ -9,7 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="velora-icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Questrial&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   /* ---------------------------------------------------------------
      Velora Capital - design tokens
@@ -893,7 +893,7 @@
 
   /* 4. Trustpilot badge: review count sits to the right of the stars. */
   .tp{
-    --tile:26px;font-family:'Questrial',sans-serif;
+    --tile:26px;font-family:'Geist','Helvetica Neue',Arial,sans-serif;
     display:flex;flex-direction:column;align-items:center;
     text-decoration:none;margin:0 auto 32px;width:fit-content;color:#191919;
   }
@@ -908,10 +908,27 @@
   .tpt-p{background:linear-gradient(90deg,#00B67A var(--f),#DCDCE6 var(--f))}
   .tpt svg{width:70%;height:70%;display:block;fill:#191919}
   .tp-brand{display:flex;align-items:center;gap:calc(var(--tile)*.14);margin-top:calc(var(--tile)*.48);line-height:1}
-  .tp-brand>svg{width:calc(var(--tile)*.84);height:calc(var(--tile)*.74);display:block;fill:#00B67A;flex-shrink:0}
+  .tp-brand>svg{width:calc(var(--tile)*.84);height:calc(var(--tile)*.74);display:block;fill:#12D483;flex-shrink:0}
   .tp-word{font-size:calc(var(--tile)*.715);font-weight:700;line-height:1;letter-spacing:-.045em;display:block}
   .tp:hover .tp-brand{opacity:.78}
   @media(max-width:640px){.tp{--tile:24px;margin-bottom:28px}}
+  /* The approval phone. Hidden below 1280px, where the centred hero already
+     fills the width; above it there is dead space on the left and this goes
+     in it. No panel, no border, no background of its own - a cut-out PNG
+     sitting straight on the page wash. */
+  .hero-phone{display:none}
+  @media(min-width:1280px){
+    .hero-phone{
+      display:block;position:absolute;z-index:0;
+      left:clamp(4px, 2.2vw, 76px);
+      bottom:0;
+      width:clamp(236px, 20.5vw, 400px);
+      height:auto;
+      pointer-events:none;
+      filter:drop-shadow(0 26px 46px rgba(28,43,71,.16));
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -956,6 +973,7 @@
        /apply?amount=... with no script involved. -->
   <div class="top">
   <section class="hero">
+    <img class="hero-phone" src="/hand-phone.png" alt="" aria-hidden="true" width="640" height="986">
     <div class="wrap">
       <h1 class="hero-in">Business funding<br>without the wait.</h1>
       <p class="sub hero-in hero-in-2">Working capital from $5,000 to $5 million. No credit pull. Quick approvals.</p>
