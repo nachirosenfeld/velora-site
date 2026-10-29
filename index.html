@@ -1525,11 +1525,21 @@
   slider.addEventListener('input', sync);
   sync();
 
-  form.addEventListener('submit', function(e){
-    e.preventDefault();                     // stays on the page, no redirect
+  // first click shows the estimate, second click goes to the application
+  var shown = false;
+  function estimate(){
     var v = +slider.value;
-    range.textContent = money(v) + ' – ' + money(Math.round(v * 1.5));
+    range.textContent = money(v) + ' \u2013 ' + money(Math.round(v * 1.5));
+  }
+  slider.addEventListener('input', function(){ if(shown) estimate(); });
+
+  form.addEventListener('submit', function(e){
+    if(shown) return;                       // let it submit to /apply
+    e.preventDefault();
+    estimate();
     result.hidden = false;
+    shown = true;
+    btn.textContent = 'Apply now';
   });
 })();
 </script>
